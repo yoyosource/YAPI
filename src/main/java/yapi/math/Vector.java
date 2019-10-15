@@ -1,5 +1,7 @@
 package yapi.math;
 
+import java.util.Arrays;
+
 public class Vector {
 
     private double[] vec;
@@ -153,6 +155,18 @@ public class Vector {
         return st.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vector)) return false;
+        Vector vector = (Vector) o;
+        return Arrays.equals(vec, vector.vec);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(vec);
+    }
 
 }
 

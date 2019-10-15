@@ -98,6 +98,10 @@ public class StringUtils {
         return splitString(string, new String[]{" ", "\n", "\t", ",", ".", "-", "!", "?", ";"}, false, false, false);
     }
 
+    public static String[] splitWords(String string, boolean reviveSplitted) {
+        return splitString(string, new String[]{" ", "\n", "\t", ",", ".", "-", "!", "?", ";"}, reviveSplitted, false, false);
+    }
+
     public static String[] splitString(String string, String[] splitStrings) {
         return splitString(string, splitStrings, false, false, false);
     }

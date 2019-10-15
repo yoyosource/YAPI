@@ -1,5 +1,6 @@
 import yapi.math.NumberUtils;
 
+import java.io.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +39,8 @@ public class Work {
         long time = System.currentTimeMillis();
         System.out.println(NumberUtils.primeFactorization(3412613467L));
         System.out.println(System.currentTimeMillis() - time + "ms");
+
+        File file = new File("");
     }
 
 }

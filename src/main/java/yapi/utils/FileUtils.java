@@ -35,6 +35,21 @@ public class FileUtils {
         return file.getName().substring(0, file.getName().lastIndexOf('.'));
     }
 
+    public static String getUserHome() {
+        return System.getProperty("user.home");
+    }
+
+    public static String getWorkingDirectory() {
+        return FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    }
+
+    public static String removeFileFromPath(String s) {
+        if (!s.contains(".")) {
+            return s;
+        }
+        return s.substring(0, s.lastIndexOf('/'));
+    }
+
     public static byte[] checkSum(File file) {
         String text = "";
         try (Scanner scanner = new Scanner(file)) {
