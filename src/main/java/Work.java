@@ -1,6 +1,9 @@
 import yapi.math.NumberUtils;
+import yapi.utils.PrefixArray;
+import yapi.utils.StringUtils;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,11 +39,23 @@ public class Work {
         //System.out.println(NumberUtils.getDivisors(1307674368000L));
          */
 
-        long time = System.currentTimeMillis();
+        /*long time = System.currentTimeMillis();
         System.out.println(NumberUtils.primeFactorization(3412613467L));
         System.out.println(System.currentTimeMillis() - time + "ms");
+         */
 
-        File file = new File("");
+        PrefixArray<Integer> prefixArray = new PrefixArray<>();
+        prefixArray.add(1);
+        prefixArray.add(2);
+        prefixArray.add(3);
+        prefixArray.add(4);
+        prefixArray.add(5);
+        prefixArray.add(6);
+        prefixArray.add(7);
+        prefixArray.add(8);
+        prefixArray.add(9);
+        prefixArray.add(10);
+        System.out.println(prefixArray.fold());
     }
 
 }
