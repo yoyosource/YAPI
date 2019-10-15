@@ -116,10 +116,7 @@ public class PrefixArray<E> {
     }
 
     public int length() {
-        if (head == null) {
-            return 0;
-        }
-        return tail.size() + 1;
+        return size();
     }
 
     public void sort(Comparator c) {
