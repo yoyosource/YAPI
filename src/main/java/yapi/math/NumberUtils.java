@@ -285,13 +285,13 @@ public class NumberUtils {
             return createRange(strings, true, true);
         } else if (s.matches("\\d+\\(\\.\\d+")) {
             String[] strings = s.split("\\(\\.");
-            return createRange(strings, true, true);
+            return createRange(strings, false, true);
         } else if (s.matches("\\d+\\.\\)\\d+")) {
             String[] strings = s.split("\\.\\)");
-            return createRange(strings, true, true);
+            return createRange(strings, true, false);
         } else if (s.matches("\\d+\\(\\)\\d+")) {
             String[] strings = s.split("\\(\\)");
-            return createRange(strings, true, true);
+            return createRange(strings, false, false);
         }
         else {
             throw new RangeException();
