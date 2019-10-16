@@ -5,6 +5,7 @@ import yapi.exceptions.ArrayMutationException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class PrefixArray<E> {
 
@@ -73,6 +74,10 @@ public class PrefixArray<E> {
         return head.equals(object) || tail.contains(object);
     }
 
+    public boolean tailContains(E object) {
+        return tail.contains(object);
+    }
+
     public void remove(E object) {
         if (!mutable) throw new ArrayMutationException();
         if (head.equals(object)) {
@@ -117,6 +122,14 @@ public class PrefixArray<E> {
 
     public int length() {
         return size();
+    }
+
+    public int tailSize() {
+        return tail.size();
+    }
+
+    public int tailLength() {
+        return tail.size();
     }
 
     public void sort(Comparator c) {
@@ -176,4 +189,19 @@ public class PrefixArray<E> {
                 ", tail=" + tail +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PrefixArray)) return false;
+        PrefixArray<?> that = (PrefixArray<?>) o;
+        return Objects.equals(head, that.head) &&
+                Objects.equals(tail, that.tail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(head, tail);
+    }
+
 }
