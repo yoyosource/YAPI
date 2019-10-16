@@ -1,6 +1,6 @@
 package yapi.exceptions;
 
-public class RangeException extends RuntimeException {
+public class RangeException extends YAPIException {
 
     public RangeException() {
         super();

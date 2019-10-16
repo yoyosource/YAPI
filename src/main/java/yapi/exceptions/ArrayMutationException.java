@@ -1,6 +1,6 @@
 package yapi.exceptions;
 
-public class ArrayMutationException extends RuntimeException {
+public class ArrayMutationException extends YAPIException {
 
     public ArrayMutationException() {
         super();

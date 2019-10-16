@@ -1,6 +1,6 @@
 package yapi.exceptions;
 
-public class NoStringException extends RuntimeException {
+public class NoStringException extends YAPIException {
 
     public NoStringException() {
         super();
