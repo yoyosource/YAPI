@@ -200,7 +200,7 @@ public class PrefixArray<E> {
         if (head == null) {
             return 0F;
         }
-        if (!(head instanceof Double)) {
+        if (!(head instanceof Float)) {
             return 0F;
         }
         if (operation == '-') {
