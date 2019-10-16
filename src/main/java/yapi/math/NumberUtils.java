@@ -457,6 +457,8 @@ public class NumberUtils {
      *   '0...20\{0>..2, 7, 5...9\{6, 7}}'
      *     0, 3, 4, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
      *
+     * @see #simplifyRange(String) to simplify your Range
+     *
      *
      * @param range is the range expression you want to evaluate.
      * @return the list of values your expression contains.
