@@ -265,7 +265,7 @@ public class NumberUtils {
 
     public static Long min(List<Long> longs) {
         if (longs.isEmpty()) {
-            return null;
+            throw new RangeException("Range is Empty");
         }
         long current = longs.get(0);
         for (long l : longs) {
@@ -278,7 +278,7 @@ public class NumberUtils {
 
     public static Long max(List<Long> longs) {
         if (longs.isEmpty()) {
-            return null;
+            throw new RangeException("Range is Empty");
         }
         long current = longs.get(0);
         for (long l : longs) {
@@ -303,9 +303,8 @@ public class NumberUtils {
      * @return is your simplified range.
      *
      * @throws RangeException if the range has any mistakes.
-     * @throws NullPointerException if the range is empty.
      */
-    public static String simplifyRange(String range) throws RangeException, NullPointerException {
+    public static String simplifyRange(String range) throws RangeException {
         List<Long> longs = getRange(range);
         long min = min(longs);
         long max = max(longs);
