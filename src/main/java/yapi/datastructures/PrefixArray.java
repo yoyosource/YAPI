@@ -1,4 +1,4 @@
-package yapi.utils;
+package yapi.datastructures;
 
 import yapi.exceptions.ArrayMutationException;
 
@@ -103,10 +103,7 @@ public class PrefixArray<E> {
     }
 
     public boolean isEmpty() {
-        if (head == null) {
-            return true;
-        }
-        return tail.isEmpty();
+        return head == null;
     }
 
     public boolean isNotEmpty() {
