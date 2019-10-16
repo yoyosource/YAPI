@@ -313,7 +313,7 @@ public class NumberUtils {
      *   From x to y and x2 to y2 but leave out the numbers which are present in both ranges
      *   '0..5#2..7'
      *     0, 1, 6, 7
-     *  Complex Example:
+     * Complex Example:
      *   '0..20\{0(.2, 7, 5..9\{6, 7}}#-10..10'
      *     11, 12, 13, 14, 15, 16, 17, 18, 19, 20, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 5, 7, 8, 9
      *   '0..20\{0(.2, 7, 5..9\{6, 7}}'
