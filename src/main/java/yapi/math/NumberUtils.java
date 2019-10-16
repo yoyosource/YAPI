@@ -459,7 +459,6 @@ public class NumberUtils {
      *
      * @see #simplifyRange(String) to simplify your Range
      *
-     *
      * @param range is the range expression you want to evaluate.
      * @return the list of values your expression contains.
      *
@@ -595,7 +594,7 @@ public class NumberUtils {
 
     private static List<Long> createRange(String[] strings, boolean includeFirst, boolean includeLast) {
         if (strings.length != 2) {
-            throw new RangeException();
+            throw new RangeException("The range has to many range parameter: " + Arrays.toString(strings));
         }
         long start = Long.parseLong(strings[0]);
         long stop = Long.parseLong(strings[1]);
