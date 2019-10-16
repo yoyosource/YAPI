@@ -137,11 +137,27 @@ public class PrefixArray<E> {
         tail.sort(c);
     }
 
-    public Integer fold() {
+    public Object fold() {
         return fold('+');
     }
 
-    public Integer fold(char operation) {
+    public Object fold(char operation) {
+        if (head == null) {
+            return 0;
+        }
+        if (head instanceof Integer) {
+            return foldInteger(operation);
+        }
+        if (head instanceof Double) {
+            return foldDouble(operation);
+        }
+        if (head instanceof Long) {
+            return foldLong(operation);
+        }
+        return 0;
+    }
+
+    public Integer foldInteger(char operation) {
         if (head == null) {
             return 0;
         }
@@ -149,13 +165,49 @@ public class PrefixArray<E> {
             return 0;
         }
         if (operation == '-') {
-            return (int)head - new PrefixArray<>(tail).fold(operation);
+            return (int)head - new PrefixArray<>(tail).foldInteger(operation);
         } else if (operation == '*') {
-            return (int)head * new PrefixArray<>(tail).fold(operation);
+            return (int)head * new PrefixArray<>(tail).foldInteger(operation);
         } else if (operation == '/') {
-            return (int)head / new PrefixArray<>(tail).fold(operation);
+            return (int)head / new PrefixArray<>(tail).foldInteger(operation);
         } else {
-            return (int)head + new PrefixArray<>(tail).fold(operation);
+            return (int)head + new PrefixArray<>(tail).foldInteger(operation);
+        }
+    }
+
+    public Double foldDouble(char operation) {
+        if (head == null) {
+            return 0.0;
+        }
+        if (!(head instanceof Double)) {
+            return 0.0;
+        }
+        if (operation == '-') {
+            return (double)head - new PrefixArray<>(tail).foldDouble(operation);
+        } else if (operation == '*') {
+            return (double)head * new PrefixArray<>(tail).foldDouble(operation);
+        } else if (operation == '/') {
+            return (double)head / new PrefixArray<>(tail).foldDouble(operation);
+        } else {
+            return (double)head + new PrefixArray<>(tail).foldDouble(operation);
+        }
+    }
+
+    public Long foldLong(char operation) {
+        if (head == null) {
+            return 0L;
+        }
+        if (!(head instanceof Long)) {
+            return 0L;
+        }
+        if (operation == '-') {
+            return (long)head - new PrefixArray<>(tail).foldLong(operation);
+        } else if (operation == '*') {
+            return (long)head * new PrefixArray<>(tail).foldLong(operation);
+        } else if (operation == '/') {
+            return (long)head / new PrefixArray<>(tail).foldLong(operation);
+        } else {
+            return (long)head + new PrefixArray<>(tail).foldLong(operation);
         }
     }
 
