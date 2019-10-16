@@ -340,8 +340,6 @@ public class NumberUtils {
             return min + "..." + max;
         }
 
-        System.out.println(leftout + " " + longs);
-
         List<List<Long>> longList = new ArrayList<>();
         List<Long> currentList = new ArrayList<>();
         for (long i = min; i <= max; i++) {
@@ -497,12 +495,15 @@ public class NumberUtils {
                     }
                 }
             } catch (IndexOutOfBoundsException e) {
-                throw new RangeException();
+                throw new RangeException("Range Expression in Operation part is missing: " + range);
             }
             return longs.get(longs.size() - 1);
         }
         if (!range.matches("(-?\\d+[.>]\\.[.<]-?\\d+)(\\\\\\{[.0-9\\-, <>{}\\\\]+\\})?")) {
-            throw new RangeException();
+            if (!range.matches("(-?\\d+[.>]\\.[.<]-?\\d+)")) {
+                throw new RangeException("Range Expression in Range part of: " + range);
+            }
+            throw new RangeException("Range Expression Exception in Exclude part of: " + range);
         }
 
         char[] chars = range.toCharArray();
