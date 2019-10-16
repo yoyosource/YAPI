@@ -78,7 +78,7 @@ public class FileUtils {
     public static String[] fileContentAsString(File file) {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
             List<String> strings = new ArrayList<>();
-            String s = "";
+            String s;
             while ((s = bufferedReader.readLine()) != null) {
                 strings.add(s);
             }
