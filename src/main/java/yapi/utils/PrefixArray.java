@@ -151,6 +151,9 @@ public class PrefixArray<E> {
         if (head instanceof Double) {
             return foldDouble(operation);
         }
+        if (head instanceof Float) {
+            return foldFloat(operation);
+        }
         if (head instanceof Long) {
             return foldLong(operation);
         }
@@ -190,6 +193,24 @@ public class PrefixArray<E> {
             return (double)head / new PrefixArray<>(tail).foldDouble(operation);
         } else {
             return (double)head + new PrefixArray<>(tail).foldDouble(operation);
+        }
+    }
+
+    public Float foldFloat(char operation) {
+        if (head == null) {
+            return 0F;
+        }
+        if (!(head instanceof Double)) {
+            return 0F;
+        }
+        if (operation == '-') {
+            return (float)head - new PrefixArray<>(tail).foldFloat(operation);
+        } else if (operation == '*') {
+            return (float)head * new PrefixArray<>(tail).foldFloat(operation);
+        } else if (operation == '/') {
+            return (float)head / new PrefixArray<>(tail).foldFloat(operation);
+        } else {
+            return (float)head + new PrefixArray<>(tail).foldFloat(operation);
         }
     }
 
