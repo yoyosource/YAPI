@@ -1,6 +1,8 @@
 package yapi.datastructures;
 
+import com.sun.imageio.plugins.common.I18N;
 import yapi.exceptions.ArrayMutationException;
+import yapi.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,12 +12,12 @@ import java.util.Objects;
 public class PrefixArray<E> {
 
     private E head;
-    private List<E> tail;
+    private List<E> tail = new ArrayList<>();
 
     private boolean mutable = true;
 
     public PrefixArray() {
-        tail = new ArrayList<>();
+
     }
 
     private PrefixArray(List<E> tail) {
@@ -23,6 +25,17 @@ public class PrefixArray<E> {
         head = tail.get(0);
         tail.remove(0);
         this.tail = tail;
+    }
+
+    public PrefixArray(String s) {
+        List<Integer> range = NumberUtils.getRange(s);
+        for (int i = 0; i < range.size(); i++) {
+            if (i == 0) {
+                head = (E)range.get(i);
+            } else {
+                tail.add((E)range.get(i));
+            }
+        }
     }
 
     public E get() {

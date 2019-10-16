@@ -37,18 +37,8 @@ public class Work {
         System.out.println(System.currentTimeMillis() - time + "ms");
          */
 
-        PrefixArray<Integer> prefixArray = new PrefixArray<>();
-        prefixArray.add(1);
-        prefixArray.add(2);
-        prefixArray.add(3);
-        prefixArray.add(4);
-        prefixArray.add(5);
-        prefixArray.add(6);
-        prefixArray.add(7);
-        prefixArray.add(8);
-        prefixArray.add(9);
-        prefixArray.add(10);
-        System.out.println(prefixArray.fold());
+
+        System.out.println(new PrefixArray<Integer>("[0 10]").foldInteger('+'));
     }
 
 }

@@ -1,5 +1,7 @@
 package yapi.math;
 
+import yapi.exceptions.RangeException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -221,12 +223,104 @@ public class NumberUtils {
         return divisors;
     }
 
+    public static long sum(String s) {
+        List<Integer> integers = getRange(s);
+        long l = 0;
+        for (long lo : integers) {
+            l += lo;
+        }
+        return l;
+    }
+
+    public static long add(List<Long> longs) {
+        long l = 0;
+        for (long lo : longs) {
+            l += lo;
+        }
+        return l;
+    }
+
+    public static long subtract(List<Long> longs) {
+        long l = 0;
+        for (long lo : longs) {
+            l -= lo;
+        }
+        return l;
+    }
+
     public static long multiply(List<Long> longs) {
         long l = 1;
         for (long lo : longs) {
             l *= lo;
         }
         return l;
+    }
+
+    public static long divide(List<Long> longs) {
+        long l = 1;
+        for (long lo : longs) {
+            l /= lo;
+        }
+        return l;
+    }
+
+    public static List<Integer> getRange(String s) {
+        if (s.matches("\\[\\d+ \\d+\\]")) {
+            String[] strings = s.substring(1, s.length() - 1).split(" ");
+            return createRange(strings, true, true);
+        } else if (s.matches("\\d+ \\d+")) {
+            String[] strings = s.split(" ");
+            return createRange(strings, true, true);
+        } else if (s.matches("\\]\\d+ \\d+\\]")) {
+            String[] strings = s.substring(1, s.length() - 1).split(" ");
+            return createRange(strings, false, true);
+        } else if (s.matches("\\[\\d+ \\d+\\[")) {
+            String[] strings = s.substring(1, s.length() - 1).split(" ");
+            return createRange(strings, true, false);
+        } else if (s.matches("\\]\\d+ \\d+\\[")) {
+            String[] strings = s.substring(1, s.length() - 1).split(" ");
+            return createRange(strings, false, false);
+        } else if (s.matches("\\d+\\.\\.\\d+")) {
+            String[] strings = s.split("\\.\\.");
+            return createRange(strings, true, true);
+        } else if (s.matches("\\d+\\(\\.\\d+")) {
+            String[] strings = s.split("\\(\\.");
+            return createRange(strings, true, true);
+        } else if (s.matches("\\d+\\.\\)\\d+")) {
+            String[] strings = s.split("\\.\\)");
+            return createRange(strings, true, true);
+        } else if (s.matches("\\d+\\(\\)\\d+")) {
+            String[] strings = s.split("\\(\\)");
+            return createRange(strings, true, true);
+        }
+        else {
+            throw new RangeException();
+        }
+    }
+
+    private static List<Integer> createRange(String[] strings, boolean includeFirst, boolean includeLast) {
+        if (strings.length != 2) {
+            throw new RangeException();
+        }
+        int start = Integer.parseInt(strings[0]);
+        int stop = Integer.parseInt(strings[1]);
+
+        if (!includeFirst) {
+            start++;
+        }
+        if (!includeLast) {
+            stop--;
+        }
+
+        if (start > stop) {
+            throw new RangeException();
+        }
+
+        List<Integer> integers = new ArrayList<>();
+        for (int i = start; i <= stop; i++) {
+            integers.add(i);
+        }
+        return integers;
     }
 
 }

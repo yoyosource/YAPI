@@ -1,10 +1,11 @@
 package yapi.utils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class FileUtils {
@@ -63,6 +64,29 @@ public class FileUtils {
         } catch (NoSuchAlgorithmException e) {
             return new byte[0];
         }
+    }
+
+    public static byte[] fileContentAsBytes(File file) {
+        try (InputStream inputStream = new FileInputStream(file)) {
+            return inputStream.readAllBytes();
+        } catch (IOException e) {
+
+        }
+        return new byte[0];
+    }
+
+    public static String[] fileContentAsString(File file) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+            List<String> strings = new ArrayList<>();
+            String s = "";
+            while ((s = bufferedReader.readLine()) != null) {
+                strings.add(s);
+            }
+            return strings.toArray(new String[0]);
+        } catch (IOException e) {
+
+        }
+        return new String[0];
     }
 
 }
