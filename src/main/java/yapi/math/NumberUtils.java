@@ -263,76 +263,217 @@ public class NumberUtils {
         return l;
     }
 
+    public static Long min(List<Long> longs) {
+        if (longs.isEmpty()) {
+            return null;
+        }
+        long current = longs.get(0);
+        for (long l : longs) {
+            if (l < current) {
+                current = l;
+            }
+        }
+        return current;
+    }
+
+    public static Long max(List<Long> longs) {
+        if (longs.isEmpty()) {
+            return null;
+        }
+        long current = longs.get(0);
+        for (long l : longs) {
+            if (l > current) {
+                current = l;
+            }
+        }
+        return current;
+    }
+
+    /**
+     * simplifyRange is used to simplify your range down to one exclude.
+     *
+     * Example:
+     *   '0...20\{0>..2, 7, 5...9\{6, 7}}#-10...10'
+     *   '-10...20\{2...4, 6, 10}'
+     *
+     *   '0...20\{0>..2, 7, 5...9\{6, 7}}'
+     *   '2...20\{5, 7...9}'
+     *
+     * @param range is the range to simplify.
+     * @return is your simplified range.
+     *
+     * @throws RangeException if the range has any mistakes.
+     * @throws NullPointerException if the range is empty.
+     */
+    public static String simplifyRange(String range) throws RangeException, NullPointerException {
+        List<Long> longs = getRange(range);
+        long min = min(longs);
+        long max = max(longs);
+
+        List<Long> duplicated = duplicates(longs);
+        StringBuilder duplicatedString = new StringBuilder();
+        if (!duplicated.isEmpty()) {
+            for (Long l : duplicated) {
+                if (duplicatedString.length() != 0) {
+                    duplicatedString.append("|");
+                }
+                duplicatedString.append(l);
+            }
+        }
+
+        if (min == max) {
+            return min + duplicatedString.toString();
+        }
+        List<Long> leftout = checkContinuity(longs, min, max);
+        if (leftout.isEmpty()) {
+            return min + "..." + max + duplicatedString.toString();
+        }
+        return min + "..." + max + "\\{" + simplifyLeftOut(leftout) + "}" + duplicatedString.toString();
+    }
+
+    private static String simplifyLeftOut(List<Long> longs) {
+        long min = min(longs);
+        long max = max(longs);
+
+        List<Long> leftout = checkContinuity(longs, min, max);
+        if (leftout.isEmpty()) {
+            return min + "..." + max;
+        }
+
+        System.out.println(leftout + " " + longs);
+
+        List<List<Long>> longList = new ArrayList<>();
+        List<Long> currentList = new ArrayList<>();
+        for (long i = min; i <= max; i++) {
+            if (longs.contains(i)) {
+                currentList.add(i);
+            } else {
+                longList.add(currentList);
+                currentList = new ArrayList<>();
+            }
+        }
+        if (!currentList.isEmpty()) {
+            longList.add(currentList);
+        }
+
+        StringBuilder st = new StringBuilder();
+        for (List<Long> longs1 : longList) {
+            if (longs1.isEmpty()) {
+                continue;
+            }
+            if (st.toString().length() > 0) {
+                st.append(", ");
+            }
+            if (longs1.size() == 1) {
+                st.append(longs1.get(0));
+            } else if (longs1.size() == 2) {
+                st.append(longs1.get(0) + ", " + longs.get(1));
+            } else {
+                st.append(longs1.get(0) + "..." + longs1.get(longs1.size() - 1));
+            }
+        }
+        return st.toString();
+    }
+
+    private static List<Long> duplicates(List<Long> longs) {
+        List<Long> duplicated = new ArrayList<>();
+        for (int x = 0; x < longs.size(); x++) {
+            long currentLong = longs.get(x);
+            int count = 0;
+            for (int y = 0; y < longs.size(); y++) {
+                if (longs.get(y) == currentLong) {
+                    count++;
+                }
+            }
+            count--;
+            while (count > 0) {
+                duplicated.add(currentLong);
+                count--;
+            }
+        }
+        return duplicated;
+    }
+
+    private static List<Long> checkContinuity(List<Long> longs, long min, long max) {
+        List<Long> leftout = new ArrayList<>();
+        for (long l = min; l < max; l++) {
+            if (!longs.contains(l)) {
+                leftout.add(l);
+            }
+        }
+        return leftout;
+    }
+
     /**
      * getRange is used if you want to get a range of numbers.
      *
      * Example:
      *  Simple Ranges:
      *   From x to y including x and y
-     *   '0..5'
+     *   '0...5'
      *     0, 1, 2, 3, 4, 5
      *   From x to y excluding x including y
-     *   '0(.5'
+     *   '0>..5'
      *     1, 2, 3, 4, 5
      *   From x to y including x excluding y
-     *   '0.)5'
+     *   '0..<5'
      *     0, 1, 2, 3, 4
      *   From x to y excluding x and y
-     *   '0()5'
+     *   '0>.<5'
      *     1, 2, 3, 4
      *  Ranges with excluding Numbers:
      *   From x to y without 2
-     *   '0..5\{2}'
+     *   '0...5\{2}'
      *     0, 1, 3, 4, 5
      *   From x to y without (From 0 to 2 excluding 0)
-     *   '0..5\{0(.2}'
+     *   '0...5\{0>..2}'
      *     0, 3, 4, 5
      *   From x to y without 2 and 3
-     *   '0..5\{2, 3}'
+     *   '0...5\{2, 3}'
      *     0, 1, 4, 5
      *   From x to y without (From 4 to 6 and 8 to 10)
-     *   '0..10\{4..6, 8..10}'
+     *   '0...10\{4...6, 8...10}'
      *     0, 1, 2, 3, 7
      *  More Complex Ranges:
      *   From x to y without (From 5 to 10 without 7 and 8)
-     *   '0..10\{5..10\{7, 8}}'
+     *   '0...10\{5...10\{7, 8}}'
      *     0, 1, 2, 3, 4, 7, 8
      *   From x to y without (From 5 to 10 without 7 and 8) and 1
-     *   '0..10\{5..10\{7, 8}, 1}'
+     *   '0...10\{5...10\{7, 8}, 1}'
      *     0, 2, 3, 4, 7, 8
      *  Operations on Ranges:
      *   From x to y and x2 to y2 just put them together
-     *   '0..5|-5..0'
+     *   '0...5|-5...0'
      *     0, 1, 2, 3, 4, 5, -5, -4, -3, -2, -1, 0
      *   From x to y or x2 to y2 but leave out duplicates
-     *   '0..5*-5..0'
+     *   '0...5*-5...0'
      *     0, 1, 2, 3, 4, 5, -5, -4, -3, -2, -1
      *   From x to y and x2 to y2 but leave out the numbers which are not present in both ranges
-     *   '0..5&2..7'
+     *   '0...5&2...7'
      *     2, 3, 4, 5
      *   From x to y and x2 to y2 but leave out the numbers which are present in both ranges
-     *   '0..5#2..7'
+     *   '0...5#2...7'
      *     0, 1, 6, 7
      * Complex Example:
-     *   '0..20\{0(.2, 7, 5..9\{6, 7}}#-10..10'
+     *   '0...20\{0>..2, 7, 5...9\{6, 7}}#-10...10'
      *     11, 12, 13, 14, 15, 16, 17, 18, 19, 20, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 5, 7, 8, 9
-     *   '0..20\{0(.2, 7, 5..9\{6, 7}}'
+     *   '0...20\{0>..2, 7, 5...9\{6, 7}}'
      *     0, 3, 4, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
      *
      *
-     * @param s is the range expression you want to evaluate.
+     * @param range is the range expression you want to evaluate.
      * @return the list of values your expression contains.
      *
      * @throws RangeException if the range has any mistakes.
      */
-    public static List<Long> getRange(String s) throws RangeException {
-        if (s.matches("-?\\d+")) {
+    public static List<Long> getRange(String range) throws RangeException {
+        if (range.matches("-?\\d+")) {
             List<Long> longs = new ArrayList<>();
-            longs.add(Long.parseLong(s));
+            longs.add(Long.parseLong(range));
             return longs;
         }
-        if (s.contains("|") || s.contains("&") || s.contains("#") || s.contains("*")) {
-            String[] rangeModifications = splitRange(s, new String[]{"|", "&", "#", "*"}, true, false);
+        if (range.contains("|") || range.contains("&") || range.contains("#") || range.contains("*")) {
+            String[] rangeModifications = splitRange(range, new String[]{"|", "&", "#", "*"}, true, false);
             List<List<Long>> longs = new ArrayList<>();
             for (String t : rangeModifications) {
                 if (t.equals("|") || t.equals("&") || t.equals("#") || t.equals("*")) {
@@ -360,17 +501,17 @@ public class NumberUtils {
             }
             return longs.get(longs.size() - 1);
         }
-        if (!s.matches("(-?\\d+[.(][.)]-?\\d+)(\\\\\\{[.0-9\\-, (){}\\\\]+\\})?")) {
+        if (!range.matches("(-?\\d+[.>]\\.[.<]-?\\d+)(\\\\\\{[.0-9\\-, <>{}\\\\]+\\})?")) {
             throw new RangeException();
         }
 
-        char[] chars = s.toCharArray();
+        char[] chars = range.toCharArray();
         StringBuilder st = new StringBuilder();
         boolean hasExclude = false;
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == '\\') {
                 hasExclude = true;
-                s = s.substring(st.length() + 2, s.length() - 1);
+                range = range.substring(st.length() + 2, range.length() - 1);
                 break;
             }
             st.append(chars[i]);
@@ -379,17 +520,17 @@ public class NumberUtils {
         String currentRange = st.toString();
         boolean includeFirst = true;
         boolean includeLast = true;
-        if (currentRange.contains("(")) {
+        if (currentRange.contains("<")) {
             includeFirst = false;
         }
-        if (currentRange.contains(")")) {
+        if (currentRange.contains(">")) {
             includeLast = false;
         }
-        String[] strings = currentRange.split("[.(][.)]");
+        String[] strings = currentRange.split("[.>]\\.[.<]");
         List<Long> longs = createRange(strings, includeFirst, includeLast);
 
         if (hasExclude) {
-            String[] toExclude = splitRange(s, new String[]{", "}, false, false);
+            String[] toExclude = splitRange(range, new String[]{", ", ","}, false, false);
             for (String t : toExclude) {
                 List<Long> exclude = getRange(t);
                 for (Long l : exclude) {
