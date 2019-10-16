@@ -304,7 +304,7 @@ public class NumberUtils {
      *   From x to y and x2 to y2 just put them together
      *   '0..5|-5..0'
      *     0, 1, 2, 3, 4, 5, -5, -4, -3, -2, -1, 0
-     *   From x to y or x2 to y2 but leave out the numbers which are duplicated
+     *   From x to y or x2 to y2 but leave out duplicates
      *   '0..5*-5..0'
      *     0, 1, 2, 3, 4, 5, -5, -4, -3, -2, -1
      *   From x to y and x2 to y2 but leave out the numbers which are not present in both ranges
@@ -313,6 +313,12 @@ public class NumberUtils {
      *   From x to y and x2 to y2 but leave out the numbers which are present in both ranges
      *   '0..5#2..7'
      *     0, 1, 6, 7
+     *  Complex Example:
+     *   '0..20\{0(.2, 7, 5..9\{6, 7}}#-10..10'
+     *     11, 12, 13, 14, 15, 16, 17, 18, 19, 20, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 5, 7, 8, 9
+     *   '0..20\{0(.2, 7, 5..9\{6, 7}}'
+     *     0, 3, 4, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+     *
      *
      * @param s is the range expression you want to evaluate.
      * @return the list of values your expression contains.
@@ -386,8 +392,8 @@ public class NumberUtils {
             String[] toExclude = splitRange(s, new String[]{", "}, false, false);
             for (String t : toExclude) {
                 List<Long> exclude = getRange(t);
-                for (long l : exclude) {
-                    longs.remove((Long)l);
+                for (Long l : exclude) {
+                    longs.remove(l);
                 }
             }
         }
