@@ -224,9 +224,8 @@ public class NumberUtils {
     }
 
     public static long sum(String s) {
-        List<Integer> integers = getRange(s);
         long l = 0;
-        for (long lo : integers) {
+        for (long lo : getRange(s)) {
             l += lo;
         }
         return l;
@@ -264,7 +263,7 @@ public class NumberUtils {
         return l;
     }
 
-    public static List<Integer> getRange(String s) {
+    public static List<Long> getRange(String s) {
         if (s.matches("\\[\\d+ \\d+\\]")) {
             String[] strings = s.substring(1, s.length() - 1).split(" ");
             return createRange(strings, true, true);
@@ -298,12 +297,12 @@ public class NumberUtils {
         }
     }
 
-    private static List<Integer> createRange(String[] strings, boolean includeFirst, boolean includeLast) {
+    private static List<Long> createRange(String[] strings, boolean includeFirst, boolean includeLast) {
         if (strings.length != 2) {
             throw new RangeException();
         }
-        int start = Integer.parseInt(strings[0]);
-        int stop = Integer.parseInt(strings[1]);
+        long start = Long.parseLong(strings[0]);
+        long stop = Long.parseLong(strings[1]);
 
         if (!includeFirst) {
             start++;
@@ -316,8 +315,8 @@ public class NumberUtils {
             throw new RangeException();
         }
 
-        List<Integer> integers = new ArrayList<>();
-        for (int i = start; i <= stop; i++) {
+        List<Long> integers = new ArrayList<>();
+        for (long i = start; i <= stop; i++) {
             integers.add(i);
         }
         return integers;
