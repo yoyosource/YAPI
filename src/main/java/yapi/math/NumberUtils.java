@@ -263,17 +263,73 @@ public class NumberUtils {
         return l;
     }
 
-    public static List<Long> getRange(String s) {
+    /**
+     * getRange is used if you want to get a range of numbers.
+     *
+     * Example:
+     *  Simple Ranges:
+     *   From x to y including x and y
+     *   '0..5'
+     *     0, 1, 2, 3, 4, 5
+     *   From x to y excluding x including y
+     *   '0(.5'
+     *     1, 2, 3, 4, 5
+     *   From x to y including x excluding y
+     *   '0.)5'
+     *     0, 1, 2, 3, 4
+     *   From x to y excluding x and y
+     *   '0()5'
+     *     1, 2, 3, 4
+     *  Ranges with excluding Numbers:
+     *   From x to y without 2
+     *   '0..5\{2}'
+     *     0, 1, 3, 4, 5
+     *   From x to y without (From 0 to 2 excluding 0)
+     *   '0..5\{0(.2}'
+     *     0, 3, 4, 5
+     *   From x to y without 2 and 3
+     *   '0..5\{2, 3}'
+     *     0, 1, 4, 5
+     *   From x to y without (From 4 to 6 and 8 to 10)
+     *   '0..10\{4..6, 8..10}'
+     *     0, 1, 2, 3, 7
+     *  More Complex Ranges:
+     *   From x to y without (From 5 to 10 without 7 and 8)
+     *   '0..10\{5..10\{7, 8}}'
+     *     0, 1, 2, 3, 4, 7, 8
+     *   From x to y without (From 5 to 10 without 7 and 8) and 1
+     *   '0..10\{5..10\{7, 8}, 1}'
+     *     0, 2, 3, 4, 7, 8
+     *  Operations on Ranges:
+     *   From x to y and x2 to y2 just put them together
+     *   '0..5|-5..0'
+     *     0, 1, 2, 3, 4, 5, -5, -4, -3, -2, -1, 0
+     *   From x to y or x2 to y2 but leave out the numbers which are duplicated
+     *   '0..5*-5..0'
+     *     0, 1, 2, 3, 4, 5, -5, -4, -3, -2, -1
+     *   From x to y and x2 to y2 but leave out the numbers which are not present in both ranges
+     *   '0..5&2..7'
+     *     2, 3, 4, 5
+     *   From x to y and x2 to y2 but leave out the numbers which are present in both ranges
+     *   '0..5#2..7'
+     *     0, 1, 6, 7
+     *
+     * @param s is the range expression you want to evaluate.
+     * @return the list of values your expression contains.
+     *
+     * @throws RangeException if the range has any mistakes.
+     */
+    public static List<Long> getRange(String s) throws RangeException {
         if (s.matches("-?\\d+")) {
             List<Long> longs = new ArrayList<>();
             longs.add(Long.parseLong(s));
             return longs;
         }
-        if (s.contains("|") || s.contains("&")) {
-            String[] rangeModifications = splitRange(s, new String[]{"|", "&"}, true, false);
+        if (s.contains("|") || s.contains("&") || s.contains("#") || s.contains("*")) {
+            String[] rangeModifications = splitRange(s, new String[]{"|", "&", "#", "*"}, true, false);
             List<List<Long>> longs = new ArrayList<>();
             for (String t : rangeModifications) {
-                if (t.equals("|") || t.equals("&")) {
+                if (t.equals("|") || t.equals("&") || t.equals("#") || t.equals("*")) {
                     continue;
                 }
                 longs.add(getRange(t));
@@ -283,8 +339,14 @@ public class NumberUtils {
                     if (rangeModifications[i].equals("|")) {
                         longs.set(i, or(longs.get(i - 1), longs.get(i)));
                     }
+                    if (rangeModifications[i].equals("*")) {
+                        longs.set(i, orExclude(longs.get(i - 1), longs.get(i)));
+                    }
                     if (rangeModifications[i].equals("&")) {
                         longs.set(i, and(longs.get(i - 1), longs.get(i)));
+                    }
+                    if (rangeModifications[i].equals("#")) {
+                        longs.set(i, xor(longs.get(i - 1), longs.get(i)));
                     }
                 }
             } catch (IndexOutOfBoundsException e) {
@@ -339,7 +401,33 @@ public class NumberUtils {
             longs.add(l);
         }
         for (long l : longs2) {
+            longs.add(l);
+        }
+        return longs;
+    }
+
+    private static List<Long> orExclude(List<Long> longs1, List<Long> longs2) {
+        List<Long> longs = new ArrayList<>();
+        for (long l : longs1) {
+            longs.add(l);
+        }
+        for (long l : longs2) {
             if (!longs.contains(l)) {
+                longs.add(l);
+            }
+        }
+        return longs;
+    }
+
+    private static List<Long> xor(List<Long> longs1, List<Long> longs2) {
+        List<Long> longs = new ArrayList<>();
+        for (long l : longs1) {
+            if (!longs2.contains(l) && !longs.contains(l)) {
+                longs.add(l);
+            }
+        }
+        for (long l : longs2) {
+            if (!longs1.contains(l) && !longs.contains(l)) {
                 longs.add(l);
             }
         }

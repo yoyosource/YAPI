@@ -40,7 +40,7 @@ public class Work {
         System.out.println(System.currentTimeMillis() - time + "ms");
          */
 
-        System.out.println(NumberUtils.getRange("0..20\\{0(.2, 7, 5..9\\{6, 7}}&-10..10"));
+        System.out.println(NumberUtils.getRange("0..20\\{0(.2, 7, 5..9\\{6, 7}}#-10..10"));
     }
 
 }
