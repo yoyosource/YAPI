@@ -1,9 +1,9 @@
 package yapi.math;
 
+import yapi.exceptions.NoStringException;
 import yapi.exceptions.RangeException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class NumberUtils {
 
@@ -264,37 +264,96 @@ public class NumberUtils {
     }
 
     public static List<Long> getRange(String s) {
-        if (s.matches("\\[\\d+ \\d+\\]")) {
-            String[] strings = s.substring(1, s.length() - 1).split(" ");
-            return createRange(strings, true, true);
-        } else if (s.matches("\\d+ \\d+")) {
-            String[] strings = s.split(" ");
-            return createRange(strings, true, true);
-        } else if (s.matches("\\]\\d+ \\d+\\]")) {
-            String[] strings = s.substring(1, s.length() - 1).split(" ");
-            return createRange(strings, false, true);
-        } else if (s.matches("\\[\\d+ \\d+\\[")) {
-            String[] strings = s.substring(1, s.length() - 1).split(" ");
-            return createRange(strings, true, false);
-        } else if (s.matches("\\]\\d+ \\d+\\[")) {
-            String[] strings = s.substring(1, s.length() - 1).split(" ");
-            return createRange(strings, false, false);
-        } else if (s.matches("\\d+\\.\\.\\d+")) {
-            String[] strings = s.split("\\.\\.");
-            return createRange(strings, true, true);
-        } else if (s.matches("\\d+\\(\\.\\d+")) {
-            String[] strings = s.split("\\(\\.");
-            return createRange(strings, false, true);
-        } else if (s.matches("\\d+\\.\\)\\d+")) {
-            String[] strings = s.split("\\.\\)");
-            return createRange(strings, true, false);
-        } else if (s.matches("\\d+\\(\\)\\d+")) {
-            String[] strings = s.split("\\(\\)");
-            return createRange(strings, false, false);
+        if (s.matches("-?\\d+")) {
+            List<Long> longs = new ArrayList<>();
+            longs.add(Long.parseLong(s));
+            return longs;
         }
-        else {
+        if (s.contains("|") || s.contains("&")) {
+            String[] rangeModifications = splitRange(s, new String[]{"|", "&"}, true, false);
+            List<List<Long>> longs = new ArrayList<>();
+            for (String t : rangeModifications) {
+                if (t.equals("|") || t.equals("&")) {
+                    continue;
+                }
+                longs.add(getRange(t));
+            }
+            try {
+                for (int i = 0; i < rangeModifications.length; i++) {
+                    if (rangeModifications[i].equals("|")) {
+                        longs.set(i, or(longs.get(i - 1), longs.get(i)));
+                    }
+                    if (rangeModifications[i].equals("&")) {
+                        longs.set(i, and(longs.get(i - 1), longs.get(i)));
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                throw new RangeException();
+            }
+            return longs.get(longs.size() - 1);
+        }
+        if (!s.matches("(-?\\d+[.(][.)]-?\\d+)(\\\\\\{[.0-9\\-, (){}\\\\]+\\})?")) {
             throw new RangeException();
         }
+
+        char[] chars = s.toCharArray();
+        StringBuilder st = new StringBuilder();
+        boolean hasExclude = false;
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '\\') {
+                hasExclude = true;
+                s = s.substring(st.length() + 2, s.length() - 1);
+                break;
+            }
+            st.append(chars[i]);
+        }
+
+        String currentRange = st.toString();
+        boolean includeFirst = true;
+        boolean includeLast = true;
+        if (currentRange.contains("(")) {
+            includeFirst = false;
+        }
+        if (currentRange.contains(")")) {
+            includeLast = false;
+        }
+        String[] strings = currentRange.split("[.(][.)]");
+        List<Long> longs = createRange(strings, includeFirst, includeLast);
+
+        if (hasExclude) {
+            String[] toExclude = splitRange(s, new String[]{", "}, false, false);
+            for (String t : toExclude) {
+                List<Long> exclude = getRange(t);
+                for (long l : exclude) {
+                    longs.remove((Long)l);
+                }
+            }
+        }
+
+        return longs;
+    }
+
+    private static List<Long> or(List<Long> longs1, List<Long> longs2) {
+        List<Long> longs = new ArrayList<>();
+        for (long l : longs1) {
+            longs.add(l);
+        }
+        for (long l : longs2) {
+            if (!longs.contains(l)) {
+                longs.add(l);
+            }
+        }
+        return longs;
+    }
+
+    private static List<Long> and(List<Long> longs1, List<Long> longs2) {
+        List<Long> longs = new ArrayList<>();
+        for (long l : longs1) {
+            if (longs2.contains(l)) {
+                longs.add(l);
+            }
+        }
+        return longs;
     }
 
     private static List<Long> createRange(String[] strings, boolean includeFirst, boolean includeLast) {
@@ -320,6 +379,92 @@ public class NumberUtils {
             integers.add(i);
         }
         return integers;
+    }
+
+    private static String[] splitRange(String string, String[] splitStrings, boolean reviveSplitted, boolean addToLast) {
+        if (string == null) throw new NullPointerException();
+        if (splitStrings == null) throw new NullPointerException();
+        if (string.isEmpty()) throw new NoStringException("No String");
+        if (splitStrings.length == 0) throw new NoStringException("No Split Strings");
+
+        char[] chars = string.toCharArray();
+
+        List<String> words = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        int i = 0;
+        int lastSplit = 0;
+
+        int inString = 0;
+
+        while (i < chars.length) {
+            int splitStringTest = 0;
+            char c = chars[i];
+            if (c == '{') {
+                inString += 1;
+            }
+            if (c == '}') {
+                inString -= 1;
+            }
+            if (inString > 0) {
+                i++;
+                stringBuilder.append(c);
+                continue;
+            }
+            String s = "";
+            for (String st : splitStrings) {
+                StringBuilder sb = new StringBuilder();
+                int index = i;
+                int currentIndex = i;
+                while (currentIndex < chars.length && currentIndex < index + st.length()) {
+                    sb.append(chars[currentIndex]);
+                    currentIndex++;
+                }
+                if (sb.toString().equals(st)) {
+                    if (s.length() == 0) {
+                        s = st;
+                    }
+                    splitStringTest++;
+                }
+            }
+
+            if (splitStringTest == 0) {
+                stringBuilder.append(c);
+            } else {
+                i += s.length() - 1;
+                if (stringBuilder.length() == 0) {
+                    if (reviveSplitted && !addToLast) {
+                        words.add(s);
+                    } else if (reviveSplitted && addToLast) {
+                        words.add(stringBuilder + s);
+                    }
+                    stringBuilder = new StringBuilder();
+                    lastSplit = i;
+                    i++;
+                    continue;
+                }
+                if (reviveSplitted) {
+                    if (addToLast) {
+                        words.add(stringBuilder.toString() + s);
+                    } else {
+                        words.add(stringBuilder.toString());
+                        words.add(s);
+                    }
+                } else {
+                    words.add(stringBuilder.toString());
+                }
+                stringBuilder = new StringBuilder();
+                lastSplit = i;
+            }
+            i++;
+        }
+        if (lastSplit != string.length()) {
+            if (stringBuilder.length() == 0) {
+                return words.toArray(new String[0]);
+            }
+            words.add(stringBuilder.toString());
+        }
+        return words.toArray(new String[0]);
     }
 
 }

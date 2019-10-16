@@ -147,6 +147,7 @@ public class StringUtils {
             if (inString) {
                 i++;
                 stringBuilder.append(c);
+                escape = false;
                 continue;
             }
             String s = "";

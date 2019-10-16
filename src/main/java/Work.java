@@ -1,4 +1,7 @@
 import yapi.datastructures.PrefixArray;
+import yapi.math.NumberUtils;
+
+import java.text.NumberFormat;
 
 public class Work {
 
@@ -37,8 +40,7 @@ public class Work {
         System.out.println(System.currentTimeMillis() - time + "ms");
          */
 
-
-        System.out.println(new PrefixArray<Integer>("[0 10]").foldInteger('+'));
+        System.out.println(NumberUtils.getRange("0..20\\{0(.2, 7, 5..9\\{6, 7}}&-10..10"));
     }
 
 }
