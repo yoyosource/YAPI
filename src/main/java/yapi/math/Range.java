@@ -12,6 +12,8 @@ public class Range {
     private RangeCheck included;
     private List<RangeCheck> excluded = new ArrayList<>();
 
+    private boolean b = false;
+
     public Range(String range) {
         this.rangeString = range;
         if (checkRange(range)) {
@@ -27,16 +29,21 @@ public class Range {
 
     private boolean checkRange(String range) {
         if (range.matches("((-?\\d+[.>][.][.<]-?\\d+)|(-?\\d+(\\.\\d+)?[.>]\\.\\.)|(\\.\\.[.<]-?\\d+(\\.\\d+)?))(\\\\\\{[ ,0-9.<>]+\\})")) {
+            if (b) {
+                return false;
+            }
             if (range.indexOf('\\') + 1 != range.indexOf('{')) {
                 return false;
             }
             String[] strings = NumberUtils.splitRange(range.substring(range.indexOf('\\') + 2, range.lastIndexOf('}')), new String[]{", ", ","}, false, false);
+            b = true;
             for (String s : strings) {
                 if (!checkRange(s)) {
                     return false;
                 }
                 excluded.add(new RangeCheck(s));
             }
+            b = false;
         }
         if (range.matches("-?\\d+(\\.\\d+)?")) {
             return true;
