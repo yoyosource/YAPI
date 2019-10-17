@@ -23,23 +23,23 @@ public class Range {
                 included = new RangeCheck(range);
             }
         } else {
-            throw new RangeException("Range Expression had Errors");
+            throw new RangeException("Range Expression was not an Range or was recursive");
         }
     }
 
     private boolean checkRange(String range) {
         if (range.matches("((-?\\d+[.>][.][.<]-?\\d+)|(-?\\d+(\\.\\d+)?[.>]\\.\\.)|(\\.\\.[.<]-?\\d+(\\.\\d+)?))(\\\\\\{[ ,0-9.<>]+\\})")) {
             if (b) {
-                return false;
+                throw new RangeException("Range Expression was recursive");
             }
             if (range.indexOf('\\') + 1 != range.indexOf('{')) {
-                return false;
+                throw new RangeException("Range Expression Error with \\ and {");
             }
             String[] strings = NumberUtils.splitRange(range.substring(range.indexOf('\\') + 2, range.lastIndexOf('}')), new String[]{", ", ","}, false, false);
             b = true;
             for (String s : strings) {
                 if (!checkRange(s)) {
-                    return false;
+                    throw new RangeException("Range Expression " + s + " is not a range");
                 }
                 excluded.add(new RangeCheck(s));
             }
