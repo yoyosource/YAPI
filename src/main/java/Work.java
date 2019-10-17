@@ -38,12 +38,13 @@ public class Work {
 
         //System.out.println(NumberUtils.primeFactorization(1307674368000L));
         //System.out.println(NumberUtils.getDivisors(1307674368000L));
-         */
+        */
 
-        /*long time = System.currentTimeMillis();
+        /*
+        long time = System.currentTimeMillis();
         System.out.println(NumberUtils.primeFactorization(3412613467L));
         System.out.println(System.currentTimeMillis() - time + "ms");
-         */
+        */
 
         /*
         System.out.println(NumberUtils.getRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}|-20...20#-10...10"));
@@ -78,7 +79,6 @@ public class Work {
         */
 
         System.out.println(new Range("...10\\{10, 5...}").in(3));
-
     }
 
 }

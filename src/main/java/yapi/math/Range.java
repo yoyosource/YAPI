@@ -106,8 +106,8 @@ public class Range {
 
 class RangeCheck {
 
-    private double min = Long.MIN_VALUE;
-    private double max = Long.MAX_VALUE;
+    private Double min = null;
+    private Double max = null;
 
     public RangeCheck(String range) {
         if (range.matches("-?\\d+(\\.\\d+)?")) {
@@ -139,18 +139,46 @@ class RangeCheck {
     }
 
     public boolean checkInteger(int i)  {
+        if (min == null && max != null) {
+            return max > i;
+        } else if (min != null && max == null) {
+            return min < i;
+        } else if (min == null && max == null) {
+            return true;
+        }
         return min < i && max > i;
     }
 
     public boolean checkLong(long i)  {
+        if (min == null && max != null) {
+            return max > i;
+        } else if (min != null && max == null) {
+            return min < i;
+        } else if (min == null && max == null) {
+            return true;
+        }
         return min < i && max > i;
     }
 
     public boolean checkDouble(double i)  {
+        if (min == null && max != null) {
+            return max > i;
+        } else if (min != null && max == null) {
+            return min < i;
+        } else if (min == null && max == null) {
+            return true;
+        }
         return min < i && max > i;
     }
 
     public boolean checkFloat(float i)  {
+        if (min == null && max != null) {
+            return max > i;
+        } else if (min != null && max == null) {
+            return min < i;
+        } else if (min == null && max == null) {
+            return true;
+        }
         return min < i && max > i;
     }
 
