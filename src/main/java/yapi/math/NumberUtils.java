@@ -473,25 +473,28 @@ public class NumberUtils {
         if (range.contains("|") || range.contains("&") || range.contains("#") || range.contains("*")) {
             String[] rangeModifications = splitRange(range, new String[]{"|", "&", "#", "*"}, true, false);
             List<List<Long>> longs = new ArrayList<>();
+            List<String> operations = new ArrayList<>();
             for (String t : rangeModifications) {
                 if (t.equals("|") || t.equals("&") || t.equals("#") || t.equals("*")) {
+                    operations.add(t);
                     continue;
                 }
                 longs.add(getRange(t));
             }
             try {
-                for (int i = 0; i < rangeModifications.length; i++) {
-                    if (rangeModifications[i].equals("|")) {
-                        longs.set(i, or(longs.get(i - 1), longs.get(i)));
+                for (int i = 0; i < operations.size(); i++) {
+                    String operation = operations.get(i);
+                    if (operation.equals("|")) {
+                        longs.set(i, or(longs.get(i), longs.get(i + 1)));
                     }
-                    if (rangeModifications[i].equals("*")) {
-                        longs.set(i, orExclude(longs.get(i - 1), longs.get(i)));
+                    if (operation.equals("*")) {
+                        longs.set(i, orExclude(longs.get(i), longs.get(i + 1)));
                     }
-                    if (rangeModifications[i].equals("&")) {
-                        longs.set(i, and(longs.get(i - 1), longs.get(i)));
+                    if (operation.equals("&")) {
+                        longs.set(i, and(longs.get(i), longs.get(i + 1)));
                     }
-                    if (rangeModifications[i].equals("#")) {
-                        longs.set(i, xor(longs.get(i - 1), longs.get(i)));
+                    if (operation.equals("#")) {
+                        longs.set(i, xor(longs.get(i), longs.get(i + 1)));
                     }
                 }
             } catch (IndexOutOfBoundsException e) {
@@ -501,7 +504,7 @@ public class NumberUtils {
         }
         if (!range.matches("(-?\\d+[.>]\\.[.<]-?\\d+)(\\\\\\{[.0-9\\-, <>{}\\\\]+\\})?")) {
             if (!range.matches("(-?\\d+[.>]\\.[.<]-?\\d+)")) {
-                throw new RangeException("Range Expression in Range part of: " + range);
+                throw new RangeException("Range Expression Exception in Range part of: " + range);
             }
             throw new RangeException("Range Expression Exception in Exclude part of: " + range);
         }
@@ -592,7 +595,7 @@ public class NumberUtils {
         return longs;
     }
 
-    private static List<Long> createRange(String[] strings, boolean includeFirst, boolean includeLast) {
+    protected static List<Long> createRange(String[] strings, boolean includeFirst, boolean includeLast) {
         if (strings.length != 2) {
             throw new RangeException("The range has to many range parameter: " + Arrays.toString(strings));
         }
@@ -607,7 +610,7 @@ public class NumberUtils {
         }
 
         if (start > stop) {
-            throw new RangeException();
+            throw new RangeException("Start of range is bigger than end of Range: " +  start + " " + stop);
         }
 
         List<Long> integers = new ArrayList<>();
@@ -617,7 +620,7 @@ public class NumberUtils {
         return integers;
     }
 
-    private static String[] splitRange(String string, String[] splitStrings, boolean reviveSplitted, boolean addToLast) {
+    protected static String[] splitRange(String string, String[] splitStrings, boolean reviveSplitted, boolean addToLast) {
         if (string == null) throw new NullPointerException();
         if (splitStrings == null) throw new NullPointerException();
         if (string.isEmpty()) throw new NoStringException("No String");

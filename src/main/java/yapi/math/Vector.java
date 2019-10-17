@@ -10,19 +10,6 @@ public class Vector {
         vec = new double[dimensions];
     }
 
-    public Vector(int dimensions, double... values) {
-        if (values.length == dimensions) {
-            vec = values;
-        } else if (values.length < dimensions) {
-            vec = new double[dimensions];
-            int i = 0;
-            for (double j : values) {
-                values[i] = j;
-                i++;
-            }
-        }
-    }
-
     public Vector(double... values) {
         vec = values;
     }
@@ -41,7 +28,7 @@ public class Vector {
     }
 
 
-    public void setVector(int dimension, int value) {
+    public void setVector(int dimension, double value) {
         if (!(dimension < 0 || dimension > vec.length)) {
             vec[dimension] = value;
         }
@@ -128,6 +115,18 @@ public class Vector {
             value += vec[i] * vec[i];
         }
         return Math.sqrt(value);
+    }
+
+    public double get(int i) {
+        return vec[i];
+    }
+
+    public Vector copy() {
+        double[] nDouble = new double[vec.length];
+        for (int i = 0; i < vec.length; i++) {
+            nDouble[i] = vec[i];
+        }
+        return new Vector(nDouble);
     }
 
 

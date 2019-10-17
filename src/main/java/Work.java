@@ -1,7 +1,12 @@
 import yapi.datastructures.PrefixArray;
+import yapi.graphics.Renderer;
+import yapi.graphics.elements.EPlane;
 import yapi.math.NumberUtils;
+import yapi.math.Range;
+import yapi.math.Vector;
 
-import java.text.NumberFormat;
+import javax.swing.*;
+import java.awt.*;
 
 public class Work {
 
@@ -40,10 +45,40 @@ public class Work {
         System.out.println(System.currentTimeMillis() - time + "ms");
          */
 
-        System.out.println(NumberUtils.getRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}#-10...10"));
-        System.out.println(NumberUtils.simplifyRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}#-10...10"));
-        System.out.println(NumberUtils.getRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}"));
-        System.out.println(NumberUtils.simplifyRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}"));
+        /*
+        System.out.println(NumberUtils.getRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}|-20...20#-10...10"));
+        System.out.println(NumberUtils.simplifyRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}|-20...20#-10...10"));
+
+        System.out.println(NumberUtils.getRange("0...2758\\{619>.<621\\{620}}"));
+        System.out.println(NumberUtils.simplifyRange("0...2758\\{619>.<621\\{620}}"));
+
+        System.out.println(new PrefixArray<Long>("0...2758\\{619>.<621\\{620}}").foldLong('+'));
+        System.out.println(NumberUtils.isPrime(3804661));
+        System.out.println(NumberUtils.primeFactorization(3804661));
+        System.out.println(NumberUtils.getDivisors(3804661));
+        //System.out.println(NumberUtils.getRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}"));
+        //System.out.println(NumberUtils.simplifyRange("0...20\\{0>..2, 7, 5...9\\{6, 7}}"));
+        */
+
+        /*
+        JFrame frame = new JFrame("Test");
+        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 4 * 3, Toolkit.getDefaultToolkit().getScreenSize().height / 4 * 3);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.setFocusTraversalKeysEnabled(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Renderer renderer = new Renderer();
+        frame.setContentPane(renderer);
+        frame.validate();
+
+        EPlane ePlane = new EPlane(new Color(100, 0, 0), new Vector(100, 100, 100), new Vector(10, 20, 0), new Vector(50, 10, 20));
+        renderer.addElement(ePlane);
+        */
+
+        System.out.println(new Range("...10\\{10, 5...}").in(3));
+
     }
 
 }
