@@ -61,7 +61,7 @@ public class Range {
     }
 
     private <N> boolean check(N n) {
-        boolean excluded = true;
+        boolean excluded = false;
         for (RangeCheck rangeCheck : this.excluded) {
             if (n instanceof Integer) {
                 excluded = excluded || rangeCheck.checkInteger((Integer)n);
