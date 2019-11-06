@@ -1,9 +1,8 @@
+import yapi.datastructures.IntegerBuffer;
 import yapi.datastructures.PrefixArray;
 import yapi.graphics.Renderer;
 import yapi.graphics.elements.EPlane;
-import yapi.math.NumberUtils;
-import yapi.math.Range;
-import yapi.math.Vector;
+import yapi.math.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,7 +77,21 @@ public class Work {
         renderer.addElement(ePlane);
         */
 
-        System.out.println(new Range("...10\\{10, 5...}").in(3));
+        //System.out.println(new Range("...10\\{10, 5...}").in(3));
+
+        int x = 0;
+        NumberRandom numberRandom = new NumberRandom();
+        for (long i = 0; i < Long.MAX_VALUE; i++) {
+            int t = numberRandom.getInt();
+            if (t == x) {
+                System.out.println(i + " " + t);
+            } else {
+                x = t;
+            }
+            if (i % 100000000 == 0) {
+                System.out.println(i);
+            }
+        }
     }
 
 }
