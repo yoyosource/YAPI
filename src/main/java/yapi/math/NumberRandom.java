@@ -1,13 +1,11 @@
 package yapi.math;
 
-import yapi.datastructures.IntegerBuffer;
-
 public class NumberRandom {
 
     private long seed = System.currentTimeMillis();
-    private long number = seed;
-    private long number1 = 8723465262572736L;
-    private long number2 = 7346589735676528756L;
+    private long cSeed = seed;
+    private long multiplier = 8723465262572736L;
+    private long constant = 7346589735676528756L;
 
     public NumberRandom() {
 
@@ -15,7 +13,7 @@ public class NumberRandom {
 
     public NumberRandom(long seed) {
         this.seed = seed;
-        number = seed;
+        cSeed = seed;
     }
 
     public long getSeed() {
@@ -23,9 +21,9 @@ public class NumberRandom {
     }
 
     private long nextNumber() {
-        long l = number * number1 + number2;
-        number1 += number2 * l;
-        number = l;
+        long l = cSeed * multiplier + constant;
+        multiplier += constant * l;
+        cSeed = l;
         return l;
     }
 
