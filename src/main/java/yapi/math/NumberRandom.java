@@ -1,5 +1,7 @@
 package yapi.math;
 
+import yapi.datastructures.IntegerBuffer;
+
 public class NumberRandom {
 
     private long seed = System.currentTimeMillis();
@@ -29,6 +31,12 @@ public class NumberRandom {
 
     public double getDouble() {
         double d = nextNumber() / (double)Long.MAX_VALUE;
+        return d < 0 ? -d : d;
+    }
+
+    public double getDouble(double max) {
+        double d = nextNumber() / (double)Long.MAX_VALUE;
+        d = d % max;
         return d < 0 ? -d : d;
     }
 
@@ -63,6 +71,28 @@ public class NumberRandom {
         float f = nextNumber() / Float.MAX_VALUE;
         f = f % max;
         return f < 0 ? -f : f;
+    }
+
+    public char getChar() {
+        int i = (int)(nextNumber() / Integer.MAX_VALUE);
+        i = i % 65536;
+        return (char)(i < 0 ? -i : i);
+    }
+
+    public char getChar(char max) {
+        int i = (int)(nextNumber() / Integer.MAX_VALUE);
+        i = i % (int)max;
+        return (char)(i < 0 ? -i : i);
+    }
+
+    public String getString(int length) {
+        StringBuilder st = new StringBuilder();
+        for (int l = 0; l < length; l++) {
+            int i = (int) (nextNumber() / Integer.MAX_VALUE);
+            i = (i % 94) + 32;
+            st.append((char)i);
+        }
+        return st.toString();
     }
 
 }
