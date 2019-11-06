@@ -14,14 +14,35 @@ public class FileUtils {
         throw new IllegalStateException("Utility class");
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param file
+     * @return
+     */
     public static String getSuffix(String file) {
         return file.substring(file.lastIndexOf('.') + 1);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param file
+     * @return
+     */
     public static String getSuffix(File file) {
         return file.getName().substring(file.getName().lastIndexOf('.') + 1);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param file
+     * @return
+     */
     public static String getName(String file) {
         if (!file.contains(".")) {
             return file;
@@ -29,6 +50,13 @@ public class FileUtils {
         return file.substring(0, file.lastIndexOf('.'));
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param file
+     * @return
+     */
     public static String getName(File file) {
         if (!file.getName().contains(".")) {
             return file.getName();
@@ -36,14 +64,32 @@ public class FileUtils {
         return file.getName().substring(0, file.getName().lastIndexOf('.'));
     }
 
+    /**
+     * @since Version 1
+     *
+     * @return
+     */
     public static String getUserHome() {
         return System.getProperty("user.home");
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public static String getWorkingDirectory() {
         return FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param s
+     * @return
+     */
     public static String removeFileFromPath(String s) {
         if (!s.contains(".")) {
             return s;
@@ -51,6 +97,13 @@ public class FileUtils {
         return s.substring(0, s.lastIndexOf('/'));
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param file
+     * @return
+     */
     public static byte[] checkSum(File file) {
         String text = "";
         try (Scanner scanner = new Scanner(file)) {
@@ -66,6 +119,13 @@ public class FileUtils {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param file
+     * @return
+     */
     public static byte[] fileContentAsBytes(File file) {
         try (InputStream inputStream = new FileInputStream(file)) {
             return inputStream.readAllBytes();
@@ -75,6 +135,13 @@ public class FileUtils {
         return new byte[0];
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param file
+     * @return
+     */
     public static String[] fileContentAsString(File file) {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
             List<String> strings = new ArrayList<>();

@@ -8,6 +8,13 @@ public class ColorUtils {
         throw new IllegalStateException("Utility class");
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param color
+     * @return
+     */
     public static Color getColor(String color) {
         if (color.length() != 8 && color.length() != 6) {
             return new Color(0, 0, 0);

@@ -9,6 +9,13 @@ public class Checker {
     private List<Double> doubleList = new ArrayList<>();
     private int i = 0;
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param d
+     * @return
+     */
     public boolean add(double d) {
         boolean b = false;
         if (doubles.isEmpty()) {

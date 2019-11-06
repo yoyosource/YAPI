@@ -51,18 +51,50 @@ public class Range {
         return range.matches("((-?\\d+[.>][.][.<]-?\\d+)|(-?\\d+(\\.\\d+)?[.>]\\.\\.)|(\\.\\.[.<]-?\\d+(\\.\\d+)?))(\\\\\\{[ ,0-9.<>]+\\})?");
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param n
+     * @param <N>
+     * @return
+     */
     public <N> boolean in(N n) {
         return check(n);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param n
+     * @param <N>
+     * @return
+     */
     public <N> boolean inside(N n) {
         return check(n);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param n
+     * @param <N>
+     * @return
+     */
     public <N> boolean out(N n) {
         return !check(n);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param n
+     * @param <N>
+     * @return
+     */
     public <N> boolean outside(N n) {
         return !check(n);
     }
@@ -145,6 +177,13 @@ class RangeCheck {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param i
+     * @return
+     */
     public boolean checkInteger(int i)  {
         if (min == null && max != null) {
             return max > i;
@@ -156,6 +195,13 @@ class RangeCheck {
         return min < i && max > i;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param i
+     * @return
+     */
     public boolean checkLong(long i)  {
         if (min == null && max != null) {
             return max > i;
@@ -167,6 +213,13 @@ class RangeCheck {
         return min < i && max > i;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param i
+     * @return
+     */
     public boolean checkDouble(double i)  {
         if (min == null && max != null) {
             return max > i;
@@ -178,6 +231,13 @@ class RangeCheck {
         return min < i && max > i;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param i
+     * @return
+     */
     public boolean checkFloat(float i)  {
         if (min == null && max != null) {
             return max > i;

@@ -28,12 +28,25 @@ public class Vector {
     }
 
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param dimension
+     * @param value
+     */
     public void setVector(int dimension, double value) {
         if (!(dimension < 0 || dimension > vec.length)) {
             vec[dimension] = value;
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param vec
+     */
     public void setVec(double[] vec) {
         if (this.vec.length == vec.length) {
             this.vec = vec;
@@ -41,6 +54,12 @@ public class Vector {
     }
 
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param vector
+     */
     public void addVector(Vector vector) {
         if (this.vec.length == vector.vec.length) {
             int i = 0;
@@ -61,6 +80,12 @@ public class Vector {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param vector
+     */
     public void subtractVector(Vector vector) {
         if (this.vec.length == vector.vec.length) {
             int i = 0;
@@ -81,12 +106,25 @@ public class Vector {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param r
+     */
     public void multiplyVector(int r) {
         for (int i = 0; i < vec.length; i++) {
             vec[i] *= r;
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param vector
+     * @return
+     */
     public double multiplyVectorSkalar(Vector vector) {
         double value = 0;
         try {
@@ -99,6 +137,12 @@ public class Vector {
         return Math.acos(value / (lenght() * vector.lenght()));
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param vector
+     */
     public void crossProduct(Vector vector) {
         if (this.vec.length != 3 || vector.vec.length != 3) {
             return;
@@ -109,6 +153,12 @@ public class Vector {
         doubles[2] = this.vec[1] * vector.vec[2] - this.vec[2] * vector.vec[1];
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public double lenght() {
         double value = 0;
         for (int i = 0; i < vec.length; i++) {
@@ -117,10 +167,23 @@ public class Vector {
         return Math.sqrt(value);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param i
+     * @return
+     */
     public double get(int i) {
         return vec[i];
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public Vector copy() {
         double[] nDouble = new double[vec.length];
         for (int i = 0; i < vec.length; i++) {

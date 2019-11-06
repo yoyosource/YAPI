@@ -14,6 +14,8 @@ public class NumberUtils {
     /**
      * Time Complexity: O(1)
      *
+     * @since Version 1
+     *
      * @param toRound the number you want to round.
      * @param digits the digits you want to round to.
      * @return the rounded number.
@@ -33,6 +35,8 @@ public class NumberUtils {
 
     /**
      * Time Complexity: O(√n)
+     *
+     * @since Version 1
      *
      * @param n the number to check if it is prime
      * @return is prime yes or no.
@@ -54,6 +58,8 @@ public class NumberUtils {
 
     /**
      * Time Complexity: O(n+n*√n)
+     *
+     * @since Version 1
      *
      * @param n the upper limit to the Primes generated.
      * @return all primes between 0 and {@param n}
@@ -77,6 +83,8 @@ public class NumberUtils {
     /**
      * Time Complexity: ~O(log(a + b))
      *
+     * @since Version 1
+     *
      * @param a
      * @param b
      * @return
@@ -87,6 +95,8 @@ public class NumberUtils {
 
     /**
      * Time Complexity: ~O(log(a + b))
+     *
+     * @since Version 1
      *
      * @param a
      * @param b
@@ -104,6 +114,8 @@ public class NumberUtils {
     /**
      * Time Complexity: ~O(log(a + b))
      *
+     * @since Version 1
+     *
      * @param a
      * @param b
      * @return
@@ -114,6 +126,8 @@ public class NumberUtils {
 
     /**
      * Time Complexity: O()
+     *
+     * @since Version 1
      *
      * @param n
      * @return
@@ -158,6 +172,8 @@ public class NumberUtils {
     /**
      * Time Complexity: O()
      *
+     * @since Version 1
+     *
      * @param n
      * @return
      */
@@ -191,6 +207,8 @@ public class NumberUtils {
     /**
      * Time Complexity: O(n)
      *
+     * @since Version 1
+     *
      * @param n
      * @return
      */
@@ -206,6 +224,8 @@ public class NumberUtils {
 
     /**
      * Time Complexity: O(√n)
+     *
+     * @since Version 1
      *
      * @param n
      * @return
@@ -223,6 +243,13 @@ public class NumberUtils {
         return divisors;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param s
+     * @return
+     */
     public static long sum(String s) {
         long l = 0;
         for (long lo : getRange(s)) {
@@ -231,6 +258,13 @@ public class NumberUtils {
         return l;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param longs
+     * @return
+     */
     public static long add(List<Long> longs) {
         long l = 0;
         for (long lo : longs) {
@@ -239,6 +273,13 @@ public class NumberUtils {
         return l;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param longs
+     * @return
+     */
     public static long subtract(List<Long> longs) {
         long l = 0;
         for (long lo : longs) {
@@ -247,6 +288,13 @@ public class NumberUtils {
         return l;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param longs
+     * @return
+     */
     public static long multiply(List<Long> longs) {
         long l = 1;
         for (long lo : longs) {
@@ -255,6 +303,13 @@ public class NumberUtils {
         return l;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param longs
+     * @return
+     */
     public static long divide(List<Long> longs) {
         long l = 1;
         for (long lo : longs) {
@@ -263,6 +318,13 @@ public class NumberUtils {
         return l;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param longs
+     * @return
+     */
     public static Long min(List<Long> longs) {
         if (longs.isEmpty()) {
             throw new RangeException("Range is Empty");
@@ -276,6 +338,13 @@ public class NumberUtils {
         return current;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param longs
+     * @return
+     */
     public static Long max(List<Long> longs) {
         if (longs.isEmpty()) {
             throw new RangeException("Range is Empty");
@@ -298,6 +367,8 @@ public class NumberUtils {
      *
      *   '0...20\{0>..2, 7, 5...9\{6, 7}}'
      *   '2...20\{5, 7...9}'
+     *
+     * @since Version 1
      *
      * @param range is the range to simplify.
      * @return is your simplified range.
@@ -456,6 +527,8 @@ public class NumberUtils {
      *     11, 12, 13, 14, 15, 16, 17, 18, 19, 20, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 5, 7, 8, 9
      *   '0...20\{0>..2, 7, 5...9\{6, 7}}'
      *     0, 3, 4, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+     *
+     * @since Version 1
      *
      * @see #simplifyRange(String) to simplify your Range
      *

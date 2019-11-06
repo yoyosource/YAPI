@@ -37,10 +37,23 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public E get() {
         return head;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param index
+     * @return
+     */
     public E get(int index) {
         if (index == 0) {
             return head;
@@ -49,6 +62,12 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param objects
+     */
     public void add(List<E> objects) {
         if (!mutable) throw new ArrayMutationException();
         for (E e : objects) {
@@ -56,6 +75,12 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param objects
+     */
     public void add(E... objects) {
         if (!mutable) throw new ArrayMutationException();
         for (E e : objects) {
@@ -63,6 +88,12 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param object
+     */
     public void add(E object) {
         if (!mutable) throw new ArrayMutationException();
         if (head == null) {
@@ -72,6 +103,13 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param object
+     * @param index
+     */
     public void add(E object, int index) {
         if (!mutable) throw new ArrayMutationException();
         if (index == 0) {
@@ -82,14 +120,34 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param object
+     * @return
+     */
     public boolean contains(E object) {
         return head.equals(object) || tail.contains(object);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param object
+     * @return
+     */
     public boolean tailContains(E object) {
         return tail.contains(object);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param object
+     */
     public void remove(E object) {
         if (!mutable) throw new ArrayMutationException();
         if (head.equals(object)) {
@@ -104,6 +162,12 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param index
+     */
     public void remove(int index) {
         if (!mutable) throw new ArrayMutationException();
         if (index == 0) {
@@ -114,14 +178,32 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public boolean isEmpty() {
         return head == null;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public boolean isNotEmpty() {
         return head != null;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public int size() {
         if (head == null) {
             return 0;
@@ -129,27 +211,64 @@ public class PrefixArray<E> {
         return tail.size() + 1;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public int length() {
         return size();
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public int tailSize() {
         return tail.size();
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public int tailLength() {
         return tail.size();
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param c
+     */
     public void sort(Comparator c) {
         if (!mutable) throw new ArrayMutationException();
         tail.sort(c);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public Object fold() {
         return fold('+');
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param operation
+     * @return
+     */
     public Object fold(char operation) {
         if (head == null) {
             return 0;
@@ -169,6 +288,13 @@ public class PrefixArray<E> {
         return 0;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param operation
+     * @return
+     */
     public Integer foldInteger(char operation) {
         if (head == null) {
             return 0;
@@ -187,6 +313,13 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param operation
+     * @return
+     */
     public Double foldDouble(char operation) {
         if (head == null) {
             return 0.0;
@@ -205,6 +338,13 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param operation
+     * @return
+     */
     public Float foldFloat(char operation) {
         if (head == null) {
             return 0F;
@@ -223,6 +363,13 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param operation
+     * @return
+     */
     public Long foldLong(char operation) {
         if (head == null) {
             return 0L;
@@ -241,14 +388,32 @@ public class PrefixArray<E> {
         }
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public boolean isMutable() {
         return mutable;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public boolean isImmutable() {
         return !mutable;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public PrefixArray<E> makeImmutable() {
         PrefixArray<E> prefixArray = new PrefixArray<>();
         prefixArray.head = this.head;
@@ -257,6 +422,12 @@ public class PrefixArray<E> {
         return prefixArray;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @return
+     */
     public PrefixArray<E> copy() {
         PrefixArray<E> prefixArray = new PrefixArray<>();
         prefixArray.head = this.head;

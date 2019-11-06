@@ -11,6 +11,13 @@ public class StringUtils {
         throw new IllegalStateException("Utility class");
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param bytes
+     * @return
+     */
     public static String toHex(byte[] bytes) {
         StringBuilder st = new StringBuilder();
         for (byte b : bytes) {
@@ -19,6 +26,13 @@ public class StringUtils {
         return st.toString();
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param string
+     * @return
+     */
     public static byte[] toBytes(String string) {
         char[] chars = string.toCharArray();
         byte[] bytes = new byte[chars.length];
@@ -28,6 +42,13 @@ public class StringUtils {
         return bytes;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param bytes
+     * @return
+     */
     public static String toString(byte[] bytes) {
         StringBuilder st = new StringBuilder();
         for (byte b : bytes) {
@@ -36,6 +57,13 @@ public class StringUtils {
         return st.toString();
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param chars
+     * @return
+     */
     public static String toString(char[] chars) {
         StringBuilder st = new StringBuilder();
         for (char c : chars) {
@@ -44,6 +72,14 @@ public class StringUtils {
         return st.toString();
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param s
+     * @param i
+     * @return
+     */
     public static String substring(String s, int i) {
         if (i < 0) {
             int j = s.length() + i;
@@ -55,6 +91,14 @@ public class StringUtils {
         return s.substring(i);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param s
+     * @param t
+     * @return
+     */
     public static String getLongestCommonPrefix(String s, String t) {
         int i = 1;
         while (t.startsWith(s.substring(0, i))) {
@@ -69,6 +113,14 @@ public class StringUtils {
         return s.substring(0, i - 1);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param s
+     * @param t
+     * @return
+     */
     public static List<Integer> getOccurrences(String s, String t) {
         if (s == null) throw new NullPointerException();
         if (t == null) throw new NullPointerException();
@@ -94,27 +146,80 @@ public class StringUtils {
         return occurrences;
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param string
+     * @return
+     */
     public static String[] splitWords(String string) {
         return splitString(string, new String[]{" ", "\n", "\t", ",", ".", "-", "!", "?", ";"}, false, false, false);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param string
+     * @param reviveSplitted
+     * @return
+     */
     public static String[] splitWords(String string, boolean reviveSplitted) {
         return splitString(string, new String[]{" ", "\n", "\t", ",", ".", "-", "!", "?", ";"}, reviveSplitted, false, false);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param string
+     * @param splitStrings
+     * @return
+     */
     public static String[] splitString(String string, String[] splitStrings) {
         return splitString(string, splitStrings, false, false, false);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param string
+     * @param splitStrings
+     * @param reviveSplitted
+     * @return
+     */
     public static String[] splitString(String string, String[] splitStrings, boolean reviveSplitted) {
         return splitString(string, splitStrings, reviveSplitted, false, false);
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param string
+     * @param splitStrings
+     * @param reviveSplitted
+     * @param addToLast
+     * @return
+     */
     public static String[] splitString(String string, String[] splitStrings, boolean reviveSplitted, boolean addToLast) {
         return splitString(string, splitStrings, reviveSplitted, addToLast, false);
 
     }
 
+    /**
+     *
+     * @since Version 1
+     *
+     * @param string
+     * @param splitStrings
+     * @param reviveSplitted
+     * @param addToLast
+     * @param splitInStrings
+     * @return
+     */
     public static String[] splitString(String string, String[] splitStrings, boolean reviveSplitted, boolean addToLast, boolean splitInStrings) {
         if (string == null) throw new NullPointerException();
         if (splitStrings == null) throw new NullPointerException();
