@@ -29,11 +29,8 @@ public class PrefixArray<E> {
     public PrefixArray(String s) {
         List<Long> range = NumberUtils.getRange(s);
         for (int i = 0; i < range.size(); i++) {
-            if (i == 0) {
-                head = (E)range.get(i);
-            } else {
-                tail.add((E)range.get(i));
-            }
+            if (i == 0) head = (E) range.get(i);
+            else tail.add((E)range.get(i));
         }
     }
 

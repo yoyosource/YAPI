@@ -31,7 +31,7 @@ public class Element {
     }
 
     public double distance(Vector vector) {
-        return vector.lenght();
+        return vector.length();
     }
 
     public boolean intersect(Vector vector) {

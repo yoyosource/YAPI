@@ -1,6 +1,6 @@
 package yapi.math;
 
-import java.math.BigDecimal;
+import java.util.Random;
 
 public class NumberRandom {
 

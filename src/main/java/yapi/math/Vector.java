@@ -125,7 +125,7 @@ public class Vector {
      * @param vector
      * @return
      */
-    public double multiplyVectorSkalar(Vector vector) {
+    public double multiplyVectorScalar(Vector vector) {
         double value = 0;
         try {
             for (int i = 0; i < this.vec.length; i++) {
@@ -134,7 +134,7 @@ public class Vector {
         } catch (IndexOutOfBoundsException e) {
             // Ignore the IndexOutOfBoundsException
         }
-        return Math.acos(value / (lenght() * vector.lenght()));
+        return Math.acos(value / (length() * vector.length()));
     }
 
     /**
@@ -159,7 +159,7 @@ public class Vector {
      *
      * @return
      */
-    public double lenght() {
+    public double length() {
         double value = 0;
         for (int i = 0; i < vec.length; i++) {
             value += vec[i] * vec[i];
