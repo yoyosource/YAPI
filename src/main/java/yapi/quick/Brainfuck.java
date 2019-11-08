@@ -17,6 +17,7 @@ public class Brainfuck {
     private long max = (long)Math.pow(2, 8) - 1;
 
     private long slowdown = 0;
+    private long executionTime = 0;
 
     private List<Character> charBuffer = new ArrayList<>();
 
@@ -128,12 +129,17 @@ public class Brainfuck {
         return st.toString();
     }
 
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
     public void run() {
         int i = 0;
         while (i < program.length) {
             if (output) {
                 info(i);
             }
+            long time = System.currentTimeMillis();
             if (program[i] == '<') {
                 decrementPointer();
             } else if (program[i] == '>') {
@@ -159,6 +165,8 @@ public class Brainfuck {
             } else if (program[i] == '}' && extended) {
                 i = endEBracket(i);
             }
+            time -= System.currentTimeMillis();
+            executionTime -= time;
             if (slowdown != 0) {
                 try {
                     Thread.sleep(slowdown);
