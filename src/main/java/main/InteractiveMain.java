@@ -70,7 +70,7 @@ public class InteractiveMain {
                                 new Point("Methods", new String[]{"setVector(int, double)", "setVec(double[])", "addVector(Vector)", "subtractVector(Vector)", "multiplyVector(int)", "multiplyVectorScalar(Vector)", "crossProduct(Vector)", "length()", "get(int)", "copy()"})
                         }),
                         new Point("NumberUtils", new Point[]{
-                                new Point("Methods (s)", new String[]{"round(double, int)", "isPrime(long)", "getPrimes(long)", "greatestCommonDivisor(long, long)", "leastCommonMultiple(long, long)", "areCoprime(long, long)", "nextPrime(long)", "primeFactorization(long)", "etDivisorsSorted(long)", "getDivisors(long)", "sum(String)", "add(List<Long>)", "subtract(List<Long>)", "multiply(List<Long>)", "divide(List<Long>)", "min(List<Long>)", "max(List<Long>)", "simplifyRange(String)", "getRange(String)"})
+                                new Point("Methods (s)", new String[]{"round(double, int)", "isPrime(long)", "getPrimes(long)", "greatestCommonDivisor(long, long)", "leastCommonMultiple(long, long)", "areCoprime(long, long)", "nextPrime(long)", "primeFactorization(long)", "setDivisorsSorted(long)", "getDivisors(long)", "sum(String)", "add(List<Long>)", "subtract(List<Long>)", "multiply(List<Long>)", "divide(List<Long>)", "min(List<Long>)", "max(List<Long>)", "simplifyRange(String)", "getRange(String)"})
                         })
                 }),
                 new Point("Utils", new String[]{"ArrayUtils", "ColorUtils", "FileUtils", "StringUtils"})}));

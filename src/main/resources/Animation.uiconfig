@@ -1,0 +1,8 @@
+?Width(40%W)
+
+pos(5%W 20)
+mode(.left)
+Rect(@Width 200)
+
+*TOUCH($Width(90%W))
+*TOUCHNOT($Width(40%W))

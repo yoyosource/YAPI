@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.zip.InflaterInputStream;
 
 public class Brainfuck {
 
@@ -21,23 +20,51 @@ public class Brainfuck {
 
     private List<Character> charBuffer = new ArrayList<>();
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param program
+     */
     public Brainfuck(String program) {
         setProgram(program);
         tape.add(0L);
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param program
+     * @param extended
+     */
     public Brainfuck(String program, boolean extended) {
         this.extended = extended;
         setProgram(program);
         tape.add(0L);
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param program
+     * @param i
+     */
     public Brainfuck(String program, int i) {
         setProgram(program);
         tape.add(0L);
         max = (long)Math.max(2, i) - 1;
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param program
+     * @param i
+     * @param extended
+     */
     public Brainfuck(String program, int i, boolean extended) {
         this.extended = extended;
         setProgram(program);
@@ -45,23 +72,51 @@ public class Brainfuck {
         max = (long)Math.max(2, i) - 1;
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     */
     public Brainfuck(File file) {
         setProgram(load(file));
         tape.add(0L);
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @param extended
+     */
     public Brainfuck(File file, boolean extended) {
         this.extended = extended;
         setProgram(load(file));
         tape.add(0L);
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @param i
+     */
     public Brainfuck(File file, int i) {
         setProgram(load(file));
         tape.add(0L);
         max = (long)Math.max(2, i) - 1;
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @param i
+     * @param extended
+     */
     public Brainfuck(File file, int i, boolean extended) {
         this.extended = extended;
         setProgram(load(file));
@@ -91,7 +146,7 @@ public class Brainfuck {
                     comment = false;
                 }
                 if (((char)b) == '/' && d) {
-                    comment = true;
+                    comment = !comment;
                 }
                 if (comment && d) {
                     continue;
@@ -113,14 +168,32 @@ public class Brainfuck {
         }
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param output
+     */
     public void setOutput(boolean output) {
         this.output = output;
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param slowdown
+     */
     public void setSlowdown(long slowdown) {
         this.slowdown = slowdown;
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @return
+     */
     public String getCode() {
         StringBuilder st = new StringBuilder();
         for (char c : program) {
@@ -129,10 +202,21 @@ public class Brainfuck {
         return st.toString();
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @return
+     */
     public long getExecutionTime() {
         return executionTime;
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     */
     public void run() {
         int i = 0;
         while (i < program.length) {

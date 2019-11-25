@@ -1,8 +1,16 @@
 package main;
 
+import yapi.conjecture.Collatz;
+import yapi.datastructures.LongTree;
+import yapi.manager.worker.Task;
+import yapi.manager.worker.WorkerPool;
+import yapi.math.NumberRandom;
 import yapi.quick.Brainfuck;
+import yapi.ui.YAPIWindow;
 
+import javax.swing.*;
 import java.io.File;
+import java.util.List;
 
 public class Work {
 
@@ -91,6 +99,7 @@ public class Work {
             }
         }*/
 
+        /*
         //Brainfuck brainfuck = new Brainfuck("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.+++.");
         //Brainfuck brainfuck = new Brainfuck(">+++++>++++[<->-]<[<]>:", true);
         //Brainfuck brainfuck = new Brainfuck("+:>>+<<[[->+<]>>[-<+>]<:[-<+>>+<]<]", true);
@@ -100,11 +109,81 @@ public class Work {
         //Brainfuck brainfuck = new Brainfuck(">>>+[[-]>>[-]++>+>+++++++[<++++>>++<-]++>>+>+>+++++[>++>++++++<<-]+>>>,<++[[>[->>]<[>>]<<-]<[<]<+>>[>]>[<+>-[[<+>-]>]<[[[-]<]++<-[<+++++++++>[<->-]>>]>>]]<<]<]<[[<]>[[>]>>[>>]+[<<]<[<]<+>>-]>[>]+[->>]<<<<[[<<]<[<]+<<[+>+<<-[>-->+<<-[>+<[>>+<<-]]]>[<+>-]<]++>>-->[>]>>[>>]]<<[>>+<[[<]<]>[[<<]<[<]+[-<+>>-[<<+>++>-[<->[<<+>>-]]]<[>+<-]>]>[>]>]>[>>]>>]<<[>>+>>+>>]<<[->>>>>>>>]<<[>.>>>>>>>]<<[>->>>>>]<<[>,>>>]<<[>+>]<<[+<<]<]");
         //Brainfuck brainfuck = new Brainfuck(">>>+[,>+++++++[<------>-]<[->+>+<<]>>[-<<+>>]<->+<[>-<[-]]>[-<<[-]+++++>>>>>]<<[->+>+<<]>>[-<<+>>]<-->+<[>-<[-]]>[-<<[-]++++++++>>>>>]<<[->+>+<<]>>[-<<+>>]<--->+<[>-<[-]]>[-<<[-]++++++>>>>>]<<[->+>+<<]>>[-<<+>>]<---->+<[>-<[-]]>[-<<[-]+++++++>>>>>]<<[->+>+<<]>>[-<<+>>]++++++[<--->-]+<[>-<[-]]>[-<<[-]++++>>>>>]<<[->+>+<<]>>[-<<+>>]+++++[<---->-]+<[>-<[-]]>[-<<[-]+++>>>>>]<<[->+>+<<]>>[-<<+>>]+++++++[<------->-]+<[>-<[-]]>[-<<[-]+>>>>>]<<[->+>+<<]>>[-<<+>>]+++++++[<------->-]<-->+<[>-<[-]]>[-<<[-]++>>>>>]<++++[<---->-]<]<<<[<<<]>>>[-->+<[>-]>[>]<<++>[-<<<<<+[>-->+<[>-]>[-<<+>>>]<<+>+<[>-]>[-<<->>>]<<+<[-<<<+>>>]<<<]>>>>>]<->+<[>-]>[>]<<+>[-<->>>[>>>]>[->+>>+<<<]>[-<+>]>>[-[->>+<<]+>>]+>[->+<]>[-<+>>>[-]+<<]+>>[-<<->>]<<<<[->>[-<<+>>]<<<<]>>[-<<<<<+>>>>>]<<<<<<<[>>[-<<<+>>>]<<<<<]+>>[>-->+<[>-]>[-<<->>>]<<+>+<[>-]>[-<<+>>>]<<+<[->>>+<<<]>>>]<]<--->+<[>-]>[->>[>>>]>+<<<<[<<<]>>]<<->+<[>-]>[->>[>>>]>-<<<<[<<<]>>]<<->+<[>-]>[->>[>>>]>[->+>>+<<<]>[-<+>]>>[-[->>+<<]+>>]+>+<[-<<]<<<<<[<<<]>>]<<->+<[>-]>[->>[>>>]>[->+>>+<<<]>[-<+>]>>[-[->>+<<]+>>]+>-<[-<<]<<<<<[<<<]>>]<<->+<[>-]>[->>[>>>]>[->+>>+<<<]>[-<+>]>>[-[->>+<<]+>>]+>.<[-<<]<<<<<[<<<]>>]<<->+<[>-]>[->>[>>>]>[->+>>+<<<]>[-<+>]>>[-[->>+<<]+>>]+>,<[-<<]<<<<<[<<<]>>]<<++++++++>>>]");
         Brainfuck brainfuck = new Brainfuck(new File("/Users/jojo/IdeaProjects/YAPI/src/main/resources/test.be"));
-        brainfuck.setOutput(true);
+        //brainfuck.setOutput(true);
         //brainfuck.setSlowdown(1);
         System.out.println(brainfuck.getCode());
         brainfuck.run();
-        System.out.println(brainfuck.getExecutionTime() + "ms");
+        System.out.println(brainfuck.getExecutionTime() + "ms");*/
+
+        /*
+        long longest = 0;
+        long lenght = 0;
+
+        long start = 10000000L * 16;
+        start = 10000000L * 0;
+
+        for (long i = start; i < start + 10000000; i++) {
+            List<Long> longs = Collatz.computeFast(i);
+            if (lenght < longs.size()) {
+                lenght = longs.size();
+                longest = i;
+            }
+        }
+
+        System.out.println(longest + " " + lenght);*/
+
+        /*
+        List<Byte> bytes = Collatz.computeCompressed(989345275647L);
+        System.out.println(bytes.size());
+        System.out.println(bytes);*/
+
+        /*
+        LongTree longTree = Collatz.reverseCompute(8);
+        System.out.println(longTree);*/
+
+        /*
+        JFrame frame = new JFrame("Test");
+        frame.setSize(500, 500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        YAPIWindow yapiWindow = new YAPIWindow(new File("/Users/jojo/IdeaProjects/YAPI/src/main/resources/Animation.uiconfig"));
+        yapiWindow.addSelector("test", "Hello");
+        yapiWindow.setUpdateLife(true);
+        frame.setContentPane(yapiWindow);
+
+        frame.setVisible(true);
+        frame.invalidate();*/
+
+        WorkerPool workerPool = new WorkerPool(20, 160);
+        for (int i = 0; i < 320; i++) {
+            workerPool.work(new Task() {
+                @Override
+                public void run() {
+                        System.out.println("TEST  " + getTaskID());
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            });
+            workerPool.work(new Task() {
+                @Override
+                public void run() {
+                        System.out.println("HALLO " + getTaskID());
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            });
+        }
+        workerPool.await();
+        System.out.println(workerPool.toString());
+        workerPool.close();
+        System.out.println(Thread.activeCount());
+        System.out.println(workerPool.getLog());
     }
 
 }
