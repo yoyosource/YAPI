@@ -1,7 +1,9 @@
 package main;
 
 import yapi.conjecture.Collatz;
+import yapi.datastructures.Graph;
 import yapi.datastructures.LongTree;
+import yapi.datastructures.Node;
 import yapi.manager.worker.Task;
 import yapi.manager.worker.WorkerPool;
 import yapi.math.NumberRandom;
@@ -154,6 +156,7 @@ public class Work {
         frame.setVisible(true);
         frame.invalidate();*/
 
+        /*
         WorkerPool workerPool = new WorkerPool(20, 160);
         for (int i = 0; i < 320; i++) {
             workerPool.work(new Task() {
@@ -183,7 +186,32 @@ public class Work {
         System.out.println(workerPool.toString());
         workerPool.close();
         System.out.println(Thread.activeCount());
-        System.out.println(workerPool.getLog());
+        System.out.println(workerPool.getLog());*/
+
+        Node.setCompact(true);
+
+        Node node1 = new Node("Test1");
+        Node node2 = new Node("Test2");
+        Node node3 = new Node("Test3");
+        Node node4 = new Node("Test4");
+        Node node5 = new Node("Test5");
+        node1.addConnection(node2);
+        node1.addConnection(node3);
+        node3.addConnection(node2);
+        node2.addConnection(node3);
+        node2.addConnection(node1);
+        node1.addConnection(node1);
+        node1.addConnection(node4);
+        node3.addConnection(node4);
+        node4.addConnection(node4);
+        node4.addConnection(node2);
+        node4.addConnection(node5);
+
+        Graph graph = new Graph(node1, node2, node3, node4, node5);
+        graph.setOutput(true);
+        System.out.println(graph.ascii());
+
+        System.out.println(node1);
     }
 
 }

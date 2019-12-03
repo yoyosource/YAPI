@@ -2,8 +2,13 @@ package yapi.utils;
 
 import yapi.exceptions.NoStringException;
 
+import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class StringUtils {
 
@@ -19,9 +24,16 @@ public class StringUtils {
      * @return
      */
     public static String toHex(byte[] bytes) {
+        return toHex(bytes, false);
+    }
+
+    public static String toHex(byte[] bytes, boolean spaces) {
         StringBuilder st = new StringBuilder();
+        boolean t = false;
         for (byte b : bytes) {
+            if (spaces && t) st.append(' ');
             st.append(String.format("%02X", b));
+            t = true;
         }
         return st.toString();
     }
@@ -144,6 +156,18 @@ public class StringUtils {
             }
         }
         return occurrences;
+    }
+
+    public static byte[] hash(String s, String hashType) {
+        if (!(hashType.equals("MD5") || hashType.equals("SHA-1") || hashType.equals("SHA-256"))) {
+            hashType = "SHA-256";
+        }
+        try {
+            MessageDigest digest = MessageDigest.getInstance(hashType);
+            return digest.digest((s + "").getBytes(StandardCharsets.UTF_8));
+        } catch (NoSuchAlgorithmException e) {
+            return new byte[0];
+        }
     }
 
     /**

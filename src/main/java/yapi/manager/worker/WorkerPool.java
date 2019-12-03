@@ -94,9 +94,11 @@ public class WorkerPool implements Runnable {
         }
         while (available.isEmpty()) {
             try {
-                wait(100);
+                synchronized (this) {
+                    wait(100);
+                }
             } catch (InterruptedException e) {
-
+                Thread.currentThread().interrupt();
             }
         }
         if (available.isEmpty()) {
@@ -104,7 +106,7 @@ public class WorkerPool implements Runnable {
             return;
         }
         available.remove(0).delete();
-        System.out.println(available.size() + " " + all.size());
+        //System.out.println(available.size() + " " + all.size());
     }
 
     private void poolManager() {

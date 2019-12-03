@@ -1,5 +1,6 @@
 package main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,18 @@ public class InteractiveMain {
     }
 
     public static void main(String[] args) {
-        versions();
+        try {
+            byte[] bytes = InteractiveMain.class.getResourceAsStream("/yapi/conjecture/Collatz.class").readAllBytes();
+            StringBuilder st = new StringBuilder();
+            for (byte b : bytes) {
+                st.append((char)b);
+            }
+            System.out.println(st);
+        } catch (IOException e) {
+
+        }
+
+        //versions();
     }
 
     public static void mapKeys() {

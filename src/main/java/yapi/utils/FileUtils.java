@@ -156,4 +156,106 @@ public class FileUtils {
         return new String[0];
     }
 
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @return
+     */
+    public static long getSize(File file) {
+        if (!file.isFile()) {
+            return 0L;
+        }
+        return file.length();
+    }
+
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @param round
+     * @return
+     */
+    public static String getSize(File file, int round) {
+        return getSize(file, true, false, round);
+    }
+
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @param convert
+     * @param round
+     * @return
+     */
+    public static String getSize(File file, boolean convert, int round) {
+        return getSize(file, convert, false, round);
+    }
+
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @param convert
+     * @return
+     */
+    public static String getSize(File file, boolean convert) {
+        return getSize(file, convert, false, 0);
+    }
+
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @param convert
+     * @param floating
+     * @return
+     */
+    public static String getSize(File file, boolean convert, boolean floating) {
+        return getSize(file, convert, floating, 0);
+    }
+
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param file
+     * @param convert
+     * @param floating
+     * @param round
+     * @return
+     */
+    public static String getSize(File file, boolean convert, boolean floating, int round) {
+        if (!convert) {
+            return getSize(file) + "";
+        }
+        long size = getSize(file);
+        int i = 0;
+        while (size > 1024) {
+            size /= 1024;
+            i++;
+        }
+        char[] chars = new char[]{'b', 'K', 'M', 'G', 'T', 'P', 'Y'};
+        if (!floating) {
+            return size + "" + chars[i];
+        } else {
+            long l = (long)Math.pow(1024, i - 1D);
+            if (round < 0) {
+                round = 0;
+            }
+            if (round > 2) {
+                round = 2;
+            }
+            int t = (int)Math.pow(10, round);
+            long s = getSize(file) / l - size * 1024;
+            s = (s / t);
+            return size + "." + s + chars[i];
+        }
+    }
+
 }
