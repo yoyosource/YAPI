@@ -6,19 +6,95 @@ import yapi.math.NumberRandom;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EncryptionSymmetric {
 
+    private EncryptionSymmetric() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static final int XOR       = 0;
+    public static final int NOT       = 1;
+    public static final int INVERSE   = 1;
+
+    public static final int PLUS      = 2;
+    public static final int ADD       = 2;
+    public static final int MINUS     = 3;
+    public static final int SUBTRACT  = 3;
+
+    public static final int XOR_PLUS  = 6;
+    public static final int XOR_MINUS = 7;
+
+    private static List<Integer> operations = new ArrayList<>();
+    static {
+        operations.add(XOR_PLUS);
+    }
+
+    public static void resetEncryption() {
+        operations.clear();
+        operations.add(XOR_PLUS);
+    }
+
+    public static void setEncryption() {
+        resetEncryption();
+    }
+
+    public static void setEncryption(int... ints) {
+        operations.clear();
+        if (ints.length == 0) {
+            operations.add(XOR_PLUS);
+            return;
+        }
+        for (int i : ints) {
+            if (i >= 0 && i <= 7) {
+                operations.add(i);
+            }
+        }
+    }
+
+    public static void setEncryption(String operation) {
+        operations.clear();
+        if (operation.isBlank()) {
+            operations.add(XOR_PLUS);
+            return;
+        }
+        String[] strings = operation.split(" ");
+        for (String s : strings) {
+            if (s.equalsIgnoreCase("XOR") || s.equals(XOR + "")) {
+                operations.add(XOR);
+            } else if (s.equalsIgnoreCase("NOT") || s.equals(NOT + "")) {
+                operations.add(NOT);
+            } else if (s.equalsIgnoreCase("INVERSE")) {
+                operations.add(INVERSE);
+            } else if (s.equalsIgnoreCase("PLUS") || s.equals(PLUS + "")) {
+                operations.add(PLUS);
+            } else if (s.equalsIgnoreCase("ADD")) {
+                operations.add(ADD);
+            } else if (s.equalsIgnoreCase("MINUS") || s.equals(MINUS + "")) {
+                operations.add(MINUS);
+            } else if (s.equalsIgnoreCase("SUBTRACT")) {
+                operations.add(SUBTRACT);
+            } else if (s.equalsIgnoreCase("XOR_PLUS") || s.equals(XOR_PLUS + "")) {
+                operations.add(XOR_PLUS);
+            } else if (s.equalsIgnoreCase("XOR_MINUS") || s.equals(XOR_MINUS + "")) {
+                operations.add(XOR_MINUS);
+            }
+        }
+    }
+
     public static void main(String[] args) {
+        setEncryption(ADD, INVERSE, MINUS, XOR_PLUS, INVERSE, ADD, XOR_PLUS, XOR, MINUS, NOT, ADD, NOT);
         if (true) {
             for (int i = 0; i < 100; i++) {
-                decrypt(encrypt(createKey(), createKey()), createKey());
+                decrypt(encrypt(toBytes(createKey()), createKey()), createKey());
             }
         }
 
         if (false) {
-            byte[] bytes = createBytes("55 5E 26 A4 A8 BC BC 4A B4 94 16 E4 48 38 AE 58 B6 59 C3 C8 F4 22 F5 4E 60 4C C9 CA A4 63 4F 04 39 6A 63 6A 40 C9 0E EC B0 4B F1 CE AE 38 2A 15 A9 D9 B4 0D 83 F4 98 2B 6B 78 2E A9 FC 8C 60 B9 A1 66 A8 84 55 4B 08 75 44 B1 A2 A5 CE F4 EB 9B 48 CA D5 A1 9A 85 2E EE 48 A4 49 83 08 7B 35 6E 2E 78 F5 2B 90 1C C8 28 55 D8 A1 13 44 28 31 7D EE 69 EE 2C BB 2F 41 DC 51 B0 11 EA 64 94 59 1A A5 D0 24 A3 4D 21 C0 7C CD 53 70 BC B7 18 1A 8D 44 AA 61 64 FD 0C 98 58 FA 55 4E 4E");
-            String s = decrypt(bytes, "h&dX`N`fL>\"Dtvfzj&2vHFtL>@X(BZ`fD&DJT BFB|6Nr b(86h&P4V4^`Vp8|n$L\\xb.hnj(4 `,jZljLz\\N(zfrVzBrJ4&,B*LPXTr20\\n0TF2jjv6>6lp@0>NbZj<:x4\"JDH|^,<L4lt$hXZz(6:4fZ^NLPdLL` 8 j<t^n@>vXBp*TpLX`&Xz R\"N<0|0>Nrpl2f@2:nNnVVp zNRXd8(fVbv,HX6Tt:8LxJVDBJpV`&(VP2Z4d||Zr>n,^.");
+            byte[] bytes = toBytes("55 5E 26 A4 A8 BC BC 4A B4 94 16 E4 48 38 AE 58 B6 59 C3 C8 F4 22 F5 4E 60 4C C9 CA A4 63 4F 04 39 6A 63 6A 40 C9 0E EC B0 4B F1 CE AE 38 2A 15 A9 D9 B4 0D 83 F4 98 2B 6B 78 2E A9 FC 8C 60 B9 A1 66 A8 84 55 4B 08 75 44 B1 A2 A5 CE F4 EB 9B 48 CA D5 A1 9A 85 2E EE 48 A4 49 83 08 7B 35 6E 2E 78 F5 2B 90 1C C8 28 55 D8 A1 13 44 28 31 7D EE 69 EE 2C BB 2F 41 DC 51 B0 11 EA 64 94 59 1A A5 D0 24 A3 4D 21 C0 7C CD 53 70 BC B7 18 1A 8D 44 AA 61 64 FD 0C 98 58 FA 55 4E 4E");
+            String s = toString(decrypt(bytes, "h&dX`N`fL>\"Dtvfzj&2vHFtL>@X(BZ`fD&DJT BFB|6Nr b(86h&P4V4^`Vp8|n$L\\xb.hnj(4 `,jZljLz\\N(zfrVzBrJ4&,B*LPXTr20\\n0TF2jjv6>6lp@0>NbZj<:x4\"JDH|^,<L4lt$hXZz(6:4fZ^NLPdLL` 8 j<t^n@>vXBp*TpLX`&Xz R\"N<0|0>Nrpl2f@2:nNnVVp zNRXd8(fVbv,HX6Tt:8LxJVDBJpV`&(VP2Z4d||Zr>n,^."));
             System.out.println(s);
         }
 
@@ -29,13 +105,13 @@ public class EncryptionSymmetric {
             String toCrypt = "Ich bin der coder32 und kann ziemlich schnell auf Tastaturen schreiben. Das kann ich, da ich einen Computer habe, seit ich 7 Jahre alt bin.";
             //toCrypt = new NumberRandom().getString(1024);
             long time = System.currentTimeMillis();
-            byte[] bytes = encrypt(toCrypt, key);
+            byte[] bytes = encrypt(toBytes(toCrypt), key);
             time = System.currentTimeMillis() - time;
-            System.out.println(StringUtils.toHex(bytes, true));
+            System.out.println(toHex(bytes));
             System.out.println(time + "ms");
             //key = ".` rFrN(>8><&Z^0@h\\F8FVxdL.J,&@,f4<nxBPB&z, XV0N\"b*bJhj |XhZ HR|@Bh:@::\\22@@<lrNX6bvFJ|N,jJz*XVT\\4|f(2^D6zd>R\\lTXZzbPZ.V<0ZHpTV*h|(bN:>R(`xJvVDZr`0:j0nnX^Bp$zxr:\"$nBhN(P60JrxF20zx<P6^$*p &hnd8fNR&x:z8n t:\\N>ZZ,.$V,XBL^6J6zz,xXrrP&hnx@4&@8P\\n*^,6FFd|dN&pd>|J$<Br8 >\\`<h\\6Z|TzFH^@^(fRz&L6Z,V.\\R* trJ^.TfHzH,xH`LVdl(H`6Jt8 2RT*Zhp@l&Dp*6<4nhn8hVR<`T&|n<TbPjv\"p|0rrdtR:.p>fz*.Fh|Dnf.>4Z4hrvV2dPnX4 6 BZ^ $FT2>rt4*Dxh.db^8b8flb.rRx6$Z<\\2^>*d\\Vtt\\R2NJ^>6XFD<$(`<f\\XH \">d >xp,H&VdDJvT\\2*^Xl2jhj<J86T0@b(4(>DTh8DHDzbX2`Vh^zF0TFTPVHFBzhh*bX^$P&\\BL@r\\.j<Z02vFDvhzFnDZ&P^Nx@$(x\\F@(,H$LRf&ZJ4Nj&.f2*^,tlfD\\FVB&&&$nN4@VrLp|\"$0b4p| b<2,z\\(P<r*2\"(J4h6x\\*l,Hp`J.,$,hvFn8hF.z`J.@\\d\"BJH\":x2x2&2@v v:P\\&\"bV<(@N4xtT40:>Xx2&\\&P0@r2*2(^DxbX\"X@Jx\\,6v6 Fxl\"@TNf8z<0& BR&J\\^|.Dd(2X2<HzR6|jdb<8<<l(F ZJZ`$&*0$T@.*h**L*\"N6JDlrZLxXJfb<jlT\\F(l|6@jl^:vlzNnPh&$\\vv>Dd\":J4@.$6rx<Ptnpp6\"jB&> \\.PPLF@x,XHbNv f|NBZ|,^:rPDh$b6:lHt``jj\"\"z,b@tjdf0.djZ4F^ftHBJXHZnj2R4@z624\"bFz@nTVrbld6ZD6`62l\"|0Rlb<Bf6&&&BZR0>jt$P 6tpJr,8*N@r.Z>br6ht>6n\"v,dLpH\\*XblL>*.N<`:NhLBV";
             time = System.currentTimeMillis();
-            String output = decrypt(bytes, key);
+            String output = toString(decrypt(bytes, key));
             time = System.currentTimeMillis() - time;
             System.out.println(output);
             System.out.println(time + "ms");
@@ -44,7 +120,7 @@ public class EncryptionSymmetric {
 
     public static String createKey(int security) {
         if (security == 0) {
-            return new NumberRandom().getString(256 );
+            return new NumberRandom().getString(256);
         } else if (security == 1) {
             return new NumberRandom().getString(512);
         } else if (security == 2) {
@@ -98,38 +174,41 @@ public class EncryptionSymmetric {
     public static byte[] encrypt(FileInputStream fileInputStream, String key) {
         try {
             byte[] bytes = fileInputStream.readAllBytes();
-            return encrypt(StringUtils.toString(bytes), key);
+            return encrypt(bytes, key);
         } catch (IOException e) {
             throw new EncryptionException("Exception while reading File");
         }
     }
 
-    public static byte[] encrypt(String text, String key) {
+    public static byte[] encrypt(byte[] text, String key) {
         if (!(key.length() == 256 || key.length() == 512 || key.length() == 1024 || key.length() == 2084 || key.length() == 4096 || key.length() == 8192)) {
-            throw new EncryptionException("Key needs to be 512, 1024, 2084, 4186 or 8192 bytes long");
+            throw new EncryptionException("Key needs to be 512, 1024, 2084, 4186 or 8192 bytes long (" + key.length() + ")");
         }
         String[] keys = keys(key);
         byte[] checksum = checksum(keys);
-        text = pad(checksum.length + 1) + pad() + text;
-        char[] chars = text.toCharArray();
-        byte[] bytes = new byte[text.length()];
+        byte[] bytes = new byte[text.length + pad().length() + pad(checksum.length + 1).length()];
+        char[] chars = new char[bytes.length];
+        char[] pad = (pad() + pad(checksum.length + 1)).toCharArray();
+        for (int i = 0; i < pad.length; i++) {
+            chars[i] = pad[i];
+        }
+        for (int i = 0; i < text.length; i++) {
+            chars[i + pad.length] = (char)text[i];
+        }
         for (int i = 0; i < checksum.length; i++) {
             bytes[i + 1] = checksum[i];
         }
         for (int i = checksum.length; i < chars.length; i++) {
-            if (i < 8) {
-                bytes[i] = (xor((byte)chars[i], keys[i]));
-            } else {
-                byte b = (byte)chars[i];
-                int l = i - 1;
-                for (int j = l; j >= l - 7; j--) {
-                    b = xor(b, keys[((int)bytes[j] + 128) % keys.length]);
-                }
-                for (int j = 0; j < keys.length; j++) {
-                    b = (xor(b, keys[j]));
-                }
-                bytes[i] = b;
+            int l = i - 1;
+            int remove = (i < 8 ? i : 7);
+            byte b = (byte)chars[i];
+            for (int j = l; j >= l - remove; j--) {
+                b = encrypt(b, keys[((int)bytes[j] + 128) % keys.length]);
             }
+            for (int j = 0; j < keys.length; j++) {
+                b = (encrypt(b, keys[j]));
+            }
+            bytes[i] = b;
         }
         byte b = 0;
         for (int i = 0; i < bytes.length; i++) {
@@ -139,7 +218,7 @@ public class EncryptionSymmetric {
         return bytes;
     }
 
-    public static String decrypt(File file, String key) {
+    public static byte[] decrypt(File file, String key) {
         try {
             return decrypt(new FileInputStream(file), key);
         } catch (IOException e) {
@@ -147,7 +226,7 @@ public class EncryptionSymmetric {
         }
     }
 
-    public static String decrypt(FileInputStream fileInputStream, String key) {
+    public static byte[] decrypt(FileInputStream fileInputStream, String key) {
         try {
             byte[] bytes = fileInputStream.readAllBytes();
             return decrypt(bytes, key);
@@ -156,13 +235,13 @@ public class EncryptionSymmetric {
         }
     }
 
-    public static String decrypt(byte[] bytes, String key) {
+    public static byte[] decrypt(byte[] bytes, String key) {
         if (!(key.length() == 256 || key.length() == 512 || key.length() == 1024 || key.length() == 2084 || key.length() == 4096 || key.length() == 8192)) {
             throw new EncryptionException("Key needs to be 512, 1024, 2084, 4186 or 8192 bytes long");
         }
-        StringBuilder st = new StringBuilder();
         String[] keys = keys(key);
         byte[] checksum = checksum(keys);
+        byte[] output = new byte[bytes.length - 8 - checksum.length - 1];
         for (int i = 1; i < checksum.length; i++) {
             if (bytes[i] != checksum[i - 1]) {
                 keys[i - 1] = pad(32);
@@ -178,18 +257,82 @@ public class EncryptionSymmetric {
         for (int i = bytes.length - 1; i >= 8 + checksum.length + 1; i--) {
             byte b = bytes[i];
             for (int j = keys.length - 1; j >= 0; j--) {
-                b = xorInverse(b, keys[j]);
+                b = decrypt(b, keys[j]);
             }
             int l = i - 1;
             for (int j = l - 7; j <= l; j++) {
-                b = xorInverse(b, keys[((int)bytes[j] + 128) % keys.length]);
+                b = decrypt(b, keys[((int)bytes[j] + 128) % keys.length]);
             }
-            st.append((char)b);
+            output[i - 8 - checksum.length - 1] = b;
         }
-        return st.reverse().toString();
+        return output;
+    }
+
+    private static byte encrypt(byte b, String key) {
+        for (int i = 0; i < operations.size(); i++) {
+            if (operations.get(i) == XOR) {
+                b = xor(b, key);
+            } else if (operations.get(i) == NOT) {
+                b = not(b);
+            } else if (operations.get(i) == PLUS) {
+                b = plus(b, key);
+            } else if (operations.get(i) == MINUS) {
+                b = subtract(b, key);
+            } else if (operations.get(i) == XOR_PLUS) {
+                b = xorPlus(b, key);
+            } else if (operations.get(i) == XOR_MINUS) {
+                b = xorMinus(b, key);
+            }
+        }
+        return b;
+    }
+
+    private static byte decrypt(byte b, String key) {
+        for (int i = operations.size() - 1; i >= 0; i--) {
+            if (operations.get(i) == XOR) {
+                b = xor(b, key);
+            } else if (operations.get(i) == NOT) {
+                b = not(b);
+            } else if (operations.get(i) == PLUS) {
+                b = subtract(b, key);
+            } else if (operations.get(i) == MINUS) {
+                b = plus(b, key);
+            } else if (operations.get(i) == XOR_PLUS) {
+                b = xorPlusInverse(b, key);
+            } else if (operations.get(i) == XOR_MINUS) {
+                b = xorMinusInverse(b, key);
+            }
+        }
+        return b;
     }
 
     private static byte xor(byte b, String key) {
+        for (char c : key.toCharArray()) {
+            b ^= c;
+        }
+        return b;
+    }
+
+    private static byte not(byte b) {
+        b &= 0xFF;
+        return b;
+    }
+
+    private static byte plus(byte b, String key) {
+        for (char c : key.toCharArray()) {
+            b += c;
+        }
+        return b;
+    }
+
+    private static byte subtract(byte b, String key) {
+        for (char c : key.toCharArray()) {
+            b -= c;
+        }
+        return b;
+    }
+
+    private static byte xorPlus(byte b, String key) {
         for (char c : key.toCharArray()) {
             b ^= c;
             b += c;
@@ -197,10 +340,27 @@ public class EncryptionSymmetric {
         return b;
     }
 
-    private static byte xorInverse(byte b, String key) {
+    private static byte xorPlusInverse(byte b, String key) {
         char[] chars = key.toCharArray();
-        for (int i = key.length() - 1; i >= 0; i--) {
+        for (int i = chars.length - 1; i >= 0; i--) {
             b -= chars[i];
+            b ^= chars[i];
+        }
+        return b;
+    }
+
+    private static byte xorMinus(byte b, String key) {
+        for (char c : key.toCharArray()) {
+            b ^= c;
+            b -= c;
+        }
+        return b;
+    }
+
+    private static byte xorMinusInverse(byte b, String key) {
+        char[] chars = key.toCharArray();
+        for (int i = chars.length - 1; i >= 0; i--) {
+            b += chars[i];
             b ^= chars[i];
         }
         return b;
@@ -219,13 +379,36 @@ public class EncryptionSymmetric {
         return bytes;
     }
 
-    public static byte[] createBytes(String s) {
-        String[] strings = s.split(" ");
-        byte[] bytes = new byte[strings.length];
-        for (int i = 0; i < strings.length; i++) {
-            bytes[i] = (byte)(Integer.parseInt(strings[i], 16));
+    public static byte[] toBytes(String s) {
+        if (s.matches("[A-F0-9]{2}( [A-F0-9]{2})*")) {
+            String[] strings = s.split(" ");
+            byte[] bytes = new byte[strings.length];
+            for (int i = 0; i < strings.length; i++) {
+                bytes[i] = (byte)(Integer.parseInt(strings[i], 16));
+            }
+            return bytes;
+        } else {
+            return s.getBytes();
         }
-        return bytes;
+    }
+
+    public static String toHex(byte[] bytes) {
+        StringBuilder st = new StringBuilder();
+        boolean t = false;
+        for (byte b : bytes) {
+            if (t) st.append(' ');
+            st.append(String.format("%02X", b));
+            t = true;
+        }
+        return st.toString();
+    }
+
+    public static String toString(byte[] bytes) {
+        StringBuilder st = new StringBuilder();
+        for (byte b : bytes) {
+            st.append((char)b);
+        }
+        return st.toString();
     }
 
 }
