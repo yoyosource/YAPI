@@ -2,11 +2,10 @@ package yapi.utils;
 
 import yapi.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
+import yapi.math.NumberUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EncryptionSymmetric {
@@ -85,8 +84,31 @@ public class EncryptionSymmetric {
     }
 
     public static void main(String[] args) {
-        setEncryption(ADD, INVERSE, MINUS, XOR_PLUS, INVERSE, ADD, XOR_PLUS, XOR, MINUS, NOT, ADD, NOT);
-        if (true) {
+        //setEncryption(ADD, INVERSE, MINUS, XOR_PLUS, INVERSE, ADD, XOR_PLUS, XOR, MINUS, NOT, ADD, NOT);
+
+        if (false) {
+            int security = 4;
+            char[] s1 = createKey("pw12345", security).toCharArray();
+            char[] s2 = createKey("pw21345", security).toCharArray();
+            int longest = 0;
+            while (s1.length > Math.pow(10, longest)) {
+                longest++;
+            }
+
+            int duplicates = 0;
+            for (int i = 0; i < s1.length; i++) {
+                if (s1[i] == s2[i]) {
+                    duplicates++;
+                    //System.out.println(" ".repeat(longest - (i + "").length()) + i + " -> " + s1[i]);
+                }
+            }
+            System.out.println("Total duplicates  : " + duplicates);
+            System.out.println("Total length      : " + s1.length);
+
+            return;
+        }
+
+        if (false) {
             for (int i = 0; i < 100; i++) {
                 decrypt(encrypt(toBytes(createKey()), createKey()), createKey());
             }
@@ -99,52 +121,96 @@ public class EncryptionSymmetric {
         }
 
         if (true) {
-            String key = ".` rFrN(>8><&Z^0@h\\F8FVxdL.J,&@,f4<nxBPB&z, XV0N\"b*bJhj |XhZ HR|@Bh:@::\\22@@<lrNX6bvFJ|N,jJz*XVT\\4|f(2^D6zd>R\\lTXZzbPZ.V<0ZHpTV*h|(bN:>R(`xJvVDZr`0:j0nnX^Bp$zxr:\"$nBhN(P60JrxF20zx<P6^$*p &hnd8fNR&x:z8n t:\\N>ZZ,.$V,XBL^6J6zz,xXrrP&hnx@4&@8P\\n*^,6FFd|dN&pd>|J$<Br8 >\\`<h\\6Z|TzFH^@^(fRz&L6Z,V.\\R* trJ^.TfHzH,xH`LVdl(H`6Jt8 2RT*Zhp@l&Dp*6<4nhn8hVR<`T&|n<TbPjv\"p|0rrdtR:.p>fz*.Fh|Dnf.>4Z4hrvV2dPnX4 6 BZ^ $FT2>rt4*Dxh.db^8b8flb.rRx6$Z<\\2^>*d\\Vtt\\R2NJ^>6XFD<$(`<f\\XH \">d >xp,H&VdDJvT\\2*^Xl2jhj<J86T0@b(4(>DTh8DHDzbX2`Vh^zF0TFTPVHFBzhh*bX^$P&\\BL@r\\.j<Z02vFDvhzFnDZ&P^Nx@$(x\\F@(,H$LRf&ZJ4Nj&.f2*^,tlfD\\FVB&&&$nN4@VrLp|\"$0b4p| b<2,z\\(P<r*2\"(J4h6x\\*l,Hp`J.,$,hvFn8hF.z`J.@\\d\"BJH\":x2x2&2@v v:P\\&\"bV<(@N4xtT40:>Xx2&\\&P0@r2*2(^DxbX\"X@Jx\\,6v6 Fxl\"@TNf8z<0& BR&J\\^|.Dd(2X2<HzR6|jdb<8<<l(F ZJZ`$&*0$T@.*h**L*\"N6JDlrZLxXJfb<jlT\\F(l|6@jl^:vlzNnPh&$\\vv>Dd\":J4@.$6rx<Ptnpp6\"jB&> \\.PPLF@x,XHbNv f|NBZ|,^:rPDh$b6:lHt``jj\"\"z,b@tjdf0.djZ4F^ftHBJXHZnj2R4@z624\"bFz@nTVrbld6ZD6`62l\"|0Rlb<Bf6&&&BZR0>jt$P 6tpJr,8*N@r.Z>br6ht>6n\"v,dLpH\\*XblL>*.N<`:NhLBV";
-            key = createKey(0);
+            String key = createKey("pw12345", 1);
             System.out.println(key);
             String toCrypt = "Ich bin der coder32 und kann ziemlich schnell auf Tastaturen schreiben. Das kann ich, da ich einen Computer habe, seit ich 7 Jahre alt bin.";
             //toCrypt = new NumberRandom().getString(1024);
-            long time = System.currentTimeMillis();
+            Timer timer = new Timer();
+            timer.start();
             byte[] bytes = encrypt(toBytes(toCrypt), key);
-            time = System.currentTimeMillis() - time;
+            timer.stop();
             System.out.println(toHex(bytes));
-            System.out.println(time + "ms");
+            System.out.println(timer.getTimeFormatted("MMF>M ssF>s mmmF>m xxxF>x nnnF>n"));
             //key = ".` rFrN(>8><&Z^0@h\\F8FVxdL.J,&@,f4<nxBPB&z, XV0N\"b*bJhj |XhZ HR|@Bh:@::\\22@@<lrNX6bvFJ|N,jJz*XVT\\4|f(2^D6zd>R\\lTXZzbPZ.V<0ZHpTV*h|(bN:>R(`xJvVDZr`0:j0nnX^Bp$zxr:\"$nBhN(P60JrxF20zx<P6^$*p &hnd8fNR&x:z8n t:\\N>ZZ,.$V,XBL^6J6zz,xXrrP&hnx@4&@8P\\n*^,6FFd|dN&pd>|J$<Br8 >\\`<h\\6Z|TzFH^@^(fRz&L6Z,V.\\R* trJ^.TfHzH,xH`LVdl(H`6Jt8 2RT*Zhp@l&Dp*6<4nhn8hVR<`T&|n<TbPjv\"p|0rrdtR:.p>fz*.Fh|Dnf.>4Z4hrvV2dPnX4 6 BZ^ $FT2>rt4*Dxh.db^8b8flb.rRx6$Z<\\2^>*d\\Vtt\\R2NJ^>6XFD<$(`<f\\XH \">d >xp,H&VdDJvT\\2*^Xl2jhj<J86T0@b(4(>DTh8DHDzbX2`Vh^zF0TFTPVHFBzhh*bX^$P&\\BL@r\\.j<Z02vFDvhzFnDZ&P^Nx@$(x\\F@(,H$LRf&ZJ4Nj&.f2*^,tlfD\\FVB&&&$nN4@VrLp|\"$0b4p| b<2,z\\(P<r*2\"(J4h6x\\*l,Hp`J.,$,hvFn8hF.z`J.@\\d\"BJH\":x2x2&2@v v:P\\&\"bV<(@N4xtT40:>Xx2&\\&P0@r2*2(^DxbX\"X@Jx\\,6v6 Fxl\"@TNf8z<0& BR&J\\^|.Dd(2X2<HzR6|jdb<8<<l(F ZJZ`$&*0$T@.*h**L*\"N6JDlrZLxXJfb<jlT\\F(l|6@jl^:vlzNnPh&$\\vv>Dd\":J4@.$6rx<Ptnpp6\"jB&> \\.PPLF@x,XHbNv f|NBZ|,^:rPDh$b6:lHt``jj\"\"z,b@tjdf0.djZ4F^ftHBJXHZnj2R4@z624\"bFz@nTVrbld6ZD6`62l\"|0Rlb<Bf6&&&BZR0>jt$P 6tpJr,8*N@r.Z>br6ht>6n\"v,dLpH\\*XblL>*.N<`:NhLBV";
-            time = System.currentTimeMillis();
+            timer.reset();
+            timer.start();
             String output = toString(decrypt(bytes, key));
-            time = System.currentTimeMillis() - time;
+            timer.stop();
             System.out.println(output);
-            System.out.println(time + "ms");
+            System.out.println(timer.getTimeFormatted("MMF>M ssF>s mmmF>m xxxF>x nnnF>n"));
         }
+    }
+
+    public static String createKey(String username, String password, int security) {
+        long checksum = 0;
+        for (char c : username.toCharArray()) {
+            checksum += c;
+        }
+        return rotate(createKey(password, security - 1) + createKey(username, security - 1), checksum);
+    }
+
+    public static String createKey(String password, int security) {
+        if (security < 0) {
+            security = 0;
+        }
+        if (security > 16) {
+            security = 16;
+        }
+        security = (int)Math.pow(2, security + 8);
+
+        long checksum = 0;
+        for (char c : password.toCharArray()) {
+            checksum += c;
+        }
+
+        int hashsum = 0;
+        byte[] hash = StringUtils.hash(password, "SHA256");
+        for (byte b : hash) {
+            hashsum += b;
+        }
+
+        String key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2) + new NumberRandom(hashsum).getString(security / 2 - 64);
+        key = mixUP(key, checksum + hashsum);
+        return key;
+    }
+
+    private static String mixUP(String key, long random) {
+        NumberRandom numberRandom = new NumberRandom(random);
+        char[] chars = key.toCharArray();
+        for (int i = 0; i < 10000; i++) {
+            int x1 = numberRandom.getInt(chars.length);
+            int x2 = numberRandom.getInt(chars.length);
+            char c = chars[x1];
+            chars[x1] = chars[x2];
+            chars[x2] = c;
+        }
+        StringBuilder st = new StringBuilder();
+        for (char c : chars) {
+            st.append(c);
+        }
+        return st.toString();
     }
 
     public static String createKey(int security) {
-        if (security == 0) {
-            return new NumberRandom().getString(256);
-        } else if (security == 1) {
-            return new NumberRandom().getString(512);
-        } else if (security == 2) {
-            return new NumberRandom().getString(1024);
-        } else if (security == 3) {
-            return new NumberRandom().getString(2048);
-        } else if (security == 4) {
-            return new NumberRandom().getString(4096);
-        } else if (security == 5) {
-            return new NumberRandom().getString(8192);
-        } else {
-            return createKey();
+        if (security < 0) {
+            security = 0;
         }
+        if (security > 16) {
+            security = 16;
+        }
+        security += 8;
+        return new NumberRandom().getString((int)Math.pow(2, security));
     }
 
     public static String createKey() {
-        return new NumberRandom().getString(1024);
+        return createKey(2);
     }
 
-    public static String pad() {
+    private static String pad() {
         return new NumberRandom().getString(8);
     }
 
-    public static String pad(int length) {
+    private static String pad(int length) {
         return new NumberRandom().getString(length);
     }
 
@@ -163,109 +229,132 @@ public class EncryptionSymmetric {
         return strings;
     }
 
-    public static byte[] encrypt(File file, String key) {
-        try {
-            return encrypt(new FileInputStream(file), key);
-        } catch (IOException e) {
-            throw new EncryptionException("Exception while opening File");
+    private static boolean checkKey(int length) {
+        if (length < 256) {
+            return false;
         }
-    }
-
-    public static byte[] encrypt(FileInputStream fileInputStream, String key) {
-        try {
-            byte[] bytes = fileInputStream.readAllBytes();
-            return encrypt(bytes, key);
-        } catch (IOException e) {
-            throw new EncryptionException("Exception while reading File");
+        int limit = 1;
+        while (limit < length) {
+            limit *= 2;
         }
+        return length == limit;
     }
 
     public static byte[] encrypt(byte[] text, String key) {
-        if (!(key.length() == 256 || key.length() == 512 || key.length() == 1024 || key.length() == 2084 || key.length() == 4096 || key.length() == 8192)) {
-            throw new EncryptionException("Key needs to be 512, 1024, 2084, 4186 or 8192 bytes long (" + key.length() + ")");
+        if (!checkKey(key.length())) {
+            throw new EncryptionException("Key needs to be at least 256 bytes long and a power of 2. Your key was " + key.length() + " bytes long.");
         }
+
         String[] keys = keys(key);
-        byte[] checksum = checksum(keys);
-        byte[] bytes = new byte[text.length + pad().length() + pad(checksum.length + 1).length()];
+        byte[] bytes = new byte[text.length + pad().length() + 33];
+
+        char[] pad = pad().toCharArray();
+        byte[] checksum = StringUtils.hash(toString(text), "SHA-256");
         char[] chars = new char[bytes.length];
-        char[] pad = (pad() + pad(checksum.length + 1)).toCharArray();
         for (int i = 0; i < pad.length; i++) {
-            chars[i] = pad[i];
-        }
-        for (int i = 0; i < text.length; i++) {
-            chars[i + pad.length] = (char)text[i];
+            chars[i + 1] = pad[i];
         }
         for (int i = 0; i < checksum.length; i++) {
-            bytes[i + 1] = checksum[i];
+            chars[i + 1 + pad.length] = (char)checksum[i];
         }
-        for (int i = checksum.length; i < chars.length; i++) {
+        for (int i = 0; i < text.length; i++) {
+            chars[i + 1 + pad.length + checksum.length] = (char)text[i];
+        }
+
+        for (int i = 1; i < bytes.length; i++) {
+
             int l = i - 1;
-            int remove = (i < 8 ? i : 7);
+            int remove = (i < 8 ? i - 1 : 7);
             byte b = (byte)chars[i];
+
             for (int j = l; j >= l - remove; j--) {
-                b = encrypt(b, keys[((int)bytes[j] + 128) % keys.length]);
+                b = encrypt(b, rotate(keys[((int)chars[j] + 128) % keys.length], bytes[j] + 128));
             }
             for (int j = 0; j < keys.length; j++) {
                 b = (encrypt(b, keys[j]));
             }
+
             bytes[i] = b;
         }
+
         byte b = 0;
         for (int i = 0; i < bytes.length; i++) {
             b += bytes[i] * i;
         }
         bytes[0] = b;
+
+        NumberRandom numberRandom = new NumberRandom(b);
+        for (int i = 0; i < 1000; i++) {
+            int x1 = numberRandom.getInt(bytes.length - 1) + 1;
+            int x2 = numberRandom.getInt(bytes.length - 1) + 1;
+            b = bytes[x1];
+            bytes[x1] = bytes[x2];
+            bytes[x2] = b;
+        }
+
         return bytes;
     }
 
-    public static byte[] decrypt(File file, String key) {
-        try {
-            return decrypt(new FileInputStream(file), key);
-        } catch (IOException e) {
-            throw new EncryptionException("Exception while opening File");
-        }
-    }
-
-    public static byte[] decrypt(FileInputStream fileInputStream, String key) {
-        try {
-            byte[] bytes = fileInputStream.readAllBytes();
-            return decrypt(bytes, key);
-        } catch (IOException e) {
-            throw new EncryptionException("Exception while reading File");
-        }
-    }
-
     public static byte[] decrypt(byte[] bytes, String key) {
-        if (!(key.length() == 256 || key.length() == 512 || key.length() == 1024 || key.length() == 2084 || key.length() == 4096 || key.length() == 8192)) {
-            throw new EncryptionException("Key needs to be 512, 1024, 2084, 4186 or 8192 bytes long");
+        if (!checkKey(key.length())) {
+            throw new EncryptionException("Key needs to be at least 256 bytes long and a power of 2. Your key was " + key.length() + " bytes long.");
         }
+
         String[] keys = keys(key);
-        byte[] checksum = checksum(keys);
-        byte[] output = new byte[bytes.length - 8 - checksum.length - 1];
-        for (int i = 1; i < checksum.length; i++) {
-            if (bytes[i] != checksum[i - 1]) {
-                keys[i - 1] = pad(32);
-            }
+        byte[] intermediate = new byte[bytes.length];
+
+        byte b = bytes[0];
+        NumberRandom numberRandom = new NumberRandom(b);
+        List<Integer> switches = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            switches.add(numberRandom.getInt(bytes.length - 1) + 1);
+            switches.add(numberRandom.getInt(bytes.length - 1) + 1);
         }
-        byte c = 0;
+        for (int i = switches.size() - 1; i >= 0; i -= 2) {
+            int x1 = switches.get(i);
+            int x2 = switches.get(i - 1);
+            b = bytes[x1];
+            bytes[x1] = bytes[x2];
+            bytes[x2] = b;
+        }
+
+        bytes[0] = 0;
+
         for (int i = 1; i < bytes.length; i++) {
-            c += bytes[i] * i;
-        }
-        if (bytes[0] != c) {
-            keys[0] = pad(32);
-        }
-        for (int i = bytes.length - 1; i >= 8 + checksum.length + 1; i--) {
-            byte b = bytes[i];
-            for (int j = keys.length - 1; j >= 0; j--) {
-                b = decrypt(b, keys[j]);
-            }
+
             int l = i - 1;
-            for (int j = l - 7; j <= l; j++) {
-                b = decrypt(b, keys[((int)bytes[j] + 128) % keys.length]);
+            int remove = (i < 8 ? i - 1 : 7);
+            b = bytes[i];
+
+            for (int j = keys.length - 1; j >= 0; j--) {
+                b = (decrypt(b, keys[j]));
             }
-            output[i - 8 - checksum.length - 1] = b;
+            for (int j = l - remove; j <= l; j++) {
+                b = decrypt(b, rotate(keys[((int)intermediate[j] + 128) % keys.length], bytes[j] + 128));
+            }
+
+            intermediate[i] = b;
         }
-        return output;
+
+        int shift = pad().length() + 1;
+        for (int i = shift; i < intermediate.length; i++) {
+            intermediate[i - shift] = intermediate[i];
+        }
+        intermediate = Arrays.copyOf(intermediate, intermediate.length - shift);
+
+        byte[] checksum1 = Arrays.copyOf(intermediate, 32);
+        shift = 32;
+        for (int i = shift; i < intermediate.length; i++) {
+            intermediate[i - shift] = intermediate[i];
+        }
+        intermediate = Arrays.copyOf(intermediate, intermediate.length - shift);
+
+        byte[] checksum2 = StringUtils.hash(toString(intermediate), "SHA-256");
+        if (!Arrays.equals(checksum1, checksum2)) {
+            return new byte[0];
+        }
+
+        return Arrays.copyOf(intermediate, intermediate.length);
     }
 
     private static byte encrypt(byte b, String key) {
@@ -379,6 +468,25 @@ public class EncryptionSymmetric {
         return bytes;
     }
 
+    private static String rotate(String key, long rotation) {
+        if (rotation % key.length() == 0) {
+            return key;
+        }
+
+        rotation = rotation % key.length();
+        char[] chars = key.toCharArray();
+        char[] output = new char[key.length()];
+        for (int i = 0; i < chars.length; i++) {
+            output[(int)(i + rotation) % chars.length] = chars[i];
+        }
+
+        StringBuilder st = new StringBuilder();
+        for (char c : output) {
+            st.append(c);
+        }
+        return st.toString();
+    }
+
     public static byte[] toBytes(String s) {
         if (s.matches("[A-F0-9]{2}( [A-F0-9]{2})*")) {
             String[] strings = s.split(" ");
@@ -390,6 +498,17 @@ public class EncryptionSymmetric {
         } else {
             return s.getBytes();
         }
+    }
+
+    public static String toHex(char[] chars) {
+        StringBuilder st = new StringBuilder();
+        boolean t = false;
+        for (char c : chars) {
+            if (t) st.append(' ');
+            st.append(String.format("%02X", (byte)c));
+            t = true;
+        }
+        return st.toString();
     }
 
     public static String toHex(byte[] bytes) {

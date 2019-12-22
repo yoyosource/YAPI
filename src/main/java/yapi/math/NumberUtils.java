@@ -3,6 +3,7 @@ package yapi.math;
 import yapi.exceptions.NoStringException;
 import yapi.exceptions.RangeException;
 
+import java.math.BigInteger;
 import java.util.*;
 
 public class NumberUtils {
@@ -138,18 +139,51 @@ public class NumberUtils {
             if (l != -1) {
                 return l;
             }
-            for (long i = n + 2; i < Long.MAX_VALUE; i += 2) {
+            n += 2;
+            if (n % 3 != 0) {
+                if (isPrime(n)) {
+                    return n;
+                }
+            }
+            n += 2;
+            if (n % 3 != 0) {
+                if (isPrime(n)) {
+                    return n;
+                }
+            }
+            for (long i = n + 2; i < Long.MAX_VALUE; i += 6) {
                 if (isPrime(i)) {
                     return i;
+                }
+                if (isPrime(i + 2)) {
+                    return i + 2;
                 }
             }
         } else {
             if (n < 2) {
                 return 2;
             }
-            for (long i = n + 1; i < Long.MAX_VALUE; i++) {
+            if (n % 2 == 0) {
+                n++;
+            }
+            if (n % 3 != 0) {
+                if (isPrime(n)) {
+                    return n;
+                }
+            }
+            n += 2;
+            if (n % 3 != 0) {
+                if (isPrime(n)) {
+                    return n;
+                }
+            }
+            n += 2;
+            for (long i = n; i < Long.MAX_VALUE; i += 6) {
                 if (isPrime(i)) {
                     return i;
+                }
+                if (isPrime(i + 2)) {
+                    return i + 2;
                 }
             }
         }
@@ -190,17 +224,26 @@ public class NumberUtils {
         long currentPrime = 2;
         while (!isPrime(n)) {
             if (n < currentPrime) {
-                primes.add(n);
+                if (n != 1) {
+                    primes.add(n);
+                }
                 return primes;
             }
+            int times = 0;
             while (n % currentPrime == 0) {
                 primes.add(currentPrime);
                 n = n / currentPrime;
+                times++;
+            }
+            if (times > 0) {
+                System.out.println(times + "x " + currentPrime);
             }
             currentPrime = nextPrime(currentPrime);
         }
 
-        primes.add(n);
+        if (n != 1) {
+            primes.add(n);
+        }
         return primes;
     }
 
@@ -340,6 +383,29 @@ public class NumberUtils {
 
     /**
      *
+     * @since Version 1.1
+     *
+     * @param longs
+     * @return
+     */
+    public static Long minIndex(List<Long> longs) {
+        if (longs.isEmpty()) {
+            throw new RangeException("Range is Empty");
+        }
+        long current = longs.get(0);
+        long index = 0;
+        for (int i = 0; i < longs.size(); i++) {
+            long l = longs.get(i);
+            if (l < current) {
+                current = l;
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    /**
+     *
      * @since Version 1
      *
      * @param longs
@@ -356,6 +422,29 @@ public class NumberUtils {
             }
         }
         return current;
+    }
+
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param longs
+     * @return
+     */
+    public static Long maxIndex(List<Long> longs) {
+        if (longs.isEmpty()) {
+            throw new RangeException("Range is Empty");
+        }
+        long current = longs.get(0);
+        long index = 0;
+        for (int i = 0; i < longs.size(); i++) {
+            long l = longs.get(i);
+            if (l > current) {
+                current = l;
+                index = i;
+            }
+        }
+        return index;
     }
 
     /**
@@ -470,6 +559,20 @@ public class NumberUtils {
             }
         }
         return leftout;
+    }
+
+    /**
+     *
+     * @since Version 1.1
+     *
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return
+     */
+    public static double pythagoras(double x1, double y1, double x2, double y2) {
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
     /**

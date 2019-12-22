@@ -1,7 +1,5 @@
 package yapi.math;
 
-import java.util.Random;
-
 public class NumberRandom {
 
     private long seed = System.currentTimeMillis();
@@ -35,6 +33,11 @@ public class NumberRandom {
         return l;
     }
 
+    private long nextNumberAbsolute() {
+        long l = nextNumber();
+        return (l < 0 ? -l : l);
+    }
+
     /**
      *
      * @since Version 1
@@ -44,6 +47,16 @@ public class NumberRandom {
     public double getDouble() {
         double d = nextNumber() / (double)Long.MAX_VALUE;
         return d < 0 ? -d : d;
+    }
+
+    /**
+     *
+     * @sinve Version 1.1
+     *
+     * @return
+     */
+    public double getDoubleSigned() {
+        return nextNumber() / (double)Long.MAX_VALUE;
     }
 
     /**
@@ -61,6 +74,17 @@ public class NumberRandom {
 
     /**
      *
+     * @sinve Version 1.1
+     *
+     * @param max
+     * @return
+     */
+    public double getDoubleSigned(double max) {
+        return (nextNumber() / (double)Long.MAX_VALUE) % max;
+    }
+
+    /**
+     *
      * @since Version 1
      *
      * @return
@@ -68,6 +92,16 @@ public class NumberRandom {
     public int getInt() {
         int i = (int)(nextNumber() / Integer.MAX_VALUE);
         return i < 0 ? -i : i;
+    }
+
+    /**
+     *
+     * @sinve Version 1.1
+     *
+     * @return
+     */
+    public int getIntSigned() {
+        return (int)(nextNumber() / Integer.MAX_VALUE);
     }
 
     /**
@@ -85,6 +119,17 @@ public class NumberRandom {
 
     /**
      *
+     * @sinve Version 1.1
+     *
+     * @param max
+     * @return
+     */
+    public int getIntSigned(int max) {
+        return (int)((nextNumber() / Integer.MAX_VALUE) % max);
+    }
+
+    /**
+     *
      * @since Version 1
      *
      * @return
@@ -92,6 +137,16 @@ public class NumberRandom {
     public long getLong() {
         long l = nextNumber();
         return l < 0 ? -l : l;
+    }
+
+    /**
+     *
+     * @sinve Version 1.1
+     *
+     * @return
+     */
+    public long getLongSigned() {
+        return nextNumber();
     }
 
     /**
@@ -109,6 +164,17 @@ public class NumberRandom {
 
     /**
      *
+     * @sinve Version 1.1
+     *
+     * @param max
+     * @return
+     */
+    public long getLongSigned(long max) {
+        return nextNumber() % max;
+    }
+
+    /**
+     *
      * @since Version 1
      *
      * @return
@@ -116,6 +182,16 @@ public class NumberRandom {
     public float getFloat() {
         float f = nextNumber() / Float.MAX_VALUE;
         return f < 0 ? -f : f;
+    }
+
+    /**
+     *
+     * @sinve Version 1.1
+     *
+     * @return
+     */
+    public float getFloatSigned() {
+        return (float)nextNumber() / Float.MAX_VALUE;
     }
 
     /**
@@ -129,6 +205,17 @@ public class NumberRandom {
         float f = nextNumber() / Float.MAX_VALUE;
         f = f % max;
         return f < 0 ? -f : f;
+    }
+
+    /**
+     *
+     * @sinve Version 1.1
+     *
+     * @param max
+     * @return
+     */
+    public float getFloatSigned(float max) {
+        return (float)nextNumber() / Float.MAX_VALUE % max;
     }
 
     /**
@@ -164,11 +251,12 @@ public class NumberRandom {
      * @return
      */
     public String getString(int length) {
+        if (length < 0) {
+            return "";
+        }
         StringBuilder st = new StringBuilder();
         for (int l = 0; l < length; l++) {
-            int i = (int) (nextNumber() / Integer.MAX_VALUE);
-            i = (i % 94) + 32;
-            st.append((char)i);
+            st.append((char)((nextNumberAbsolute() % 94) + 32));
         }
         return st.toString();
     }

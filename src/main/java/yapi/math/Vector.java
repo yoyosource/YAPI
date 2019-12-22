@@ -8,6 +8,7 @@ public class Vector {
 
     public Vector(int dimensions) {
         vec = new double[dimensions];
+        Arrays.fill(vec, 0);
     }
 
     public Vector(double... values) {
@@ -112,9 +113,21 @@ public class Vector {
      *
      * @param r
      */
-    public void multiplyVector(int r) {
+    public void multiplyVector(double r) {
         for (int i = 0; i < vec.length; i++) {
             vec[i] *= r;
+        }
+    }
+
+    /**
+     *
+     * @since Version 1
+     *
+     * @param r
+     */
+    public void divideVector(double r) {
+        for (int i = 0; i < vec.length; i++) {
+            vec[i] /= r;
         }
     }
 
