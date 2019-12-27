@@ -14,9 +14,9 @@ public class StringUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(convertText("Hello &&{arrow} World"));
-        System.out.println(convertTextBack(convertText("Hello &&{arrow} World")));
-        System.out.println(convertText(convertTextBack(convertText("Hello &&{arrow} World"))));
+        System.out.println(formatText("Hello &&{arrow} World"));
+        System.out.println(unformatText(formatText("Hello &&{arrow} World")));
+        System.out.println(formatText(unformatText(formatText("Hello &&{arrow} World"))));
     }
 
     private static Map<String, String> specialMap = new HashMap<>();
@@ -114,7 +114,7 @@ public class StringUtils {
         // @>--,---
     }
 
-    public static String convertText(String s) {
+    public static String formatText(String s) {
         char[] chars = s.toCharArray();
         int and = 0;
         int i = 0;
@@ -148,7 +148,7 @@ public class StringUtils {
         return output.toString();
     }
 
-    public static String convertTextBack(String s) {
+    public static String unformatText(String s) {
         char[] chars = s.toCharArray();
         StringBuilder st = new StringBuilder();
         for (char c : chars) {

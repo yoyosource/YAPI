@@ -169,8 +169,8 @@ public class EncryptionSymmetric {
             hashsum += b;
         }
 
-        String key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2) + new NumberRandom(hashsum).getString(security / 2 - 64);
-        key = mixUP(key, checksum + hashsum);
+        String key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2 - 64) + new NumberRandom(hashsum).getString(security / 2 - 64);
+        key = toHex(hash).replace(" ", "") + mixUP(key, checksum + hashsum);
         return key;
     }
 
