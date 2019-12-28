@@ -18,6 +18,23 @@ public class JSONObject extends JSONType {
         jsonVariables.add(jsonVariable);
     }
 
+    public List<String> getKeys() {
+        List<String> keys = new ArrayList<>();
+        for (JSONVariable jsonVariable : jsonVariables) {
+            keys.add(jsonVariable.getName());
+        }
+        return keys;
+    }
+
+    public JSONType getValue(String key) {
+        for (JSONVariable jsonVariable : jsonVariables) {
+            if (jsonVariable.getName().equals(key)) {
+                return jsonVariable.getJsonType();
+            }
+        }
+        return null;
+    }
+
     @Override
     public String getType() {
         return "JSONObject";

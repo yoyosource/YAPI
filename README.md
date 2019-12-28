@@ -4,3 +4,17 @@ My Java API **YAPI** is a diversed and powerfull API to make you live easier wit
 
 ## YAPI's naming
 Y for YoyoNow or @YoyoSource. API for application programming interface. You can also say library as there is a consortium of methods and structures in this api.
+
+## Planned Features
+
+- **config** System
+- **Regex** System
+- **JSON** System
+- **YAPION** System
+- **Calculator** second one of **Tec**
+- **Sets**
+- **Flow Chart** System
+- **Color Utils** more methods.
+- **Priority Queue**
+- **Hash Table**?
+- **Matrix**
