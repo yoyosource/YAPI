@@ -16,9 +16,10 @@ public class ColorUtils {
      * @return
      */
     public static Color getColor(String color) {
-        if (color.length() != 8 && color.length() != 6) {
+        if (color.length() != 9 && color.length() != 7 && color.charAt(0) != '#') {
             return new Color(0, 0, 0);
         }
+        color = color.substring(1);
         try {
             if (color.length() == 6) {
                 String r = color.substring(0, 1);

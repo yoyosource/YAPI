@@ -1,8 +1,9 @@
-package yapi.utils;
+package yapi.encryption;
 
 import yapi.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
-import yapi.math.NumberUtils;
+import yapi.utils.StringUtils;
+import yapi.utils.Timer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,64 +81,6 @@ public class EncryptionSymmetric {
             } else if (s.equalsIgnoreCase("XOR_MINUS") || s.equals(XOR_MINUS + "")) {
                 operations.add(XOR_MINUS);
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        //setEncryption(ADD, INVERSE, MINUS, XOR_PLUS, INVERSE, ADD, XOR_PLUS, XOR, MINUS, NOT, ADD, NOT);
-
-        if (false) {
-            int security = 4;
-            char[] s1 = createKey("pw12345", security).toCharArray();
-            char[] s2 = createKey("pw21345", security).toCharArray();
-            int longest = 0;
-            while (s1.length > Math.pow(10, longest)) {
-                longest++;
-            }
-
-            int duplicates = 0;
-            for (int i = 0; i < s1.length; i++) {
-                if (s1[i] == s2[i]) {
-                    duplicates++;
-                    //System.out.println(" ".repeat(longest - (i + "").length()) + i + " -> " + s1[i]);
-                }
-            }
-            System.out.println("Total duplicates  : " + duplicates);
-            System.out.println("Total length      : " + s1.length);
-
-            return;
-        }
-
-        if (false) {
-            for (int i = 0; i < 100; i++) {
-                decrypt(encrypt(toBytes(createKey()), createKey()), createKey());
-            }
-        }
-
-        if (false) {
-            byte[] bytes = toBytes("55 5E 26 A4 A8 BC BC 4A B4 94 16 E4 48 38 AE 58 B6 59 C3 C8 F4 22 F5 4E 60 4C C9 CA A4 63 4F 04 39 6A 63 6A 40 C9 0E EC B0 4B F1 CE AE 38 2A 15 A9 D9 B4 0D 83 F4 98 2B 6B 78 2E A9 FC 8C 60 B9 A1 66 A8 84 55 4B 08 75 44 B1 A2 A5 CE F4 EB 9B 48 CA D5 A1 9A 85 2E EE 48 A4 49 83 08 7B 35 6E 2E 78 F5 2B 90 1C C8 28 55 D8 A1 13 44 28 31 7D EE 69 EE 2C BB 2F 41 DC 51 B0 11 EA 64 94 59 1A A5 D0 24 A3 4D 21 C0 7C CD 53 70 BC B7 18 1A 8D 44 AA 61 64 FD 0C 98 58 FA 55 4E 4E");
-            String s = toString(decrypt(bytes, "h&dX`N`fL>\"Dtvfzj&2vHFtL>@X(BZ`fD&DJT BFB|6Nr b(86h&P4V4^`Vp8|n$L\\xb.hnj(4 `,jZljLz\\N(zfrVzBrJ4&,B*LPXTr20\\n0TF2jjv6>6lp@0>NbZj<:x4\"JDH|^,<L4lt$hXZz(6:4fZ^NLPdLL` 8 j<t^n@>vXBp*TpLX`&Xz R\"N<0|0>Nrpl2f@2:nNnVVp zNRXd8(fVbv,HX6Tt:8LxJVDBJpV`&(VP2Z4d||Zr>n,^."));
-            System.out.println(s);
-        }
-
-        if (true) {
-            String key = createKey("pw12345", 1);
-            System.out.println(key);
-            String toCrypt = "Ich bin der coder32 und kann ziemlich schnell auf Tastaturen schreiben. Das kann ich, da ich einen Computer habe, seit ich 7 Jahre alt bin.";
-            //toCrypt = new NumberRandom().getString(1024);
-            Timer timer = new Timer();
-            timer.start();
-            byte[] bytes = encrypt(toBytes(toCrypt), key);
-            timer.stop();
-            System.out.println(toHex(bytes));
-            System.out.println(timer.getTimeFormatted("MMF>M ssF>s mmmF>m xxxF>x nnnF>n"));
-            //key = ".` rFrN(>8><&Z^0@h\\F8FVxdL.J,&@,f4<nxBPB&z, XV0N\"b*bJhj |XhZ HR|@Bh:@::\\22@@<lrNX6bvFJ|N,jJz*XVT\\4|f(2^D6zd>R\\lTXZzbPZ.V<0ZHpTV*h|(bN:>R(`xJvVDZr`0:j0nnX^Bp$zxr:\"$nBhN(P60JrxF20zx<P6^$*p &hnd8fNR&x:z8n t:\\N>ZZ,.$V,XBL^6J6zz,xXrrP&hnx@4&@8P\\n*^,6FFd|dN&pd>|J$<Br8 >\\`<h\\6Z|TzFH^@^(fRz&L6Z,V.\\R* trJ^.TfHzH,xH`LVdl(H`6Jt8 2RT*Zhp@l&Dp*6<4nhn8hVR<`T&|n<TbPjv\"p|0rrdtR:.p>fz*.Fh|Dnf.>4Z4hrvV2dPnX4 6 BZ^ $FT2>rt4*Dxh.db^8b8flb.rRx6$Z<\\2^>*d\\Vtt\\R2NJ^>6XFD<$(`<f\\XH \">d >xp,H&VdDJvT\\2*^Xl2jhj<J86T0@b(4(>DTh8DHDzbX2`Vh^zF0TFTPVHFBzhh*bX^$P&\\BL@r\\.j<Z02vFDvhzFnDZ&P^Nx@$(x\\F@(,H$LRf&ZJ4Nj&.f2*^,tlfD\\FVB&&&$nN4@VrLp|\"$0b4p| b<2,z\\(P<r*2\"(J4h6x\\*l,Hp`J.,$,hvFn8hF.z`J.@\\d\"BJH\":x2x2&2@v v:P\\&\"bV<(@N4xtT40:>Xx2&\\&P0@r2*2(^DxbX\"X@Jx\\,6v6 Fxl\"@TNf8z<0& BR&J\\^|.Dd(2X2<HzR6|jdb<8<<l(F ZJZ`$&*0$T@.*h**L*\"N6JDlrZLxXJfb<jlT\\F(l|6@jl^:vlzNnPh&$\\vv>Dd\":J4@.$6rx<Ptnpp6\"jB&> \\.PPLF@x,XHbNv f|NBZ|,^:rPDh$b6:lHt``jj\"\"z,b@tjdf0.djZ4F^ftHBJXHZnj2R4@z624\"bFz@nTVrbld6ZD6`62l\"|0Rlb<Bf6&&&BZR0>jt$P 6tpJr,8*N@r.Z>br6ht>6n\"v,dLpH\\*XblL>*.N<`:NhLBV";
-            timer.reset();
-            timer.start();
-            String output = toString(decrypt(bytes, key));
-            timer.stop();
-            System.out.println(output);
-            System.out.println(timer.getTimeFormatted("MMF>M ssF>s mmmF>m xxxF>x nnnF>n"));
         }
     }
 
@@ -238,6 +181,13 @@ public class EncryptionSymmetric {
             limit *= 2;
         }
         return length == limit;
+    }
+
+    public static String solve(String text, String password, int security) {
+        if (text.matches("[A-F0-9]{2}( [A-F0-9]{2})*")) {
+            return StringUtils.formatText(toString(decrypt(toBytes(text), createKey(password, security))));
+        }
+        return toHex(encrypt(toBytes(StringUtils.unformatText(text)), createKey(password, security)));
     }
 
     public static byte[] encrypt(byte[] text, String key) {

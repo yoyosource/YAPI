@@ -244,7 +244,7 @@ public class PrefixArray<E> {
      *
      * @param c
      */
-    public void sort(Comparator c) {
+    public void sort(Comparator<? super E> c) {
         if (!mutable) throw new ArrayMutationException();
         tail.sort(c);
     }

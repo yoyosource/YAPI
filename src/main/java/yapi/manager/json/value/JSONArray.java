@@ -13,6 +13,10 @@ public class JSONArray extends JSONType {
 
     }
 
+    public int size() {
+        return array.size();
+    }
+
     public JSONType get(int index) {
         return array.get(index);
     }

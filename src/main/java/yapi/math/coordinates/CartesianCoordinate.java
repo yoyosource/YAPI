@@ -1,6 +1,15 @@
 package yapi.math.coordinates;
 
+import yapi.datastructures.IntegerBuffer;
+import yapi.manager.yapion.YAPIONVariable;
+import yapi.manager.yapion.value.YAPIONArray;
+import yapi.manager.yapion.value.YAPIONObject;
+import yapi.manager.yapion.value.YAPIONValue;
+import yapi.math.NumberRandom;
 import yapi.math.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartesianCoordinate extends Coordinate {
 
@@ -49,9 +58,25 @@ public class CartesianCoordinate extends Coordinate {
                 '}';
     }
 
+    public static CartesianCoordinate deserialize(YAPIONObject yapionObject) {
+        CartesianCoordinate cartesianCoordinate = null;
+        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("cartesian-coordinate")) {
+            cartesianCoordinate = new CartesianCoordinate(((YAPIONValue) yapionObject.getValue("x")).getDouble(), ((YAPIONValue) yapionObject.getValue("y")).getDouble());
+        }
+        return cartesianCoordinate;
+    }
+
     @Override
     public String type() {
-        return "polar";
+        return "cartesian";
+    }
+
+    public YAPIONObject serialize() {
+        YAPIONObject yapionObject = new YAPIONObject();
+        yapionObject.add(new YAPIONVariable("object-type", new YAPIONValue("cartesian-coordinate")));
+        yapionObject.add(new YAPIONVariable("x", new YAPIONValue(value1 + "D")));
+        yapionObject.add(new YAPIONVariable("y", new YAPIONValue(value2 + "D")));
+        return yapionObject;
     }
 
 }

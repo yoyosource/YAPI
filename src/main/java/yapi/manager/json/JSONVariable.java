@@ -22,4 +22,5 @@ public class JSONVariable {
     public String toString() {
         return "\"" + name + "\"" + ": " + jsonType.toString();
     }
+
 }

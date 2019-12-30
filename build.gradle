@@ -26,3 +26,19 @@ jar {
         )
     }
 }
+
+task compileInfo {
+    description 'Create the Interactive Main Info file'
+    group "YAP"
+
+    mustRunAfter classes
+
+    doLast {
+        def command = "java -classpath ${buildDir}/classes/java/main main.CreateInteractiveMain ${buildDir} graphics"
+        def retval = command.execute().text.trim()
+
+        print(retval)
+    }
+}
+
+jar.dependsOn compileInfo

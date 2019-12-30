@@ -1,5 +1,9 @@
 package yapi.datastructures;
 
+import yapi.manager.yapion.YAPIONVariable;
+import yapi.manager.yapion.value.YAPIONArray;
+import yapi.manager.yapion.value.YAPIONObject;
+import yapi.manager.yapion.value.YAPIONValue;
 import yapi.math.NumberRandom;
 
 import java.util.ArrayList;
@@ -11,6 +15,7 @@ public class IntegerBuffer {
     private boolean noValues = false;
 
     private NumberRandom numberRandom = null;
+    private int gets = 0;
     private int max = Integer.MAX_VALUE;
 
     public IntegerBuffer() {
@@ -82,6 +87,27 @@ public class IntegerBuffer {
         return !integers.isEmpty();
     }
 
+    public static IntegerBuffer deserialize(YAPIONObject yapionObject) {
+        IntegerBuffer integerBuffer = null;
+        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("integer-buffer")) {
+            if (yapionObject.getKeys().size() == 3 && yapionObject.getKeys().contains("seed") && yapionObject.getKeys().contains("gets")) {
+                long l = ((YAPIONValue)yapionObject.getValue("seed")).getLong();
+                int g = ((YAPIONValue)yapionObject.getValue("gets")).getInteger();
+                integerBuffer = new IntegerBuffer(new NumberRandom(l));
+                integerBuffer.next(g);
+            }
+            if (yapionObject.getKeys().size() == 2 && yapionObject.getKeys().contains("values")) {
+                YAPIONArray yapionArray = (YAPIONArray)yapionObject.getValue("values");
+                List<Integer> integers = new ArrayList<>();
+                for (int i = 0; i < yapionArray.size(); i++) {
+                    integers.add(((YAPIONValue)yapionArray.get(i)).getInteger());
+                }
+                integerBuffer = new IntegerBuffer(integers);
+            }
+        }
+        return integerBuffer;
+    }
+
     /**
      *
      * @since Version 1
@@ -91,36 +117,11 @@ public class IntegerBuffer {
     public Integer next() {
         generate();
         if (hasNext()) {
+            gets++;
             return integers.remove(0);
         } else {
             return null;
         }
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param size
-     * @return
-     */
-    public List<Integer> next(int size) {
-        for (int i = 0; i < size; i++) {
-            generate();
-        }
-        if (!hasNext()) {
-            return null;
-        }
-        List<Integer> integers = new ArrayList<>();
-        while (size > 0) {
-            if (hasNext()) {
-                integers.add(this.integers.remove(0));
-            } else {
-                break;
-            }
-            size--;
-        }
-        return integers;
     }
 
     /**
@@ -189,4 +190,49 @@ public class IntegerBuffer {
         }
         return i;
     }
+
+    /**
+     *
+     * @since Version 1
+     *
+     * @param size
+     * @return
+     */
+    public List<Integer> next(int size) {
+        for (int i = 0; i < size; i++) {
+            generate();
+        }
+        if (!hasNext()) {
+            return null;
+        }
+        List<Integer> integers = new ArrayList<>();
+        while (size > 0) {
+            if (hasNext()) {
+                gets++;
+                integers.add(this.integers.remove(0));
+            } else {
+                break;
+            }
+            size--;
+        }
+        return integers;
+    }
+
+    public YAPIONObject serialize() {
+        YAPIONObject yapionObject = new YAPIONObject();
+        yapionObject.add(new YAPIONVariable("object-type", new YAPIONValue("integer-buffer")));
+        if (numberRandom != null) {
+            yapionObject.add(new YAPIONVariable("seed", new YAPIONValue(numberRandom.getSeed() + "L")));
+            yapionObject.add(new YAPIONVariable("gets", new YAPIONValue(gets + "I")));
+        } else {
+            List<Integer> integers = all();
+            YAPIONArray yapionArray = new YAPIONArray();
+            for (int i : integers) {
+                yapionArray.add(new YAPIONValue(i + "I"));
+            }
+            yapionObject.add(new YAPIONVariable("values", yapionArray));
+        }
+        return yapionObject;
+    }
+
 }

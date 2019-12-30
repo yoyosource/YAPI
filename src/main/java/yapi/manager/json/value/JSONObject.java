@@ -14,10 +14,6 @@ public class JSONObject extends JSONType {
 
     }
 
-    public void add(JSONVariable jsonVariable) {
-        jsonVariables.add(jsonVariable);
-    }
-
     public List<String> getKeys() {
         List<String> keys = new ArrayList<>();
         for (JSONVariable jsonVariable : jsonVariables) {
@@ -33,6 +29,10 @@ public class JSONObject extends JSONType {
             }
         }
         return null;
+    }
+
+    public void add(JSONVariable jsonVariable) {
+        jsonVariables.add(jsonVariable);
     }
 
     @Override

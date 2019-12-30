@@ -1,6 +1,5 @@
 package yapi.manager.json.value;
 
-import yapi.exceptions.JSONException;
 import yapi.manager.json.JSONType;
 
 import java.math.BigDecimal;

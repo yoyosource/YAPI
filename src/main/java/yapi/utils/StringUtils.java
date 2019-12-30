@@ -136,8 +136,7 @@ public class StringUtils {
                 output.append(convertSpecial(st.toString()));
             } else if (and == 2) {
                 output.append(chars[i - 2]).append(chars[i - 1]);
-            }
-            if (chars[i] == '&') {
+            } else if (chars[i] == '&') {
                 and++;
             } else {
                 output.append(chars[i]);
@@ -153,7 +152,7 @@ public class StringUtils {
         StringBuilder st = new StringBuilder();
         for (char c : chars) {
             if (c < ' ' || c > '~') {
-                st.append("&&{$x").append(String.format("%02X", (int)c)).append("}");
+                st.append("&&{$x").append(String.format("%04X", (int)c)).append("}");
             } else {
                 st.append(c);
             }
@@ -167,7 +166,7 @@ public class StringUtils {
         }
         s = s.substring(1, s.length() - 1);
 
-        if (s.matches("\\$x[0-9A-F]+")) {
+        if (s.matches("\\$x[0-9A-F]{4}")) {
             s = s.substring(2);
             return (char)Integer.parseInt(s, 16) + "";
         }
@@ -331,6 +330,10 @@ public class StringUtils {
             }
         }
         return occurrences;
+    }
+
+    public static byte[] hash(String s) {
+        return hash(s, "SHA-256");
     }
 
     public static byte[] hash(String s, String hashType) {

@@ -1,6 +1,8 @@
-package yapi.exceptions;
+package yapi.exceptions.objectnotation;
 
-public class JSONException extends YAPIException {
+import yapi.exceptions.ObjectNotationException;
+
+public class JSONException extends ObjectNotationException {
 
     public JSONException() {
         super();

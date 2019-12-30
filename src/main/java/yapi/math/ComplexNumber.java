@@ -1,6 +1,10 @@
 package yapi.math;
 
+import yapi.manager.yapion.YAPIONVariable;
+import yapi.manager.yapion.value.YAPIONObject;
+import yapi.manager.yapion.value.YAPIONValue;
 import yapi.math.coordinates.CartesianCoordinate;
+import yapi.math.coordinates.PolarCoordinate;
 
 public class ComplexNumber {
 
@@ -76,5 +80,21 @@ public class ComplexNumber {
                 "r=" + r +
                 ", i=" + i +
                 '}';
+    }
+
+    public static ComplexNumber deserialize(YAPIONObject yapionObject) {
+        ComplexNumber complexNumber = null;
+        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("complex-number")) {
+            complexNumber = new ComplexNumber(((YAPIONValue) yapionObject.getValue("real")).getDouble(), ((YAPIONValue) yapionObject.getValue("imaginary")).getDouble());
+        }
+        return complexNumber;
+    }
+
+    public YAPIONObject serialize() {
+        YAPIONObject yapionObject = new YAPIONObject();
+        yapionObject.add(new YAPIONVariable("object-type", new YAPIONValue("complex-number")));
+        yapionObject.add(new YAPIONVariable("real", new YAPIONValue(r + "D")));
+        yapionObject.add(new YAPIONVariable("imaginary", new YAPIONValue(i + "D")));
+        return yapionObject;
     }
 }
