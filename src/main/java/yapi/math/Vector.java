@@ -161,9 +161,10 @@ public class Vector {
             return;
         }
         double[] doubles = new double[3];
-        doubles[0] = this.vec[2] * vector.vec[3] - this.vec[3] * vector.vec[2];
-        doubles[1] = this.vec[3] * vector.vec[1] - this.vec[1] * vector.vec[3];
-        doubles[2] = this.vec[1] * vector.vec[2] - this.vec[2] * vector.vec[1];
+        doubles[0] = this.vec[1] * vector.vec[2] - this.vec[2] * vector.vec[1];
+        doubles[1] = this.vec[2] * vector.vec[0] - this.vec[0] * vector.vec[2];
+        doubles[2] = this.vec[0] * vector.vec[1] - this.vec[1] * vector.vec[0];
+        vec = doubles;
     }
 
     /**
@@ -212,15 +213,15 @@ public class Vector {
         st.append("Vector[ ");
         for (int i = 0; i < vec.length; i++) {
             if (i == 0) {
-                st.append("x=" + vec[i]);
+                st.append("x=").append(vec[i]);
             } else if (i == 1) {
-                st.append("y=" + vec[i]);
+                st.append("y=").append(vec[i]);
             } else if (i == 2) {
-                st.append("z=" + vec[i]);
+                st.append("z=").append(vec[i]);
             } else if (i == 3) {
-                st.append("w=" + vec[i]);
+                st.append("w=").append(vec[i]);
             } else {
-                st.append((i + 1) + "=" + vec[i]);
+                st.append((i + 1)).append("=").append(vec[i]);
             }
             if (i < vec.length) {
                 st.append(" ");

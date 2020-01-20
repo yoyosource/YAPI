@@ -2,8 +2,8 @@ package yapi.manager.yapion;
 
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
-import yapi.utils.ColorUtils;
-import yapi.utils.StringUtils;
+import yapi.color.ColorUtils;
+import yapi.string.StringUtils;
 
 import java.awt.*;
 

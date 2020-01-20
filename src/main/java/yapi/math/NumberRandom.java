@@ -2,10 +2,17 @@ package yapi.math;
 
 public class NumberRandom {
 
+    private static long currentSeed = 0;
+    private static NumberRandom numberRandom = new NumberRandom();
+
+    public static NumberRandom getInstance() {
+        currentSeed += numberRandom.getInt();
+        return new NumberRandom(currentSeed);
+    }
+
     private long seed = System.currentTimeMillis();
     private long cSeed = seed;
     private long multiplier = 8723465262572736L;
-    private long constant = 7346589735676528756L;
 
     public NumberRandom() {
 
@@ -27,6 +34,7 @@ public class NumberRandom {
     }
 
     private long nextNumber() {
+        long constant = 7346589735676528756L;
         long l = cSeed * multiplier + constant;
         multiplier += constant * l;
         cSeed = l;

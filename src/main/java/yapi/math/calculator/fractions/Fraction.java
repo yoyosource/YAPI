@@ -33,6 +33,10 @@ public class Fraction {
         shorten();
     }
 
+    public Fraction(double d) {
+        this(BigDecimal.valueOf(d));
+    }
+
     public Fraction(BigInteger number) {
         this.numerator = number;
         denominator = BigInteger.valueOf(1);
@@ -122,9 +126,9 @@ public class Fraction {
 
     public Fraction subtract(Fraction fraction) {
         if (fraction.denominator.equals(denominator)) {
-            return new Fraction(fraction.numerator.subtract(numerator), denominator).setPercent(percent || fraction.percent);
+            return new Fraction(numerator.subtract(fraction.numerator), denominator).setPercent(percent || fraction.percent);
         } else {
-            return new Fraction(fraction.numerator.multiply(numerator).subtract(numerator.multiply(fraction.denominator)), fraction.denominator.multiply(denominator)).setPercent(percent || fraction.percent);
+            return new Fraction(numerator.multiply(fraction.denominator).subtract(fraction.numerator.multiply(denominator)), fraction.denominator.multiply(denominator)).setPercent(percent || fraction.percent);
         }
     }
 

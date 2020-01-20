@@ -14,10 +14,7 @@ import java.util.List;
 
 public class YAPIONParser {
 
-    public static void main(String[] args) {
-        System.out.println(YAPIONParser.parse("{Test(Hello World)    Test2{Hallo(10)Boolean(true)Boolean2(false)} Papa[Hallo,{Test(Hallo)}]Help{}}"));
-        System.out.println(YAPIONParser.toJSON(YAPIONParser.parse("{Test(Hello World)    Test2{Hallo(10)Boolean(true)Boolean2(false)} Papa[Hallo,{Test(Hallo)}]Help{}}")).toString());
-    }
+    private static int escapes = 0;
 
     public static JSONObject toJSON(YAPIONObject yapionObject) {
         JSONObject jsonObject = new JSONObject();
@@ -52,6 +49,12 @@ public class YAPIONParser {
 
     private static JSONValue toJSON(YAPIONValue yapionValue) {
         return new JSONValue(yapionValue.getValueAsJSON());
+    }
+
+    public static void main(String[] args) {
+        System.out.println("{Test{Hallo({}\\))}}");
+        System.out.println(parse("{Test{Hallo({}\\))}}").toHierarchyString());
+        System.out.println(parse("{Test{Hallo({}\\))}}").toString());
     }
 
     /**
@@ -91,7 +94,7 @@ public class YAPIONParser {
         StringBuilder key = new StringBuilder();
         int i = 0;
         while (i < chars.length) {
-            if (chars[i] == '\\') {
+            if (!escaped && chars[i] == '\\') {
                 escaped = true;
                 i++;
                 continue;
@@ -99,7 +102,7 @@ public class YAPIONParser {
 
             if (!escaped && chars[i] == '(') {
                 String s = getValue(chars, i);
-                i += s.length() + 1;
+                i += s.length() + 1 + escapes;
                 yapionObject.add(new YAPIONVariable(key.toString(), new YAPIONValue(s)));
                 key = new StringBuilder();
             } else if (!escaped && chars[i] == '[') {
@@ -175,6 +178,7 @@ public class YAPIONParser {
     }
 
     private static String getValue(char[] chars, int index) {
+        escapes = 0;
         StringBuilder st = new StringBuilder();
         int bracket = 1;
         int type;
@@ -190,29 +194,38 @@ public class YAPIONParser {
             throw new YAPIONException("Unknown starting bracket at " + index + "\n" + createErrorMessage(chars, index, index));
         }
         index++;
+        boolean escaped = false;
         for (int i = index; i < chars.length; i++) {
-            if (type == 0) {
+            if (!escaped && chars[i] == '\\') {
+                escapes++;
+                escaped = true;
+                if (type != 0) {
+                    st.append('\\');
+                }
+                continue;
+            }
+            if (type == 0 && !escaped) {
                 if (chars[i] == '(') {
                     bracket++;
                 }
                 if (chars[i] == ')') {
                     bracket--;
                 }
-            } else if (type == 1) {
+            } else if (type == 1 && !escaped) {
                 if (chars[i] == '[') {
                     bracket++;
                 }
                 if (chars[i] == ']') {
                     bracket--;
                 }
-            } else if (type == 2) {
+            } else if (type == 2 && !escaped) {
                 if (chars[i] == '{') {
                     bracket++;
                 }
                 if (chars[i] == '}') {
                     bracket--;
                 }
-            } else {
+            } else if (!escaped) {
                 if (chars[i] == '<') {
                     bracket++;
                 }
@@ -225,6 +238,7 @@ public class YAPIONParser {
             } else {
                 st.append(chars[i]);
             }
+            escaped = false;
         }
         throw new YAPIONException("Missing closing bracket for opening bracket at " + index + "\n" + createErrorMessage(chars, index, chars.length));
     }
@@ -234,7 +248,7 @@ public class YAPIONParser {
         boolean escaped = false;
         StringBuilder st = new StringBuilder();
         for (int i = start; i < end; i++) {
-            if (chars[i] == '\\') {
+            if (!escaped && chars[i] == '\\') {
                 escaped = true;
                 continue;
             }

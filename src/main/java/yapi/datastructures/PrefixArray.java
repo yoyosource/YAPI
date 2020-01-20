@@ -2,6 +2,7 @@ package yapi.datastructures;
 
 import yapi.exceptions.ArrayMutationException;
 import yapi.math.NumberUtils;
+import yapi.math.RangeSimple;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,7 +28,7 @@ public class PrefixArray<E> {
     }
 
     public PrefixArray(String s) {
-        List<Long> range = NumberUtils.getRange(s);
+        List<Long> range = RangeSimple.getRange(s);
         for (int i = 0; i < range.size(); i++) {
             if (i == 0) head = (E) range.get(i);
             else tail.add((E)range.get(i));

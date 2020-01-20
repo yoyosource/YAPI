@@ -1,7 +1,7 @@
 package yapi.encryption;
 
 import yapi.encryption.passwordtable.*;
-import yapi.utils.Timer;
+import yapi.quick.Timer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

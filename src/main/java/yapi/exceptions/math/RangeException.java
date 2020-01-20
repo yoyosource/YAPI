@@ -1,6 +1,8 @@
-package yapi.exceptions;
+package yapi.exceptions.math;
 
-public class RangeException extends YAPIException {
+import yapi.exceptions.MathException;
+
+public class RangeException extends MathException {
 
     public RangeException() {
         super();

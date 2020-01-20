@@ -1,4 +1,4 @@
-package yapi.utils;
+package yapi.quick;
 
 public class Timer {
 

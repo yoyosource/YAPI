@@ -1,18 +1,18 @@
 package yapi.math.calculator.fractions;
 
 import yapi.math.NumberUtils;
-import yapi.utils.StringUtils;
+import yapi.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Calculator {
+public class CalculatorFractions {
 
     private Fraction result;
 
-    public Calculator(String toCalculate) {
+    public CalculatorFractions(String toCalculate) {
         List<String> strings = split(toCalculate);
         List<Part> parts = parts(strings);
         List<Long> priorities = priorities(parts);
@@ -150,11 +150,12 @@ public class Calculator {
         priorities.remove((int)index + 1);
         priorities.set((int)index, 0L);
         priorities.remove((int)index - 1);
-        if (index > 2 && parts.get((int)index - 2).getOperator().equals("(") && parts.get((int)index).getOperator().equals(")")) {
-            parts.remove((int)index);
-            parts.remove((int)index - 2);
-            priorities.remove((int)index);
-            priorities.remove((int)index - 2);
+        index--;
+        if (index > 0 && parts.get((int)index - 1).getOperator().equals("(") && parts.get((int)index + 1).getOperator().equals(")")) {
+            parts.remove((int)index + 1);
+            parts.remove((int)index - 1);
+            priorities.remove((int)index + 1);
+            priorities.remove((int)index - 1);
         }
     }
 

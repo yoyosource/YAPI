@@ -1,0 +1,55 @@
+package yapi.math.mathscript.tree.special;
+
+import com.sun.security.jgss.GSSUtil;
+import yapi.exceptions.math.MathScriptException;
+import yapi.math.mathscript.state.Variable;
+import yapi.math.mathscript.state.VariableState;
+import yapi.math.mathscript.tree.Knot;
+import yapi.math.mathscript.tree.values.FunctionVariable;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+public class FunctionProduct extends Knot {
+
+    @Override
+    public Knot addKnot(Knot knot) {
+        if (getKnots().size() < 4) {
+            getKnots().add(knot);
+        }
+        return this;
+    }
+
+    @Override
+    public BigDecimal getResult(VariableState variableState) {
+        if (!(getKnots().get(0) instanceof FunctionVariable)) {
+            throw new MathScriptException("First parameter of 'product' needs to be a variable");
+        }
+        String name = ((FunctionVariable)getKnots().get(0)).getName();
+        BigInteger start = getKnots().get(1).getResult(variableState.copy()).toBigIntegerExact();
+        BigInteger stop = getKnots().get(2).getResult(variableState.copy()).toBigIntegerExact();
+
+        BigDecimal output = BigDecimal.ONE;
+        while (start.compareTo(stop) < 0) {
+            output = output.multiply(getKnots().get(3).getResult(variableState.add(new Variable(name).setValue(start))), getMathContext());
+            start = start.add(BigInteger.ONE);
+        }
+        return output;
+    }
+
+    @Override
+    public String toString(int i) {
+        StringBuilder st = new StringBuilder();
+        st.append("product" + "\n");
+        boolean b = false;
+        for (Knot knot : getKnots()) {
+            if (b) {
+                st.append("\n");
+            }
+            b = true;
+            st.append(" ".repeat(i));
+            st.append(knot.toString(i + 1));
+        }
+        return st.toString();
+    }
+}

@@ -1,6 +1,6 @@
 package yapi.math;
 
-import yapi.exceptions.RangeException;
+import yapi.exceptions.math.RangeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class Range {
             if (range.indexOf('\\') + 1 != range.indexOf('{')) {
                 throw new RangeException("Range Expression Error with \\ and {");
             }
-            String[] strings = NumberUtils.splitRange(range.substring(range.indexOf('\\') + 2, range.lastIndexOf('}')), new String[]{", ", ","}, false, false);
+            String[] strings = RangeSimple.splitRange(range.substring(range.indexOf('\\') + 2, range.lastIndexOf('}')), new String[]{", ", ","}, false, false);
             b = true;
             for (String s : strings) {
                 if (!checkRange(s)) {
@@ -141,119 +141,120 @@ public class Range {
                 "rangeString='" + rangeString + '\'' +
                 '}';
     }
-}
 
-class RangeCheck {
+    private class RangeCheck {
 
-    private Double min = null;
-    private Double max = null;
+        private Double min = null;
+        private Double max = null;
 
-    public RangeCheck(String range) {
-        if (range.matches("-?\\d+(\\.\\d+)?")) {
-            min = Double.parseDouble(range);
-            max = Double.parseDouble(range);
+        public RangeCheck(String range) {
+            if (range.matches("-?\\d+(\\.\\d+)?")) {
+                min = Double.parseDouble(range);
+                max = Double.parseDouble(range);
+            }
+            else if (range.matches("-?\\d+\\.\\.\\.-?\\d+")) {
+                min = Double.parseDouble(range.split("\\.\\.\\.")[0]);
+                max = Double.parseDouble(range.split("\\.\\.\\.")[1]);
+            } else if (range.matches("-?\\d+\\>\\.\\.-?\\d+")) {
+                min = Double.parseDouble(range.split("\\>\\.\\.")[0]) + 1;
+                max = Double.parseDouble(range.split("\\>\\.\\.")[1]);
+            } else if (range.matches("-?\\d+\\.\\.\\<-?\\d+")) {
+                min = Double.parseDouble(range.split("\\.\\.\\<")[0]);
+                max = Double.parseDouble(range.split("\\.\\.\\<")[1]) - 1;
+            } else if (range.matches("-?\\d+\\>\\.\\<-?\\d+")) {
+                min = Double.parseDouble(range.split("\\>\\.\\<")[0]) + 1;
+                max = Double.parseDouble(range.split("\\>\\.\\<")[1]) - 1;
+            }
+            else if (range.matches("\\.\\.\\.-?\\d+")) {
+                max = Double.parseDouble(range.substring(3));
+            } else if (range.matches("\\.\\.\\<-?\\d+")) {
+                max = Double.parseDouble(range.substring(3)) - 1;
+            } else if (range.matches("-?\\d+\\.\\.\\.")) {
+                min = Double.parseDouble(range.substring(0, range.length() - 3));
+            } else if (range.matches("-?\\d+\\>\\.\\.")) {
+                min = Double.parseDouble(range.substring(0, range.length() - 3)) + 1;
+            }
         }
-        else if (range.matches("-?\\d+\\.\\.\\.-?\\d+")) {
-            min = Double.parseDouble(range.split("\\.\\.\\.")[0]);
-            max = Double.parseDouble(range.split("\\.\\.\\.")[1]);
-        } else if (range.matches("-?\\d+\\>\\.\\.-?\\d+")) {
-            min = Double.parseDouble(range.split("\\>\\.\\.")[0]) + 1;
-            max = Double.parseDouble(range.split("\\>\\.\\.")[1]);
-        } else if (range.matches("-?\\d+\\.\\.\\<-?\\d+")) {
-            min = Double.parseDouble(range.split("\\.\\.\\<")[0]);
-            max = Double.parseDouble(range.split("\\.\\.\\<")[1]) - 1;
-        } else if (range.matches("-?\\d+\\>\\.\\<-?\\d+")) {
-            min = Double.parseDouble(range.split("\\>\\.\\<")[0]) + 1;
-            max = Double.parseDouble(range.split("\\>\\.\\<")[1]) - 1;
+
+        /**
+         *
+         * @since Version 1
+         *
+         * @param i
+         * @return
+         */
+        public boolean checkInteger(int i)  {
+            if (min == null && max != null) {
+                return max > i;
+            } else if (min != null && max == null) {
+                return min < i;
+            } else if (min == null && max == null) {
+                return true;
+            }
+            return min < i && max > i;
         }
-        else if (range.matches("\\.\\.\\.-?\\d+")) {
-            max = Double.parseDouble(range.substring(3));
-        } else if (range.matches("\\.\\.\\<-?\\d+")) {
-            max = Double.parseDouble(range.substring(3)) - 1;
-        } else if (range.matches("-?\\d+\\.\\.\\.")) {
-            min = Double.parseDouble(range.substring(0, range.length() - 3));
-        } else if (range.matches("-?\\d+\\>\\.\\.")) {
-            min = Double.parseDouble(range.substring(0, range.length() - 3)) + 1;
+
+        /**
+         *
+         * @since Version 1
+         *
+         * @param i
+         * @return
+         */
+        public boolean checkLong(long i)  {
+            if (min == null && max != null) {
+                return max > i;
+            } else if (min != null && max == null) {
+                return min < i;
+            } else if (min == null && max == null) {
+                return true;
+            }
+            return min < i && max > i;
+        }
+
+        /**
+         *
+         * @since Version 1
+         *
+         * @param i
+         * @return
+         */
+        public boolean checkDouble(double i)  {
+            if (min == null && max != null) {
+                return max > i;
+            } else if (min != null && max == null) {
+                return min < i;
+            } else if (min == null && max == null) {
+                return true;
+            }
+            return min < i && max > i;
+        }
+
+        /**
+         *
+         * @since Version 1
+         *
+         * @param i
+         * @return
+         */
+        public boolean checkFloat(float i)  {
+            if (min == null && max != null) {
+                return max > i;
+            } else if (min != null && max == null) {
+                return min < i;
+            } else if (min == null && max == null) {
+                return true;
+            }
+            return min < i && max > i;
+        }
+
+        @Override
+        public String toString() {
+            return "RangeCheck{" +
+                    "min=" + min +
+                    ", max=" + max +
+                    '}';
         }
     }
 
-    /**
-     *
-     * @since Version 1
-     *
-     * @param i
-     * @return
-     */
-    public boolean checkInteger(int i)  {
-        if (min == null && max != null) {
-            return max > i;
-        } else if (min != null && max == null) {
-            return min < i;
-        } else if (min == null && max == null) {
-            return true;
-        }
-        return min < i && max > i;
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param i
-     * @return
-     */
-    public boolean checkLong(long i)  {
-        if (min == null && max != null) {
-            return max > i;
-        } else if (min != null && max == null) {
-            return min < i;
-        } else if (min == null && max == null) {
-            return true;
-        }
-        return min < i && max > i;
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param i
-     * @return
-     */
-    public boolean checkDouble(double i)  {
-        if (min == null && max != null) {
-            return max > i;
-        } else if (min != null && max == null) {
-            return min < i;
-        } else if (min == null && max == null) {
-            return true;
-        }
-        return min < i && max > i;
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param i
-     * @return
-     */
-    public boolean checkFloat(float i)  {
-        if (min == null && max != null) {
-            return max > i;
-        } else if (min != null && max == null) {
-            return min < i;
-        } else if (min == null && max == null) {
-            return true;
-        }
-        return min < i && max > i;
-    }
-
-    @Override
-    public String toString() {
-        return "RangeCheck{" +
-                "min=" + min +
-                ", max=" + max +
-                '}';
-    }
 }

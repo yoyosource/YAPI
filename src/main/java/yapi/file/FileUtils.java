@@ -1,4 +1,6 @@
-package yapi.utils;
+package yapi.file;
+
+import yapi.exceptions.NoStringException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +24,9 @@ public class FileUtils {
      * @return
      */
     public static String getSuffix(String file) {
+        if (!file.contains(".")) {
+            return "";
+        }
         return file.substring(file.lastIndexOf('.') + 1);
     }
 
@@ -33,6 +38,9 @@ public class FileUtils {
      * @return
      */
     public static String getSuffix(File file) {
+        if (!file.getName().contains(".")) {
+            return "";
+        }
         return file.getName().substring(file.getName().lastIndexOf('.') + 1);
     }
 
@@ -255,6 +263,85 @@ public class FileUtils {
             long s = getSize(file) / l - size * 1024;
             s = (s / t);
             return size + "." + s + chars[i];
+        }
+    }
+
+    /**
+     * This Methods dumps a String to a file by calling 'dump(File file, byte[] bytes)'-
+     *
+     * @param file
+     * @param s
+     * @throws IOException
+     */
+    public static void dump(File file, String s) throws IOException {
+        dump(file, s.getBytes());
+    }
+
+    /**
+     * This Methods dumps a byte array to a file with OutputStream
+     *
+     * @param file
+     * @param bytes
+     * @throws IOException if File was not found or error occurred while dumping the bytes
+     * @throws NoStringException if the byte array is null.
+     */
+    public static void dump(File file, byte[] bytes) throws IOException {
+        if (!file.exists()) {
+            throw new FileNotFoundException();
+        }
+        if (!file.isFile()) {
+            throw new FileNotFoundException();
+        }
+        if (bytes == null) {
+            throw new NoStringException();
+        }
+        try (OutputStream outputStream = new FileOutputStream(file)) {
+            outputStream.write(bytes);
+            outputStream.flush();
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    /**
+     * This method is a abstraction of the ResourceManager and is recommended when you only want to read 1 file without management or caching it.
+     *
+     * @param file
+     * @return
+     */
+    public static byte[] fileContentFromResourceAsBytes(String file) {
+        try {
+            return FileUtils.class.getResourceAsStream("/" + file).readAllBytes();
+        } catch (IOException e) {
+            return new byte[0];
+        }
+    }
+
+    /**
+     * This method is a abstraction of the ResourceManager and is recommended when you only want to read 1 file without management or caching it.
+     *
+     * @param file
+     * @return
+     */
+    public static String[] fileContentFromResourceAsString(String file) {
+        try {
+            byte[] bytes = FileUtils.class.getResourceAsStream("/" + file).readAllBytes();
+            List<String> strings = new ArrayList<>();
+            StringBuilder st = new StringBuilder();
+            for (byte b : bytes) {
+                if ((char)b == '\n') {
+                    strings.add(st.toString());
+                    st = new StringBuilder();
+                } else {
+                    st.append((char)b);
+                }
+            }
+            if (st.length() > 0) {
+                strings.add(st.toString());
+            }
+            return strings.toArray(new String[0]);
+        } catch (IOException e) {
+            return new String[0];
         }
     }
 

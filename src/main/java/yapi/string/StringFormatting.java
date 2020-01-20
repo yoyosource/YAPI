@@ -1,23 +1,14 @@
-package yapi.utils;
+package yapi.string;
 
 import yapi.exceptions.NoStringException;
+import yapi.math.NumberRandom;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class StringUtils {
-
-    private StringUtils() {
-        throw new IllegalStateException("Utility class");
-    }
-
-    public static void main(String[] args) {
-        System.out.println(formatText("Hello &&{arrow} World"));
-        System.out.println(unformatText(formatText("Hello &&{arrow} World")));
-        System.out.println(formatText(unformatText(formatText("Hello &&{arrow} World"))));
-    }
+public class StringFormatting {
 
     private static Map<String, String> specialMap = new HashMap<>();
 
@@ -114,6 +105,10 @@ public class StringUtils {
         // @>--,---
     }
 
+    private StringFormatting() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static String formatText(String s) {
         char[] chars = s.toCharArray();
         int and = 0;
@@ -133,7 +128,9 @@ public class StringUtils {
                     }
                     i++;
                 } while (bracket != 0);
+                i--;
                 output.append(convertSpecial(st.toString()));
+                and = 0;
             } else if (and == 2) {
                 output.append(chars[i - 2]).append(chars[i - 1]);
             } else if (chars[i] == '&') {
@@ -151,7 +148,7 @@ public class StringUtils {
         char[] chars = s.toCharArray();
         StringBuilder st = new StringBuilder();
         for (char c : chars) {
-            if (c < ' ' || c > '~') {
+            if (c < ' ' || c > '~' || c == '{') {
                 st.append("&&{$x").append(String.format("%04X", (int)c)).append("}");
             } else {
                 st.append(c);
@@ -161,7 +158,7 @@ public class StringUtils {
     }
 
     private static String convertSpecial(String s) {
-        if (!s.matches("(\\{[a-z]+(:[a-z]+)*?})|(\\{\\$x[0-9A-F]+})")) {
+        if (!s.matches("(\\{[a-z]+(:[a-z]+)*?})|(\\{\\$x[0-9A-F]{4}})")) {
             return s;
         }
         s = s.substring(1, s.length() - 1);
@@ -190,6 +187,29 @@ public class StringUtils {
         return s;
     }
 
+    public static String insertSpaces(String s) {
+        if (contains(s, ' ')) {
+            return s;
+        }
+        char[] chars = s.toCharArray();
+        int lastSpace = 0;
+        StringBuilder st = new StringBuilder();
+        NumberRandom numberRandom = new NumberRandom();
+        for (int i = 0; i < chars.length; i++) {
+            double d = (sigmoid(lastSpace - 2.0)) - (1 - sigmoid(chars.length - (double)i));
+            if (numberRandom.getDouble(1) < d) {
+                st.append(' ');
+            }
+            st.append(chars[i]);
+        }
+
+        return st.toString();
+    }
+
+    private static double sigmoid(double input) {
+        return (1 / (1 + Math.exp(-input)));
+    }
+
     /**
      *
      * @since Version 1
@@ -201,6 +221,12 @@ public class StringUtils {
         return toHex(bytes, false);
     }
 
+    /**
+     *
+     * @param bytes
+     * @param spaces
+     * @return
+     */
     public static String toHex(byte[] bytes, boolean spaces) {
         StringBuilder st = new StringBuilder();
         boolean t = false;
@@ -214,18 +240,97 @@ public class StringUtils {
 
     /**
      *
+     * @param chars
+     * @return
+     */
+    public static String toHex(char[] chars) {
+        return toHex(chars, false);
+    }
+
+    /**
+     *
+     * @param chars
+     * @param spaces
+     * @return
+     */
+    public static String toHex(char[] chars, boolean spaces) {
+        StringBuilder st = new StringBuilder();
+        boolean t = false;
+        for (char b : chars) {
+            if (spaces && t) st.append(' ');
+            st.append(String.format("%04X", (int)b));
+            t = true;
+        }
+        return st.toString();
+    }
+
+    /**
+     *
      * @since Version 1
      *
      * @param string
      * @return
      */
     public static byte[] toBytes(String string) {
-        char[] chars = string.toCharArray();
+        if (string.matches("[A-F0-9]{2}( [A-F0-9]{2})*")) {
+            StringBuilder st = new StringBuilder();
+            int index = 0;
+            char[] chars = string.toCharArray();
+            byte[] output = new byte[occurrences(string, ' ') + 1];
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] == ' ') {
+                    output[index++] = (byte)(Integer.parseInt(st.toString(), 16));
+                    st = new StringBuilder();
+                } else {
+                    st.append(chars[i]);
+                }
+            }
+            if (st.length() != 0) {
+                output[index] = (byte)(Integer.parseInt(st.toString(), 16));
+            }
+            return output;
+        } else {
+            return string.getBytes();
+        }
+    }
+
+    public static byte[] toBytes(char[] chars) {
         byte[] bytes = new byte[chars.length];
         for (int i = 0; i < chars.length; i++) {
-            bytes[i] = (byte) chars[i];
+            bytes[i] = (byte)chars[i];
         }
         return bytes;
+    }
+
+    public static char[] toChars(String string) {
+        if (string.matches("[A-F0-9]{2,4}( [A-F0-9]{2,4})*")) {
+            StringBuilder st = new StringBuilder();
+            int index = 0;
+            char[] chars = string.toCharArray();
+            char[] output = new char[occurrences(string, ' ') + 1];
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] == ' ') {
+                    output[index++] = (char)(Integer.parseInt(st.toString(), 16));
+                    st = new StringBuilder();
+                } else {
+                    st.append(chars[i]);
+                }
+            }
+            if (st.length() != 0) {
+                output[index] = (char)(Integer.parseInt(st.toString(), 16));
+            }
+            return output;
+        } else {
+            return string.toCharArray();
+        }
+    }
+
+    public static char[] toChars(byte[] bytes) {
+        char[] chars = new char[bytes.length];
+        for (int i = 0; i < chars.length; i++) {
+            chars[i] = (char)bytes[i];
+        }
+        return chars;
     }
 
     /**
@@ -256,6 +361,107 @@ public class StringUtils {
             st.append(c);
         }
         return st.toString();
+    }
+
+    public static String checksum(String s) {
+        return toHex(StringCrpyting.hash(s, StringCrpyting.MD5));
+    }
+
+    public static String checksum(String s, String hashType) {
+        return toHex(StringCrpyting.hash(s, hashType));
+    }
+
+    public static String checksum(String s, boolean spaces) {
+        return toHex(StringCrpyting.hash(s, StringCrpyting.MD5), true);
+    }
+
+    public static String checksum(String s, String hashType, boolean spaces) {
+        return toHex(StringCrpyting.hash(s, hashType), true);
+    }
+
+    /**
+     *
+     * @param s
+     * @param c
+     * @return
+     */
+    public static boolean contains(String s, char c) {
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == c) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param s
+     * @param c
+     * @return
+     */
+    public static int occurrences(String s, char c) {
+        char[] chars = s.toCharArray();
+        int count = 0;
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == c) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     *
+     * @param s
+     * @param chars
+     * @return
+     */
+    public static boolean contains(String s, char[] chars) {
+        int index = 0;
+        char[] input = s.toCharArray();
+
+        for (int i = 0; i < input.length; i++) {
+            if (input[i] == chars[index]) {
+                index++;
+            } else {
+                index = 0;
+            }
+
+            if (index == chars.length) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param s
+     * @param chars
+     * @return
+     */
+    public static int occurrences(String s, char[] chars) {
+        int index = 0;
+        int count = 0;
+        char[] input = s.toCharArray();
+
+        for (int i = 0; i < input.length; i++) {
+            if (input[i] == chars[index]) {
+                index++;
+            } else {
+                index = 0;
+            }
+
+            if (index == chars.length) {
+                count++;
+                index = 0;
+            }
+        }
+
+        return count;
     }
 
     /**
@@ -315,202 +521,24 @@ public class StringUtils {
         if (!s.contains(t)) return new ArrayList<>();
 
         List<Integer> occurrences = new ArrayList<>();
-        char[] charsS = s.toCharArray();
-        char[] charsT = t.toCharArray();
+        char[] chars = t.toCharArray();
+        int index = 0;
+        char[] input = s.toCharArray();
 
-        for (int i = 0; i <= charsS.length - charsT.length; i++) {
-            boolean b = true;
-            for (int j = 0; j < charsT.length; j++) {
-                if (charsS[i + j] != charsT[j]) {
-                    b = false;
-                }
-            }
-            if (b) {
-                occurrences.add(i);
-            }
-        }
-        return occurrences;
-    }
-
-    public static byte[] hash(String s) {
-        return hash(s, "SHA-256");
-    }
-
-    public static byte[] hash(String s, String hashType) {
-        if (!(hashType.equals("MD5") || hashType.equals("SHA-1") || hashType.equals("SHA-256"))) {
-            hashType = "SHA-256";
-        }
-        try {
-            MessageDigest digest = MessageDigest.getInstance(hashType);
-            return digest.digest((s + "").getBytes(StandardCharsets.UTF_8));
-        } catch (NoSuchAlgorithmException e) {
-            return new byte[0];
-        }
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param string
-     * @return
-     */
-    public static String[] splitWords(String string) {
-        return splitString(string, new String[]{" ", "\n", "\t", ",", ".", "-", "!", "?", ";"}, false, false, false);
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param string
-     * @param reviveSplitted
-     * @return
-     */
-    public static String[] splitWords(String string, boolean reviveSplitted) {
-        return splitString(string, new String[]{" ", "\n", "\t", ",", ".", "-", "!", "?", ";"}, reviveSplitted, false, false);
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param string
-     * @param splitStrings
-     * @return
-     */
-    public static String[] splitString(String string, String[] splitStrings) {
-        return splitString(string, splitStrings, false, false, false);
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param string
-     * @param splitStrings
-     * @param reviveSplitted
-     * @return
-     */
-    public static String[] splitString(String string, String[] splitStrings, boolean reviveSplitted) {
-        return splitString(string, splitStrings, reviveSplitted, false, false);
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param string
-     * @param splitStrings
-     * @param reviveSplitted
-     * @param addToLast
-     * @return
-     */
-    public static String[] splitString(String string, String[] splitStrings, boolean reviveSplitted, boolean addToLast) {
-        return splitString(string, splitStrings, reviveSplitted, addToLast, false);
-
-    }
-
-    /**
-     *
-     * @since Version 1
-     *
-     * @param string
-     * @param splitStrings
-     * @param reviveSplitted
-     * @param addToLast
-     * @param splitInStrings
-     * @return
-     */
-    public static String[] splitString(String string, String[] splitStrings, boolean reviveSplitted, boolean addToLast, boolean splitInStrings) {
-        if (string == null) throw new NullPointerException();
-        if (splitStrings == null) throw new NullPointerException();
-        if (string.isEmpty()) throw new NoStringException("No String");
-        if (splitStrings.length == 0) throw new NoStringException("No Split Strings");
-
-        char[] chars = string.toCharArray();
-
-        List<String> words = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder();
-
-        int i = 0;
-        int lastSplit = 0;
-
-        boolean inString = false;
-        boolean escape = false;
-
-        while (i < chars.length) {
-            int splitStringTest = 0;
-            char c = chars[i];
-            if (c == '"' && !escape && !splitInStrings) {
-                inString = !inString;
-            }
-            if (inString && c == '\\' && !splitInStrings) {
-                escape = true;
-                i++;
-                stringBuilder.append(c);
-                continue;
-            }
-            if (inString) {
-                i++;
-                stringBuilder.append(c);
-                escape = false;
-                continue;
-            }
-            String s = "";
-            for (String st : splitStrings) {
-                StringBuilder sb = new StringBuilder();
-                int index = i;
-                int currentIndex = i;
-                while (currentIndex < chars.length && currentIndex < index + st.length()) {
-                    sb.append(chars[currentIndex]);
-                    currentIndex++;
-                }
-                if (sb.toString().equals(st)) {
-                    if (s.length() == 0) {
-                        s = st;
-                    }
-                    splitStringTest++;
-                }
-            }
-
-            if (splitStringTest == 0) {
-                stringBuilder.append(c);
+        for (int i = 0; i < input.length; i++) {
+            if (input[i] == chars[index]) {
+                index++;
             } else {
-                i += s.length() - 1;
-                if (stringBuilder.length() == 0) {
-                    if (reviveSplitted && !addToLast) {
-                        words.add(s);
-                    } else if (reviveSplitted && addToLast) {
-                        words.add(stringBuilder + s);
-                    }
-                    stringBuilder = new StringBuilder();
-                    lastSplit = i;
-                    i++;
-                    continue;
-                }
-                if (reviveSplitted) {
-                    if (addToLast) {
-                        words.add(stringBuilder.toString() + s);
-                    } else {
-                        words.add(stringBuilder.toString());
-                        words.add(s);
-                    }
-                } else {
-                    words.add(stringBuilder.toString());
-                }
-                stringBuilder = new StringBuilder();
-                lastSplit = i;
+                index = 0;
             }
-            i++;
-        }
-        if (lastSplit != string.length()) {
-            if (stringBuilder.length() == 0) {
-                return words.toArray(new String[0]);
+
+            if (index == chars.length) {
+                occurrences.add(index - chars.length);
+                index = 0;
             }
-            words.add(stringBuilder.toString());
         }
-        return words.toArray(new String[0]);
+
+        return occurrences;
     }
 
 }

@@ -2,8 +2,7 @@ package yapi.encryption;
 
 import yapi.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
-import yapi.utils.StringUtils;
-import yapi.utils.Timer;
+import yapi.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

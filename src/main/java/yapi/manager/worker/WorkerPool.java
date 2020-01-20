@@ -204,6 +204,9 @@ public class WorkerPool implements Runnable {
             }
             tries = 0;
             Worker worker = available.remove(0);
+            if (worker == null) {
+                continue;
+            }
             worker.finish();
             log.add("Closing > " + worker.getName());
             all.remove(worker);

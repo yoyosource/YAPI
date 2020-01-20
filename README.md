@@ -5,9 +5,13 @@ My Java API **YAPI** is a diversed and powerfull API to make you live easier wit
 ## YAPI's naming
 Y for YoyoNow or @YoyoSource. API for application programming interface. You could even say library as this is a consortium of methods and data structures.
 
+## API's used
+- eobermuhlner/big-math (https://github.com/eobermuhlner/big-math/tree/master)
+
 ## Planned Features
 
 - **config** System
+- **log** System
 - **Calculator** second one of **Tec**
 - **Sets**
 - **Flow Chart** System

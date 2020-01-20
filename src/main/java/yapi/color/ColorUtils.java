@@ -1,4 +1,4 @@
-package yapi.utils;
+package yapi.color;
 
 import java.awt.*;
 

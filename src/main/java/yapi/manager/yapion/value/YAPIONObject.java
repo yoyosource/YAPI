@@ -1,5 +1,7 @@
 package yapi.manager.yapion.value;
 
+import yapi.manager.json.value.JSONObject;
+import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.YAPIONType;
 import yapi.manager.yapion.YAPIONVariable;
 
@@ -48,6 +50,10 @@ public class YAPIONObject extends YAPIONType {
             st.append(yapionVariable.toString());
         }
         return st.append("}").toString();
+    }
+
+    public JSONObject toJson() {
+        return YAPIONParser.toJSON(this);
     }
 
     public String toHierarchyString() {

@@ -114,31 +114,27 @@ public class Collatz {
      * @param depth
      * @return
      */
-    public static LongTree reverseCompute(int depth) {
-        LongTree longTree = new LongTree(1);
-        if (depth > 0) {
-            longTree.add(reverseCompute(depth, longTree));
-        }
-        return longTree;
-    }
-
-    private static LongTree[] reverseCompute(int depth, LongTree last) {
-        LongTree[] longTrees = new LongTree[2];
-        if (true) {
-            LongTree longTree = new LongTree(last.getL() * 2);
-            longTrees[0] = longTree;
-            if (depth > 0) {
-                last.add(reverseCompute(depth - 1, longTree));
+    public static List<Integer> reverseCompute(int depth) {
+        List<Integer> integers = new ArrayList<>();
+        List<Integer> nextLayer = new ArrayList<>();
+        nextLayer.add(1);
+        for (int i = 0; i < depth; i++) {
+            List<Integer> currentLayer = new ArrayList<>();
+            currentLayer.addAll(nextLayer);
+            nextLayer.clear();
+            while (!currentLayer.isEmpty()) {
+                int num = currentLayer.remove(0);
+                if (!integers.contains(num)) {
+                    integers.add(num);
+                }
+                nextLayer.add(num * 2);
+                double t = (num - 1) / 3.0;
+                if (t > 0 && (int)t == t) {
+                    nextLayer.add((int)t);
+                }
             }
         }
-        if ((last.getL() - 1) / 3 == (last.getL() - 1.0) / 3.0) {
-            LongTree longTree = new LongTree((last.getL() - 1) / 3);
-            longTrees[1] = longTree;
-            if (depth > 0) {
-                last.add(reverseCompute(depth - 1, longTree));
-            }
-        }
-        return longTrees;
+        return integers;
     }
 
 }
