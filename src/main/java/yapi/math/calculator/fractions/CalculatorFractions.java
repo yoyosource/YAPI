@@ -1,6 +1,7 @@
 package yapi.math.calculator.fractions;
 
 import yapi.math.NumberUtils;
+import yapi.string.StringSplitting;
 import yapi.string.StringUtils;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class CalculatorFractions {
     }
 
     private List<String> split(String s) {
-        List<String> strings = Arrays.stream(StringUtils.splitString(s.replaceAll(" +", " "), new String[]{"+", "-", "*", "/", "%", "(", ")", "^", " "}, true, false)).collect(Collectors.toList());
+        List<String> strings = Arrays.stream(StringSplitting.splitString(s.replaceAll(" +", " "), new String[]{"+", "-", "*", "/", "%", "(", ")", "^", " "}, true, false)).collect(Collectors.toList());
         for (int i = 0; i < strings.size() - 1; i++) {
             if (strings.get(i).matches("[0-9]+(\\.[0-9]+)?")) {
                 if (strings.get(i + 1).equals("%")) {

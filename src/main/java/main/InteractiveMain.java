@@ -3,6 +3,7 @@ package main;
 import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.file.FileUtils;
+import yapi.string.StringSplitting;
 import yapi.string.StringUtils;
 
 import java.util.*;
@@ -45,7 +46,7 @@ public class InteractiveMain {
 
         }
         */
-        YAPIONObject yapionObject = YAPIONParser.parse(StringUtils.merge(FileUtils.fileContentFromResourceAsString("main/yapi.info"), "\n"));
+        YAPIONObject yapionObject = YAPIONParser.parse(StringSplitting.merge(FileUtils.fileContentFromResourceAsString("main/yapi.info"), "\n"));
         System.out.println(yapionObject.toString());
         System.out.println("YAPI");
         version(yapionObject, 0, new ArrayList<>());

@@ -3,6 +3,7 @@ package yapi.manager.yapion;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 import yapi.color.ColorUtils;
+import yapi.string.StringFormatting;
 import yapi.string.StringUtils;
 
 import java.awt.*;
@@ -16,7 +17,7 @@ public class YAPIONObjectParser {
     public static YAPIONObject toYAPIONObject(Color color) {
         YAPIONObject yapionObject = new YAPIONObject();
         yapionObject.add(getTypeVariable("color"));
-        yapionObject.add(getVariable("color", "#" + StringUtils.toHex(new byte[]{(byte)color.getRed(), (byte)color.getGreen(), (byte)color.getBlue(), (byte)color.getAlpha()})));
+        yapionObject.add(getVariable("color", "#" + StringFormatting.toHex(new byte[]{(byte)color.getRed(), (byte)color.getGreen(), (byte)color.getBlue(), (byte)color.getAlpha()})));
         return yapionObject;
     }
 

@@ -3,6 +3,7 @@ package yapi.encryption;
 import yapi.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
 import yapi.string.StringCrpyting;
+import yapi.string.StringFormatting;
 import yapi.string.StringUtils;
 
 import java.util.ArrayList;
@@ -228,9 +229,9 @@ public class EncryptionSymmetric {
 
     public static String solve(String text, String password, int security) {
         if (text.matches("[A-F0-9]{2}( [A-F0-9]{2})*")) {
-            return StringUtils.formatText(toString(decrypt(toBytes(text), createKey(password, security))));
+            return StringFormatting.formatText(toString(decrypt(toBytes(text), createKey(password, security))));
         }
-        return toHex(encrypt(toBytes(StringUtils.unformatText(text)), createKey(password, security)));
+        return toHex(encrypt(toBytes(StringFormatting.unformatText(text)), createKey(password, security)));
     }
 
     public static byte[] encrypt(byte[] text, String key) {

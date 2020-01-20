@@ -16,6 +16,7 @@ import yapi.math.mathscript.tree.special.FunctionProduct;
 import yapi.math.mathscript.tree.special.FunctionSum;
 import yapi.math.mathscript.tree.values.FunctionConstant;
 import yapi.math.mathscript.tree.values.FunctionVariable;
+import yapi.string.StringSplitting;
 import yapi.string.StringUtils;
 
 import java.io.File;
@@ -111,7 +112,7 @@ public class MathScript {
             if (s.isBlank()) {
                 continue;
             }
-            String[] str = StringUtils.splitString(s, new String[]{" ", "(", ")", "{", "}", "=", ":", ",", ";"}, true, false, false);
+            String[] str = StringSplitting.splitString(s, new String[]{" ", "(", ")", "{", "}", "=", ":", ",", ";"}, true, false, false);
             for (int i = 0; i < str.length; i++) {
                 if (str[i].isBlank()) {
                     continue;
