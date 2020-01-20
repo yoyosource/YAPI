@@ -2,6 +2,7 @@ package yapi.encryption;
 
 import yapi.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
+import yapi.string.StringCrpyting;
 import yapi.string.StringUtils;
 
 import java.util.ArrayList;
@@ -83,6 +84,19 @@ public class EncryptionSymmetric {
         }
     }
 
+    public static String createKey(String username, String password, int security, boolean newMode) {
+        if (!newMode) {
+            return createKey(username, password, security);
+        }
+
+        long checksum = 0;
+        for (char c : username.toCharArray()) {
+            checksum += c;
+        }
+        return rotate(createKey(password, security - 1, true) + createKey(username, security - 1, true), checksum);
+    }
+
+    @Deprecated(since = "Version 1.2, please use the new createKey method and convert old systems to new one.")
     public static String createKey(String username, String password, int security) {
         long checksum = 0;
         for (char c : username.toCharArray()) {
@@ -91,6 +105,36 @@ public class EncryptionSymmetric {
         return rotate(createKey(password, security - 1) + createKey(username, security - 1), checksum);
     }
 
+    public static String createKey(String password, int security, boolean newMode) {
+        if (!newMode) {
+            return createKey(password, security);
+        }
+
+        if (security < 0) {
+            security = 0;
+        }
+        if (security > 16) {
+            security = 16;
+        }
+        security = (int)Math.pow(2, security + 10);
+
+        long checksum = 0;
+        for (char c : password.toCharArray()) {
+            checksum += c;
+        }
+
+        int hashsum = 0;
+        byte[] hash = StringCrpyting.hash(password, "SHA-512");
+        for (byte b : hash) {
+            hashsum += b;
+        }
+
+        String key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2 - 128) + new NumberRandom(hashsum).getString(security / 2 - 128);
+        key = toHex(hash).replace(" ", "") + mixUP(key, checksum + hashsum);
+        return key;
+    }
+
+    @Deprecated(since = "Version 1.2, please use the new createKey method and convert old systems to new one.")
     public static String createKey(String password, int security) {
         if (security < 0) {
             security = 0;
@@ -106,7 +150,7 @@ public class EncryptionSymmetric {
         }
 
         int hashsum = 0;
-        byte[] hash = StringUtils.hash(password, "SHA256");
+        byte[] hash = StringCrpyting.hash(password, "SHA-256");
         for (byte b : hash) {
             hashsum += b;
         }
@@ -198,7 +242,7 @@ public class EncryptionSymmetric {
         byte[] bytes = new byte[text.length + pad().length() + 33];
 
         char[] pad = pad().toCharArray();
-        byte[] checksum = StringUtils.hash(toString(text), "SHA-256");
+        byte[] checksum = StringCrpyting.hash(toString(text), "SHA-256");
         char[] chars = new char[bytes.length];
         for (int i = 0; i < pad.length; i++) {
             chars[i + 1] = pad[i];
@@ -298,7 +342,7 @@ public class EncryptionSymmetric {
         }
         intermediate = Arrays.copyOf(intermediate, intermediate.length - shift);
 
-        byte[] checksum2 = StringUtils.hash(toString(intermediate), "SHA-256");
+        byte[] checksum2 = StringCrpyting.hash(toString(intermediate), "SHA-256");
         if (!Arrays.equals(checksum1, checksum2)) {
             return new byte[0];
         }

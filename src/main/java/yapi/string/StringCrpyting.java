@@ -12,6 +12,7 @@ public class StringCrpyting {
     public static final String SHA1 = "SHA-1";
     public static final String SHA256 = "SHA-256";
     public static final String SHA512 = "SHA-512";
+
     public static final String[] hashTypes = new String[]{MD5, SHA1, SHA256, SHA512};
 
     private StringCrpyting() {
@@ -19,15 +20,19 @@ public class StringCrpyting {
     }
 
     public static String toHex(byte[] bytes) {
-        return StringUtils.toHex(bytes);
+        return StringFormatting.toHex(bytes, true);
     }
 
     public static String toHex(byte[] bytes, boolean spaces) {
-        return StringUtils.toHex(bytes, spaces);
+        return StringFormatting.toHex(bytes, spaces);
     }
 
     public static byte[] hash(String s) {
-        return hash(s, SHA512);
+        return hash(s, hashTypes[hashTypes.length - 1]);
+    }
+
+    public static String hash(String s, boolean spaces) {
+        return toHex(hash(s), spaces);
     }
 
     public static byte[] hash(String s, String hashType) {
@@ -38,7 +43,7 @@ public class StringCrpyting {
             }
         }
         if (!b) {
-            hashType = SHA512;
+            hashType = hashTypes[hashTypes.length - 1];
         }
         try {
             MessageDigest digest = MessageDigest.getInstance(hashType);
@@ -46,6 +51,10 @@ public class StringCrpyting {
         } catch (NoSuchAlgorithmException e) {
             return new byte[0];
         }
+    }
+
+    public static String hash(String s, String hashType, boolean spaces) {
+        return toHex(hash(s, hashType), spaces);
     }
 
     public static byte[] encrypt(String s, String password) {

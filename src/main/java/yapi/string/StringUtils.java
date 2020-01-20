@@ -108,4 +108,8 @@ public class StringUtils {
         return StringSplitting.merge(strings, s);
     }
 
+    public static void main(String[] args) {
+        StringCrpyting.encrypt("Hallo", "1101wowxD", 4);
+    }
+
 }
