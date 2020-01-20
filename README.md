@@ -12,7 +12,6 @@ Y for YoyoNow or @YoyoSource. API for application programming interface. You cou
 
 - **config** System
 - **log** System
-- **Calculator** second one of **Tec**
 - **Sets**
 - **Flow Chart** System
 - **Color Utils** more methods.

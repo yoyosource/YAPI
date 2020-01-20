@@ -1,7 +1,5 @@
 package yapi.string;
 
-import yapi.exceptions.NoStringException;
-
 import java.util.*;
 
 public class StringUtils {
