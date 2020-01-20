@@ -77,6 +77,9 @@ public class Timer {
      * |
      * +--- Synonym for Format
      *
+     * Example:
+     *   dF>d hF>h MF>M sF>s mF>m xF>x nF>n
+     *
      * @param format
      * @return
      */
@@ -234,14 +237,6 @@ public class Timer {
         format = format.replace("dd", n2);
         format = format.replace("d", n1);
         return format;
-    }
-
-    public static void main(String[] args) throws Exception {
-        Timer timer = new Timer();
-        timer.start();
-        Thread.sleep(1000);
-        timer.stop();
-        System.out.println(timer.getTimeFormatted("dF>d hF>h MF>M sF>s mF>m xF>x nF>n   N"));
     }
 
 }
