@@ -58,47 +58,47 @@ public class StringCrpyting {
     }
 
     public static byte[] encrypt(String s, String password) {
-        String key = EncryptionSymmetric.createKey(password, 4);
+        String key = EncryptionSymmetric.createKey(password, 4, true);
         return EncryptionSymmetric.encrypt(s.getBytes(), key);
     }
 
     public static byte[] encrypt(String s, String userName, String password) {
-        String key = EncryptionSymmetric.createKey(userName, password, 4);
+        String key = EncryptionSymmetric.createKey(userName, password, 4, true);
         return EncryptionSymmetric.encrypt(s.getBytes(), key);
     }
 
     public static byte[] encrypt(String s, String password, int security) {
-        String key = EncryptionSymmetric.createKey(password, security);
+        String key = EncryptionSymmetric.createKey(password, security, true);
         return EncryptionSymmetric.encrypt(s.getBytes(), key);
     }
 
     public static byte[] encrypt(String s, String userName, String password, int security) {
-        String key = EncryptionSymmetric.createKey(userName, password, security);
+        String key = EncryptionSymmetric.createKey(userName, password, security, true);
         return EncryptionSymmetric.encrypt(s.getBytes(), key);
     }
 
     public static String decrypt(byte[] bytes, String password) {
-        String key = EncryptionSymmetric.createKey(password, 4);
+        String key = EncryptionSymmetric.createKey(password, 4, true);
         byte[] r = EncryptionSymmetric.decrypt(bytes, key);
-        return StringUtils.toString(r);
+        return StringFormatting.toString(r);
     }
 
     public static String decrypt(byte[] bytes, String userName, String password) {
-        String key = EncryptionSymmetric.createKey(userName, password, 4);
+        String key = EncryptionSymmetric.createKey(userName, password, 4, true);
         byte[] r = EncryptionSymmetric.decrypt(bytes, key);
-        return StringUtils.toString(r);
+        return StringFormatting.toString(r);
     }
 
     public static String decrypt(byte[] bytes, String password, int security) {
-        String key = EncryptionSymmetric.createKey(password, security);
+        String key = EncryptionSymmetric.createKey(password, security, true);
         byte[] r = EncryptionSymmetric.decrypt(bytes, key);
-        return StringUtils.toString(r);
+        return StringFormatting.toString(r);
     }
 
     public static String decrypt(byte[] bytes, String userName, String password, int security) {
-        String key = EncryptionSymmetric.createKey(userName, password, security);
+        String key = EncryptionSymmetric.createKey(userName, password, security, true);
         byte[] r = EncryptionSymmetric.decrypt(bytes, key);
-        return StringUtils.toString(r);
+        return StringFormatting.toString(r);
     }
 
 }
