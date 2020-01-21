@@ -8,6 +8,16 @@ Y for YoyoNow or @YoyoSource. API for application programming interface. You cou
 ## API's used
 - eobermuhlner/big-math (https://github.com/eobermuhlner/big-math/tree/master)
 
+## Version Log
+- **1.0** [R] > Focus on Math and Encryption
+- **1.1** [A] > Pre release of **1.2**. Focus on String Manipulation and Compression
+- **1.2** [C] > Planned release.
+
+* [R] Release
+* [A] Alpha
+* [B] Beta
+* [C] Coming soon
+
 ## Planned Features
 
 - **config** System
@@ -17,6 +27,5 @@ Y for YoyoNow or @YoyoSource. API for application programming interface. You cou
 - **Color Utils** more methods.
 - **Matrix**
 
-
-- **Regex** System
-- **State Machine**
+* **Regex** System
+* **State Machine**
