@@ -1,3 +1,10 @@
+![YAPI Version V1.0](https://img.shields.io/badge/YAPI%20Version-1.0-green)
+![YAPI Latest V1.1](https://img.shields.io/badge/YAPI%20Latest-1.1-red)
+[![License: GPL v3+](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+![Methods 695](https://img.shields.io/badge/Methods-695-blue)
+![Code Lines 15542](https://img.shields.io/badge/Code%20Lines-15542-blue)
+
 # YAPI
 
 My Java API **YAPI** is a diversed and powerfull API to make you live easier with coding. Some problems and ideas have neat solutions within this api. To use it just import it and for questions ask me on GitHub. Feel free to leave suggestions and improvements to any method, class or structure. 
