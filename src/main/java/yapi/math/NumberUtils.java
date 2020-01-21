@@ -1,7 +1,6 @@
 package yapi.math;
 
 import yapi.exceptions.MathException;
-import yapi.exceptions.NoStringException;
 import yapi.exceptions.math.RangeException;
 
 import java.math.BigInteger;
@@ -92,7 +91,11 @@ public class NumberUtils {
      * @return
      */
     public static long greatestCommonDivisor(long a, long b) {
-        return b == 0 ? (a < 0 ? -a : a) : greatestCommonDivisor(b, a % b);
+        if (b == 0) {
+            return a < 0 ? -a : a;
+        } else {
+            return greatestCommonDivisor(b, a % b);
+        }
     }
 
     /**
@@ -141,16 +144,12 @@ public class NumberUtils {
                 return l;
             }
             n += 2;
-            if (n % 3 != 0) {
-                if (isPrime(n)) {
-                    return n;
-                }
+            if (n % 3 != 0 && isPrime(n)) {
+                return n;
             }
             n += 2;
-            if (n % 3 != 0) {
-                if (isPrime(n)) {
-                    return n;
-                }
+            if (n % 3 != 0 && isPrime(n)) {
+                return n;
             }
             for (long i = n + 2; i < Long.MAX_VALUE; i += 6) {
                 if (isPrime(i)) {
@@ -167,16 +166,12 @@ public class NumberUtils {
             if (n % 2 == 0) {
                 n++;
             }
-            if (n % 3 != 0) {
-                if (isPrime(n)) {
-                    return n;
-                }
+            if (n % 3 != 0 && isPrime(n)) {
+                return n;
             }
             n += 2;
-            if (n % 3 != 0) {
-                if (isPrime(n)) {
-                    return n;
-                }
+            if (n % 3 != 0 && isPrime(n)) {
+                return n;
             }
             n += 2;
             for (long i = n; i < Long.MAX_VALUE; i += 6) {
@@ -230,14 +225,9 @@ public class NumberUtils {
                 }
                 return primes;
             }
-            int times = 0;
             while (n % currentPrime == 0) {
                 primes.add(currentPrime);
                 n = n / currentPrime;
-                times++;
-            }
-            if (times > 0) {
-                System.out.println(times + "x " + currentPrime);
             }
             currentPrime = nextPrime(currentPrime);
         }
@@ -382,7 +372,7 @@ public class NumberUtils {
      */
     public static Long min(List<Long> longs) {
         if (longs.isEmpty()) {
-            throw new RangeException("Range is Empty");
+            throw new RangeException("List is Empty");
         }
         long current = longs.get(0);
         for (long l : longs) {
@@ -402,7 +392,7 @@ public class NumberUtils {
      */
     public static Long minIndex(List<Long> longs) {
         if (longs.isEmpty()) {
-            throw new RangeException("Range is Empty");
+            throw new RangeException("List is Empty");
         }
         long current = longs.get(0);
         long index = 0;
@@ -425,7 +415,7 @@ public class NumberUtils {
      */
     public static Long max(List<Long> longs) {
         if (longs.isEmpty()) {
-            throw new RangeException("Range is Empty");
+            throw new RangeException("List is Empty");
         }
         long current = longs.get(0);
         for (long l : longs) {
@@ -445,7 +435,7 @@ public class NumberUtils {
      */
     public static Long maxIndex(List<Long> longs) {
         if (longs.isEmpty()) {
-            throw new RangeException("Range is Empty");
+            throw new RangeException("List is Empty");
         }
         long current = longs.get(0);
         long index = 0;
@@ -482,7 +472,7 @@ public class NumberUtils {
      */
     public static long factorial(long input) {
         if (input < 0) {
-            throw new MathException("factorial of negatives is not defined");
+            throw new MathException("Factorial of negatives is not defined");
         }
         if (input == 0) {
             return 1;

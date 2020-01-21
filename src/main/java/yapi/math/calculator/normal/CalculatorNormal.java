@@ -19,7 +19,6 @@ public class CalculatorNormal {
     }
 
     public Object calculate() {
-        System.out.println(tokens);
         if (!checkIfCalculation()) {
             return null;
         }
@@ -60,10 +59,8 @@ public class CalculatorNormal {
 
             String key2 = tokens.get(i - 1).getKey();
             String val2 = tokens.get(i - 1).getVal().toString();
-            if (key.equals("STb")) {
-                if (val.equals("(") && (key2.equals("int") || key2.equals("num") || key2.equals("lon"))) {
-                    nTokens.add(new Token("OPE", "*"));
-                }
+            if (key.equals("STb") && (val.equals("(") && (key2.equals("int") || key2.equals("num") || key2.equals("lon")))) {
+                nTokens.add(new Token("OPE", "*"));
             }
             if (tokens.get(i).isType()) {
                 if (tokens.get(i - 1).isType()) {
@@ -79,10 +76,8 @@ public class CalculatorNormal {
                     nTokens.add(new Token("OPE", "log"));
                     continue;
                 }
-                if (val.equals("root")) {
-                    if (!(key2.equals("num") || key2.equals("lon") || key2.equals("int"))) {
-                        nTokens.add(new Token("int", "2"));
-                    }
+                if (val.equals("root") && !(key2.equals("num") || key2.equals("lon") || key2.equals("int"))) {
+                    nTokens.add(new Token("int", "2"));
                 }
             }
             nTokens.add(tokens.get(i));
@@ -191,20 +186,16 @@ public class CalculatorNormal {
     private void removeBrackets(List<Integer> priorities) {
         for (int i = tokens.size() - 2; i >= 1; i--) {
             try {
-                if (tokens.get(i + 1).getVal().toString().equals(")")) {
-                    if (tokens.get(i - 1).getVal().toString().equals("(")) {
-                        remove(i, tokens);
-                        remove(i, priorities);
-                    }
+                if (tokens.get(i + 1).getVal().toString().equals(")") && tokens.get(i - 1).getVal().toString().equals("(")) {
+                    remove(i, tokens);
+                    remove(i, priorities);
                 }
-                if (tokens.get(i + 1).getVal().toString().equals("|")) {
-                    if (tokens.get(i - 1).getVal().toString().equals("|")) {
-                        remove(i, tokens);
-                        remove(i, priorities);
-                    }
+                if (tokens.get(i + 1).getVal().toString().equals("|") && tokens.get(i - 1).getVal().toString().equals("|")) {
+                    remove(i, tokens);
+                    remove(i, priorities);
                 }
             } catch (IndexOutOfBoundsException e) {
-
+                // Ignore
             }
         }
     }

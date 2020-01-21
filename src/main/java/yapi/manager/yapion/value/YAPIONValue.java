@@ -44,7 +44,9 @@ public class YAPIONValue extends YAPIONType {
             try {
                 Integer.parseInt(value);
                 return VALUE_INTEGER;
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+                // Ignored
+            }
             try {
                 Long.parseLong(value);
                 return VALUE_LONG;
@@ -88,7 +90,9 @@ public class YAPIONValue extends YAPIONType {
             try {
                 Float.parseFloat(value);
                 return VALUE_FLOAT;
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+                // Ignored
+            }
             try {
                 Double.parseDouble(value);
                 return VALUE_DOUBLE;

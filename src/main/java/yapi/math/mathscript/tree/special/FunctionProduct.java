@@ -1,6 +1,5 @@
 package yapi.math.mathscript.tree.special;
 
-import com.sun.security.jgss.GSSUtil;
 import yapi.exceptions.math.MathScriptException;
 import yapi.math.mathscript.state.Variable;
 import yapi.math.mathscript.state.VariableState;

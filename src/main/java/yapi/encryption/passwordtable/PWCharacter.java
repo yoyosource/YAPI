@@ -18,9 +18,4 @@ public class PWCharacter extends PWObject {
         }
         return false;
     }
-
-    @Override
-    public char getChar() {
-        return super.getChar();
-    }
 }

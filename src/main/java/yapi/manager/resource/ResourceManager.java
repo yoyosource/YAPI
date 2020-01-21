@@ -68,8 +68,7 @@ public class ResourceManager {
             path = "/" + path;
         }
 
-        try {
-            InputStream inputStream = ResourceManager.class.getResourceAsStream(path);
+        try (InputStream inputStream = ResourceManager.class.getResourceAsStream(path)) {
             if (path.endsWith(".jpg") || path.endsWith(".png")) {
                 BufferedImage image = ImageIO.read(inputStream);
                 imageMap.put(name, image);
@@ -77,7 +76,7 @@ public class ResourceManager {
                 byteMap.put(name, inputStream.readAllBytes());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // Ignored
         }
         loading.remove(name);
     }

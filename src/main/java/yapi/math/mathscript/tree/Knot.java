@@ -1,6 +1,5 @@
 package yapi.math.mathscript.tree;
 
-import yapi.math.calculator.fractions.Fraction;
 import yapi.math.mathscript.state.VariableState;
 
 import java.math.BigDecimal;

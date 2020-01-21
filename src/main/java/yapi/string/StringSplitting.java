@@ -7,6 +7,10 @@ import java.util.List;
 
 public class StringSplitting {
 
+    private StringSplitting() {
+        throw new IllegalStateException();
+    }
+
     /**
      *
      * @since Version 1

@@ -12,10 +12,6 @@ public class JSONObject extends JSONType {
 
     private List<JSONVariable> jsonVariables = new ArrayList<>();
 
-    public JSONObject() {
-
-    }
-
     public List<String> getKeys() {
         List<String> keys = new ArrayList<>();
         for (JSONVariable jsonVariable : jsonVariables) {

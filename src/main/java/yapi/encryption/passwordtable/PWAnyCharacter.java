@@ -15,9 +15,4 @@ public class PWAnyCharacter extends PWObject {
         setChar((char)(getChar() + 1));
         return false;
     }
-
-    @Override
-    public char getChar() {
-        return super.getChar();
-    }
 }

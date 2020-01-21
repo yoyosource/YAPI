@@ -1,7 +1,6 @@
 package yapi.compression.general;
 
 import yapi.string.StringFormatting;
-import yapi.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

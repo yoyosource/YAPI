@@ -4,7 +4,6 @@ import yapi.exceptions.WindowCreatorException;
 import yapi.exceptions.YAPIException;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -399,18 +398,12 @@ public class YAPIWindow extends JComponent {
                 int w = width;
                 int h = height;
 
-                if (mode == 0) {
-                    if (!(point.getX() > x && point.getX() < x + w && point.getY() > y && point.getY() < y + h)) {
-                        executeLine(g, tokenizeLine(st.toString()));
-                    }
-                } else if (mode == 1) {
-                    if (!(point.getX() > x - w / 2 && point.getX() < x + w / 2 && point.getY() > y - h / 2 && point.getY() < y + h / 2)) {
-                        executeLine(g, tokenizeLine(st.toString()));
-                    }
-                } else if (mode == 2) {
-                    if (!(point.getX() > x - w && point.getX() < x && point.getY() > y - h && point.getY() < y)) {
-                        executeLine(g, tokenizeLine(st.toString()));
-                    }
+                if (mode == 0 && (!(point.getX() > x && point.getX() < x + w && point.getY() > y && point.getY() < y + h))) {
+                    executeLine(g, tokenizeLine(st.toString()));
+                } else if (mode == 1 && (!(point.getX() > x - w / 2 && point.getX() < x + w / 2 && point.getY() > y - h / 2 && point.getY() < y + h / 2))) {
+                    executeLine(g, tokenizeLine(st.toString()));
+                } else if (mode == 2 && (!(point.getX() > x - w && point.getX() < x && point.getY() > y - h && point.getY() < y))) {
+                    executeLine(g, tokenizeLine(st.toString()));
                 }
             }
         });
@@ -623,8 +616,7 @@ public class YAPIWindow extends JComponent {
     }
 
     private void update() {
-        try {
-            InputStream inputStream = new FileInputStream(configuration);
+        try (InputStream inputStream = new FileInputStream(configuration)) {
             byte[] bytes = inputStream.readAllBytes();
             StringBuilder st = new StringBuilder();
             for (byte b : bytes) {
@@ -768,12 +760,12 @@ public class YAPIWindow extends JComponent {
         }
         for (Error e : this.errors) {
             if (!errors.contains(e)) {
-                System.out.println("[Resolved] " + e.getLine() + " -> " + e.getError());
+                System.out.println("[Resolved] " + e.getLine() + " -> " + e.getErrorString());
             }
         }
         for (Error e : errors) {
             if (!this.errors.contains(e)) {
-                System.out.println("[Error]    " + e.getLine() + " -> " + e.getError());
+                System.out.println("[Error]    " + e.getLine() + " -> " + e.getErrorString());
             }
         }
         if (selectorUsed.size() != selectors.size()) {
@@ -786,18 +778,18 @@ public class YAPIWindow extends JComponent {
         for (Warning e : warnings) {
             if (!currentWarnings.contains(e)) {
                 if (e.getLine() > 0) {
-                    System.out.println("[Resolved] " + e.getWarning() + " " + e.getLine());
+                    System.out.println("[Resolved] " + e.getWarningString() + " " + e.getLine());
                 } else {
-                    System.out.println("[Resolved] " + e.getWarning());
+                    System.out.println("[Resolved] " + e.getWarningString());
                 }
             }
         }
         for (Warning e : currentWarnings) {
             if (!warnings.contains(e)) {
                 if (e.getLine() > 0) {
-                    System.out.println("[Warning]  " + e.getWarning() + " " + e.getLine());
+                    System.out.println("[Warning]  " + e.getWarningString() + " " + e.getLine());
                 } else {
-                    System.out.println("[Warning]  " + e.getWarning());
+                    System.out.println("[Warning]  " + e.getWarningString());
                 }
             }
         }
@@ -810,16 +802,16 @@ public class YAPIWindow extends JComponent {
         if (tokens.isEmpty()) {
             return;
         }
-        if (tokens.get(0).getToken().startsWith("#")) {
+        if (tokens.get(0).getTokenString().startsWith("#")) {
             return;
         }
-        if (tokens.get(0).getToken().startsWith("//")) {
+        if (tokens.get(0).getTokenString().startsWith("//")) {
             return;
         }
-        if (tokens.get(0).getToken().startsWith("/*")) {
+        if (tokens.get(0).getTokenString().startsWith("/*")) {
             comment = true;
         }
-        if (tokens.get(tokens.size() - 1).getToken().endsWith("*/")) {
+        if (tokens.get(tokens.size() - 1).getTokenString().endsWith("*/")) {
             comment = false;
             return;
         }
@@ -830,54 +822,54 @@ public class YAPIWindow extends JComponent {
         if (tokens.size() < 3) {
             throw new WindowCreatorException("Unknown Line Pattern");
         }
-        if (tokens.get(0).getToken().startsWith("?")) {
+        if (tokens.get(0).getTokenString().startsWith("?")) {
             if (!init) {
                 return;
             }
-            if (!tokens.get(1).getToken().equals("(")) {
+            if (!tokens.get(1).getTokenString().equals("(")) {
                 throw new WindowCreatorException("Missing open bracket");
             }
-            if (!tokens.get(tokens.size() - 1).getToken().equals(")")) {
+            if (!tokens.get(tokens.size() - 1).getTokenString().equals(")")) {
                 throw new WindowCreatorException("Missing closing bracket");
             }
             List<String> strings = new ArrayList<>();
             for (int i = 2; i < tokens.size() - 1; i++) {
-                strings.add(tokens.get(i).getToken());
+                strings.add(tokens.get(i).getTokenString());
             }
-            addSelector(tokens.get(0).getToken().substring(1), get(strings.stream().collect(Collectors.joining(" "))));
+            addSelector(tokens.get(0).getTokenString().substring(1), get(strings.stream().collect(Collectors.joining(" "))));
             return;
         }
-        if (tokens.get(0).getToken().startsWith("@") || tokens.get(0).getToken().startsWith("$")) {
-            if (!tokens.get(1).getToken().equals("(")) {
+        if (tokens.get(0).getTokenString().startsWith("@") || tokens.get(0).getTokenString().startsWith("$")) {
+            if (!tokens.get(1).getTokenString().equals("(")) {
                 throw new WindowCreatorException("Missing open bracket");
             }
-            if (!tokens.get(tokens.size() - 1).getToken().equals(")")) {
+            if (!tokens.get(tokens.size() - 1).getTokenString().equals(")")) {
                 throw new WindowCreatorException("Missing closing bracket");
             }
             List<String> strings = new ArrayList<>();
             for (int i = 2; i < tokens.size() - 1; i++) {
-                strings.add(tokens.get(i).getToken());
+                strings.add(tokens.get(i).getTokenString());
             }
-            addSelector(tokens.get(0).getToken().substring(1), get(strings.stream().collect(Collectors.joining(" "))));
+            addSelector(tokens.get(0).getTokenString().substring(1), get(strings.stream().collect(Collectors.joining(" "))));
             return;
         }
         for (Command command : commands) {
-            if (command.getName().equals(tokens.get(0).getToken())) {
-                if (!tokens.get(1).getToken().equals("(")) {
+            if (command.getName().equals(tokens.get(0).getTokenString())) {
+                if (!tokens.get(1).getTokenString().equals("(")) {
                     throw new WindowCreatorException("Missing open bracket");
                 }
-                if (!tokens.get(tokens.size() - 1).getToken().equals(")")) {
+                if (!tokens.get(tokens.size() - 1).getTokenString().equals(")")) {
                     throw new WindowCreatorException("Missing closing bracket");
                 }
                 List<String> strings = new ArrayList<>();
                 for (int i = 2; i < tokens.size() - 1; i++) {
-                    strings.add(tokens.get(i).getToken());
+                    strings.add(tokens.get(i).getTokenString());
                 }
                 command.run(strings.toArray(new String[0]), g);
                 return;
             }
         }
-        throw new WindowCreatorException("Unknown Token: " + tokens.get(0).getToken());
+        throw new WindowCreatorException("Unknown Token: " + tokens.get(0).getTokenString());
     }
 
     /**
@@ -990,19 +982,19 @@ public class YAPIWindow extends JComponent {
     private class Warning {
 
         private int line;
-        private String warning;
+        private String warningString;
 
         public Warning(String warning, int line) {
             this.line = line;
-            this.warning = warning;
+            this.warningString = warning;
         }
 
         public int getLine() {
             return line;
         }
 
-        public String getWarning() {
-            return warning;
+        public String getWarningString() {
+            return warningString;
         }
 
         @Override
@@ -1010,12 +1002,12 @@ public class YAPIWindow extends JComponent {
             if (this == o) return true;
             if (!(o instanceof Warning)) return false;
             Warning warning1 = (Warning) o;
-            return Objects.equals(warning, warning1.warning);
+            return Objects.equals(warningString, warning1.warningString);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(warning);
+            return Objects.hash(warningString);
         }
 
     }
@@ -1023,19 +1015,19 @@ public class YAPIWindow extends JComponent {
     private class Error {
 
         private int line;
-        private String error;
+        private String errorString;
 
         public Error(String error, int line) {
             this.line = line;
-            this.error = error;
+            this.errorString = error;
         }
 
         public int getLine() {
             return line;
         }
 
-        public String getError() {
-            return error;
+        public String getErrorString() {
+            return errorString;
         }
 
         @Override
@@ -1043,41 +1035,41 @@ public class YAPIWindow extends JComponent {
             if (this == o) return true;
             if (!(o instanceof Error)) return false;
             Error error1 = (Error) o;
-            return Objects.equals(error, error1.error);
+            return Objects.equals(errorString, error1.errorString);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(error);
+            return Objects.hash(errorString);
         }
 
     }
 
     private class Token {
 
-        private String token = "";
+        private String tokenString = "";
 
         public Token(String token) {
-            this.token = token;
+            this.tokenString = token;
         }
 
         public Token(StringBuilder token) {
-            this.token = token.toString();
+            this.tokenString = token.toString();
         }
 
-        public String getToken() {
-            return token;
+        public String getTokenString() {
+            return tokenString;
         }
 
         @Override
         public String toString() {
-            if (token.equals("\n")) {
+            if (tokenString.equals("\n")) {
                 return "Token{" +
                         "token='\\n" + '\'' +
                         '}';
             }
             return "Token{" +
-                    "token='" + token + '\'' +
+                    "token='" + tokenString + '\'' +
                     '}';
         }
 

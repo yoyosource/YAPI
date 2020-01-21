@@ -2,20 +2,18 @@ package yapi.compression.general;
 
 import yapi.math.NumberUtils;
 import yapi.string.StringFormatting;
-import yapi.string.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 public class StringCompression {
-
-    public StringCompression() {
-
-    }
 
     public static void main(String[] args) {
         if (true) {
             StringCompression stringCompression = new StringCompression();
-            byte[] bytes = new byte[0];
+            byte[] bytes;
             //bytes = stringCompression.compress("Danke   ".repeat(1024 * 512));
             bytes = stringCompression.compress("Danke   ".repeat(1024 * 1));
             //bytes = stringCompression.compress((StringUtils.toHex(StringUtils.hash("Hallo InProgressing")).repeat(64) + StringUtils.toHex(StringUtils.hash("Hallo inProgressing")).repeat(64)));

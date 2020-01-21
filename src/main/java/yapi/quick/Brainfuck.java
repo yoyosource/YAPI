@@ -136,8 +136,7 @@ public class Brainfuck {
             extended = true;
             d = true;
         }
-        try {
-            InputStream inputStream = new FileInputStream(file);
+        try (InputStream inputStream = new FileInputStream(file)) {
             byte[] bytes = inputStream.readAllBytes();
             StringBuilder st = new StringBuilder();
             boolean comment = false;
@@ -148,16 +147,15 @@ public class Brainfuck {
                 if (((char)b) == '/' && d) {
                     comment = !comment;
                 }
-                if (comment && d) {
+                if (comment) {
                     continue;
                 }
                 st.append((char)b);
             }
             return st.toString();
         } catch (IOException e) {
-
+            return "";
         }
-        return "";
     }
 
     private void setProgram(String program) {
@@ -267,19 +265,21 @@ public class Brainfuck {
         for (int i = 0; i < index; i++) {
             pad.append(' ');
         }
-        StringBuilder program = new StringBuilder();
+        StringBuilder script = new StringBuilder();
         for (char c : this.program) {
-            program.append(c);
+            script.append(c);
         }
-        System.out.println(pointer + " " + tape);
+        PrintStream printStream = System.out;
+        printStream.println(pointer + " " + tape);
         StringBuilder charBuffer = new StringBuilder();
         for (char c : this.charBuffer) {
             charBuffer.append(c).append(" ");
         }
-        System.out.println("(" + charBuffer + ")");
-        System.out.println(program);
-        System.out.println(pad + "^");
-        System.out.println();
+        printStream.println("(" + charBuffer + ")");
+        printStream.println(script);
+        printStream.println(pad + "^");
+        printStream.println();
+        printStream.flush();
     }
 
     private void incrementPointer() {

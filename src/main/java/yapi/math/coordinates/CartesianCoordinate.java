@@ -1,15 +1,9 @@
 package yapi.math.coordinates;
 
-import yapi.datastructures.IntegerBuffer;
 import yapi.manager.yapion.YAPIONVariable;
-import yapi.manager.yapion.value.YAPIONArray;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
-import yapi.math.NumberRandom;
 import yapi.math.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CartesianCoordinate extends Coordinate {
 
@@ -34,7 +28,7 @@ public class CartesianCoordinate extends Coordinate {
     private double arcCosine(double r) {
         if (value2 >= 0 && r != 0) {
             return value1 / r;
-        } else if (value2 < 0) {
+        } else if (value2 < 0 && r != 0) {
             return -(value1 / r);
         } else {
             // this case should return undefined but I will return 0 instead.

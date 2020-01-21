@@ -372,11 +372,11 @@ public class StringFormatting {
     }
 
     public static String checksum(String s, boolean spaces) {
-        return toHex(StringCrpyting.hash(s, StringCrpyting.MD5), true);
+        return toHex(StringCrpyting.hash(s, StringCrpyting.MD5), spaces);
     }
 
     public static String checksum(String s, String hashType, boolean spaces) {
-        return toHex(StringCrpyting.hash(s, hashType), true);
+        return toHex(StringCrpyting.hash(s, hashType), spaces);
     }
 
     /**

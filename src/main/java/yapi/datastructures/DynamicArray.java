@@ -1,6 +1,7 @@
 package yapi.datastructures;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 @SuppressWarnings("unchecked")
 public class DynamicArray<T> implements Iterable<T> {
@@ -100,6 +101,9 @@ public class DynamicArray<T> implements Iterable<T> {
 
             @Override
             public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
                 return arr[index++];
             }
 

@@ -4,7 +4,6 @@ import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 import yapi.color.ColorUtils;
 import yapi.string.StringFormatting;
-import yapi.string.StringUtils;
 
 import java.awt.*;
 

@@ -1,11 +1,13 @@
 package yapi.conjecture;
 
-import yapi.datastructures.LongTree;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Collatz {
+
+    private Collatz() {
+        throw new IllegalStateException();
+    }
 
     /**
      *

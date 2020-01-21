@@ -23,14 +23,14 @@ public class Task {
      * @return
      */
     public final long getID() {
-        return taskID;
+        return getTaskID();
     }
 
     /**
      * @since Version 1.1
      */
     public void run() {
-
+        // Should be overwritten by implementation
     }
 
 }

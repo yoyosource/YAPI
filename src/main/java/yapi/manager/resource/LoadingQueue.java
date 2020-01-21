@@ -8,11 +8,6 @@ public class LoadingQueue {
     private List<QueueEntry> queueEntries = new ArrayList<>();
 
     /**
-     * @since Version 1.1
-     */
-    public LoadingQueue() {}
-
-    /**
      *
      * @since Version 1.1
      *
@@ -37,10 +32,6 @@ public class LoadingQueue {
     public LoadingQueue add(String path, String name, boolean async) {
         queueEntries.add(new QueueEntry(name, path, async));
         return this;
-    }
-
-    private List<QueueEntry> getQueueEntries() {
-        return queueEntries;
     }
 
     boolean hasNext() {

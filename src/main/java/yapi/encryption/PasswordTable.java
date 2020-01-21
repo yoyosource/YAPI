@@ -3,6 +3,7 @@ package yapi.encryption;
 import yapi.encryption.passwordtable.*;
 import yapi.quick.Timer;
 
+import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -21,7 +22,7 @@ public class PasswordTable {
     private boolean show = false;
     private Timer timer = new Timer();
 
-    private String password = null;
+    private String pwd = null;
 
     /**
      * \\. is any character
@@ -36,9 +37,11 @@ public class PasswordTable {
     public PasswordTable(String s) {
         char[] chars = s.toCharArray();
         boolean escaped = false;
-        for (int i = 0; i < chars.length; i++) {
+        int i = 0;
+        while (i < chars.length) {
             if (chars[i] == '\\') {
                 escaped = true;
+                i++;
                 continue;
             }
 
@@ -69,6 +72,7 @@ public class PasswordTable {
                 pwObjects.add(new PWStatic(chars[i]));
             }
             escaped = false;
+            i++;
         }
 
         percent = new BigDecimal(possibilities).divide(BigDecimal.TEN.multiply(BigDecimal.TEN), new MathContext(2));
@@ -116,7 +120,7 @@ public class PasswordTable {
         return st.toString();
     }
 
-    public synchronized String getPassword() {
+    public synchronized String getPwd() {
         StringBuilder st = new StringBuilder();
         boolean b = true;
         int i = 0;
@@ -154,17 +158,14 @@ public class PasswordTable {
         if (threads < 1) {
             return crack(toCrack, security);
         }
-        password = null;
+        pwd = null;
         for (int i = 0; i < threads; i++) {
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    while (password == null) {
-                        String pw = threadCrack(toCrack, security);
-                        if (pw != null) {
-                            password = pw;
-                            timer.stop();
-                        }
+            Runnable runnable = () -> {
+                while (pwd == null) {
+                    String pw = threadCrack(toCrack, security);
+                    if (pw != null) {
+                        pwd = pw;
+                        timer.stop();
                     }
                 }
             };
@@ -172,9 +173,9 @@ public class PasswordTable {
             t.setName("Cracker: " + i);
             t.start();
         }
-        while (password == null) {
+        while (pwd == null) {
             if (done.compareTo(possibilities) > 0 || done.compareTo(possibilities) == 0) {
-                password = "";
+                pwd = "";
                 timer.stop();
                 failed();
                 return "";
@@ -182,20 +183,20 @@ public class PasswordTable {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-
+                Thread.currentThread().interrupt();
             }
         }
-        done(password);
-        return password;
+        done(pwd);
+        return pwd;
     }
 
     private String threadCrack(byte[] toCrack, int security) {
-        String password = getPassword();
+        String password = getPwd();
         if (password == null) {
             return "";
         }
         byte[] crack = Arrays.copyOf(toCrack, toCrack.length);
-        byte[] bytes = EncryptionSymmetric.decrypt(crack, EncryptionSymmetric.createKey(password, security));
+        byte[] bytes = EncryptionSymmetric.decrypt(crack, EncryptionSymmetric.createKey(password, security, true));
         if (bytes.length != 0) {
             return password;
         }
@@ -208,21 +209,19 @@ public class PasswordTable {
 
     public String crack(byte[] toCrack, int security) {
         timer.start();
-        String password = getPassword();
+        String password = getPwd();
         if (password == null) {
             return "";
         }
-        int i = 0;
         while (password != null) {
-            i++;
             byte[] crack = Arrays.copyOf(toCrack, toCrack.length);
-            byte[] bytes = EncryptionSymmetric.decrypt(crack, EncryptionSymmetric.createKey(password, security));
+            byte[] bytes = EncryptionSymmetric.decrypt(crack, EncryptionSymmetric.createKey(password, security, true));
             if (bytes.length != 0) {
                 timer.stop();
                 done(password);
                 return password;
             }
-            password = getPassword();
+            password = getPwd();
         }
         timer.stop();
         failed();
@@ -263,13 +262,15 @@ public class PasswordTable {
             timer.reset();
             return;
         }
-        System.out.println();
-        System.out.println("[" + "=".repeat(100) + "] " + leading("100.0", 10) + "%");
-        System.out.println();
-        System.out.println("Password cracked in " + done.toString() + " attempts.");
-        System.out.println("Password is '" + password + "'");
-        System.out.println("Time passed since start: " + timer.getTimeFormatted("hF>h MF>M sF>s mF>m xF>x nF>n"));
-        System.out.println();
+        PrintStream printStream = System.out;
+        printStream.println();
+        printStream.println("[" + "=".repeat(100) + "] " + leading("100.0", 10) + "%");
+        printStream.println();
+        printStream.println("Password cracked in " + done.toString() + " attempts.");
+        printStream.println("Password is '" + password + "'");
+        printStream.println("Time passed since start: " + timer.getTimeFormatted("hF>h MF>M sF>s mF>m xF>x nF>n"));
+        printStream.println();
+        printStream.flush();
         timer.reset();
     }
 
@@ -278,13 +279,15 @@ public class PasswordTable {
             timer.reset();
             return;
         }
-        System.out.println();
-        System.out.println("[" + "=".repeat(100) + "] " + leading("100.0", 10) + "%");
-        System.out.println();
-        System.out.println("Password cracked in " + done.toString() + " attempts.");
-        System.out.println("Password is " + "'<UNKNOWN>'");
-        System.out.println("Time passed since start: " + timer.getTimeFormatted("hF>h MF>M sF>s mF>m xF>x nF>n"));
-        System.out.println();
+        PrintStream printStream = System.out;
+        printStream.println();
+        printStream.println("[" + "=".repeat(100) + "] " + leading("100.0", 10) + "%");
+        printStream.println();
+        printStream.println("Password cracked in " + done.toString() + " attempts.");
+        printStream.println("Password is " + "'<UNKNOWN>'");
+        printStream.println("Time passed since start: " + timer.getTimeFormatted("hF>h MF>M sF>s mF>m xF>x nF>n"));
+        printStream.println();
+        printStream.flush();
         timer.reset();
     }
 

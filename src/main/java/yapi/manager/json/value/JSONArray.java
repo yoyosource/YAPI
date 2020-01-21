@@ -9,10 +9,6 @@ public class JSONArray extends JSONType {
 
     private List<JSONType> array = new ArrayList<>();
 
-    public JSONArray() {
-
-    }
-
     public int size() {
         return array.size();
     }

@@ -6,12 +6,9 @@ public class PWStatic extends PWObject {
         super(c);
     }
 
+    @Override
     public boolean update() {
         return true;
-    }
-
-    public char getChar() {
-        return super.getChar();
     }
 
 }

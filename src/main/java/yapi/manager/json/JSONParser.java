@@ -14,6 +14,10 @@ import java.util.List;
 
 public class JSONParser {
 
+    private JSONParser() {
+        throw new IllegalStateException();
+    }
+
     public static YAPIONObject toYAPION(JSONObject jsonObject) {
         YAPIONObject yapionObject = new YAPIONObject();
         List<String> keys = jsonObject.getKeys();
@@ -123,16 +127,19 @@ public class JSONParser {
         List<String> strings = new ArrayList<>();
         int bracket = 0;
 
-        for (int i = 1; i < chars.length - 1; i++) {
+        int i = 1;
+        while (i < chars.length - 1) {
             if (chars[i] == '\\') {
                 st.append(chars[i]);
                 escaped = true;
+                i++;
                 continue;
             }
 
             if (!escaped && chars[i] == '\"') {
                 st.append(chars[i]);
                 inString = !inString;
+                i++;
                 continue;
             }
 
@@ -154,6 +161,7 @@ public class JSONParser {
             }
 
             escaped = false;
+            i++;
         }
         if (st.length() != 0) {
             strings.add(st.toString());
@@ -262,7 +270,8 @@ public class JSONParser {
             st.append(chars[i]);
             if (!escaped && !inString && chars[i] == '[') {
                 bracket++;
-            } if (!escaped && !inString && chars[i] == ']') {
+            }
+            if (!escaped && !inString && chars[i] == ']') {
                 bracket--;
             }
 
@@ -297,7 +306,8 @@ public class JSONParser {
             st.append(chars[i]);
             if (!escaped && !inString && chars[i] == '{') {
                 bracket++;
-            } if (!escaped && !inString && chars[i] == '}') {
+            }
+            if (!escaped && !inString && chars[i] == '}') {
                 bracket--;
             }
 

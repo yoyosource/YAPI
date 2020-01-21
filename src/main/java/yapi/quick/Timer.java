@@ -5,8 +5,6 @@ public class Timer {
     private long time = 0;
     private long lastTime = 0;
 
-    public Timer() {}
-
     public void start() {
         if (time == 0) {
             lastTime = 0;
@@ -224,7 +222,7 @@ public class Timer {
     }
 
     private String formatDays(String format) {
-        long nano = lastTime / 1000 / 1000 / 1000 / 60 / 60 / 24 - lastTime / 1000 / 1000 / 1000 / 60 / 60 / 24;
+        long nano = lastTime / 1000 / 1000 / 1000 / 60 / 60 / 24 - lastTime / 1000 / 1000 / 1000 / 60 / 60 / 24 / 356 * 356;
         StringBuilder n2 = new StringBuilder().append(nano);
         while (n2.length() < 2) {
             n2.insert(0, "0");

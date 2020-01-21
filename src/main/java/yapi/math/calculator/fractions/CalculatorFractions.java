@@ -2,7 +2,6 @@ package yapi.math.calculator.fractions;
 
 import yapi.math.NumberUtils;
 import yapi.string.StringSplitting;
-import yapi.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,18 +27,15 @@ public class CalculatorFractions {
     private List<String> split(String s) {
         List<String> strings = Arrays.stream(StringSplitting.splitString(s.replaceAll(" +", " "), new String[]{"+", "-", "*", "/", "%", "(", ")", "^", " "}, true, false)).collect(Collectors.toList());
         for (int i = 0; i < strings.size() - 1; i++) {
-            if (strings.get(i).matches("[0-9]+(\\.[0-9]+)?")) {
-                if (strings.get(i + 1).equals("%")) {
-                    if (i < strings.size() - 2) {
-                        System.out.println("Match " + i + " " + strings.get(i) + " " + strings.get(i + 1) + " " + strings.get(i + 2));
-                        if (strings.get(i + 2).matches("\\+|-|\\*|/|%")) {
-                            strings.set(i + 1, "");
-                            strings.set(i, strings.get(i) + "%");
-                        }
-                    } else {
+            if (strings.get(i).matches("[0-9]+(\\.[0-9]+)?") && strings.get(i + 1).equals("%")) {
+                if (i < strings.size() - 2) {
+                    if (strings.get(i + 2).matches("\\+|-|\\*|/|%")) {
                         strings.set(i + 1, "");
                         strings.set(i, strings.get(i) + "%");
                     }
+                } else {
+                    strings.set(i + 1, "");
+                    strings.set(i, strings.get(i) + "%");
                 }
             }
         }

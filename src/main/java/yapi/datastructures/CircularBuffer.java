@@ -1,7 +1,5 @@
 package yapi.datastructures;
 
-import yapi.math.NumberRandom;
-
 import java.util.*;
 
 public class CircularBuffer<T> implements Iterable<T> {

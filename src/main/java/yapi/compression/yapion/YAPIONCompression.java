@@ -8,10 +8,13 @@ import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class YAPIONCompression {
+
+    private YAPIONCompression() {
+        throw new IllegalStateException();
+    }
 
     public static String compress(YAPIONObject yapionObject) {
         List<YAPIONCount> yapionCounts = new ArrayList<>();
@@ -94,18 +97,7 @@ public class YAPIONCompression {
     }
 
     private static void sort(List<YAPIONCount> yapionCounts) {
-        yapionCounts.sort(new Comparator<YAPIONCount>() {
-            @Override
-            public int compare(YAPIONCount o1, YAPIONCount o2) {
-                if (o1.getLoss() == o2.getLoss()) {
-                    return 0;
-                }
-                if (o1.getLoss() > o2.getLoss()) {
-                    return -1;
-                }
-                return 1;
-            }
-        });
+        yapionCounts.sort((o1, o2) -> Long.compare(o1.getLoss(), o2.getLoss()) * -1);
     }
 
     private static void filter(List<YAPIONCount> yapionCounts) {

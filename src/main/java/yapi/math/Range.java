@@ -100,23 +100,23 @@ public class Range {
     }
 
     private <N> boolean check(N n) {
-        boolean excluded = false;
+        boolean e = false;
         for (RangeCheck rangeCheck : this.excluded) {
             if (n instanceof Integer) {
-                excluded = excluded || rangeCheck.checkInteger((Integer)n);
+                e = e || rangeCheck.checkInteger((Integer)n);
             }
             if (n instanceof Long) {
-                excluded = excluded || rangeCheck.checkLong((Long)n);
+                e = e || rangeCheck.checkLong((Long)n);
             }
             if (n instanceof Double) {
-                excluded = excluded || rangeCheck.checkDouble((Double)n);
+                e = e || rangeCheck.checkDouble((Double)n);
             }
             if (n instanceof Float) {
-                excluded = excluded || rangeCheck.checkFloat((Float)n);
+                e = e || rangeCheck.checkFloat((Float)n);
             }
         }
 
-        if (excluded) {
+        if (e) {
             return false;
         }
 

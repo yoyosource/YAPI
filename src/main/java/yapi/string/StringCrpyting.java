@@ -13,7 +13,7 @@ public class StringCrpyting {
     public static final String SHA256 = "SHA-256";
     public static final String SHA512 = "SHA-512";
 
-    public static final String[] hashTypes = new String[]{MD5, SHA1, SHA256, SHA512};
+    private static final String[] hashTypes = new String[]{MD5, SHA1, SHA256, SHA512};
 
     private StringCrpyting() {
         throw new IllegalStateException("Utility class");

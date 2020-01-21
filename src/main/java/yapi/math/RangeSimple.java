@@ -9,6 +9,10 @@ import java.util.List;
 
 public class RangeSimple {
 
+    private RangeSimple() {
+        throw new IllegalStateException();
+    }
+
     /**
      * simplifyRange is used to simplify your range down to one exclude.
      *
@@ -23,8 +27,6 @@ public class RangeSimple {
      *
      * @param range is the range to simplify.
      * @return is your simplified range.
-     *
-     * @throws RangeException if the range has any mistakes.
      */
     public static String simplifyRange(String range) throws RangeException {
         List<Long> longs = getRange(range);
@@ -185,8 +187,6 @@ public class RangeSimple {
      *
      * @param range is the range expression you want to evaluate.
      * @return the list of values your expression contains.
-     *
-     * @throws RangeException if the range has any mistakes.
      */
     public static List<Long> getRange(String range) throws RangeException {
         if (range.matches("-?\\d+")) {

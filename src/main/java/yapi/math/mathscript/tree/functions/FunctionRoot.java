@@ -5,7 +5,6 @@ import yapi.math.mathscript.state.VariableState;
 import yapi.math.mathscript.tree.Knot;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 
 public class FunctionRoot extends Knot {
 

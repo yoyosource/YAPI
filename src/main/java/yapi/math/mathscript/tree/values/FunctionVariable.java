@@ -1,6 +1,5 @@
 package yapi.math.mathscript.tree.values;
 
-import yapi.math.calculator.fractions.Fraction;
 import yapi.math.mathscript.state.VariableState;
 import yapi.math.mathscript.tree.Knot;
 

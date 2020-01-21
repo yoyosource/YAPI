@@ -1,6 +1,5 @@
 package yapi.math.mathscript.tree.functions;
 
-import ch.obermuhlner.math.big.BigComplexMath;
 import yapi.exceptions.math.MathScriptException;
 import yapi.math.NumberUtils;
 import yapi.math.mathscript.state.VariableState;

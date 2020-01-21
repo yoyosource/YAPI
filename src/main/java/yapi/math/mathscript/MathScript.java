@@ -1,7 +1,5 @@
 package yapi.math.mathscript;
 
-import ch.obermuhlner.math.big.BigComplex;
-import ch.obermuhlner.math.big.BigComplexMath;
 import yapi.exceptions.math.MathScriptException;
 import yapi.file.FileUtils;
 import yapi.math.mathscript.state.Variable;
@@ -17,11 +15,9 @@ import yapi.math.mathscript.tree.special.FunctionSum;
 import yapi.math.mathscript.tree.values.FunctionConstant;
 import yapi.math.mathscript.tree.values.FunctionVariable;
 import yapi.string.StringSplitting;
-import yapi.string.StringUtils;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,25 +26,24 @@ public class MathScript {
 
     private VariableState variableState = new VariableState();
     private List<Token> tokens = new ArrayList<>();
-    public MathScript(String s) {
-        if (s.endsWith(".mathscript") && s.split("\n").length == 1) {
-            try {
-                createScript(new File(s));
-                return;
-            } catch (MathScriptException e) {
-
-            }
-        }
-        createScript(s);
-    }
-
-    public MathScript(File f) {
-        createScript(f);
-    }
 
     public static void main(String[] args) {
         MathScript mathScript = new MathScript("/Users/jojo/IdeaProjects/YAPI/src/main/resources/Test.mathscript");
         mathScript.run();
+    }
+
+    public MathScript(String s) {
+        if (s.endsWith(".mathscript") && s.split("\n").length == 1) {
+            try {
+                createScript(new File(s));
+            } catch (MathScriptException e) {
+                createScript(s);
+            }
+        }
+    }
+
+    public MathScript(File f) {
+        createScript(f);
     }
 
     public void setPrecision(int precision) {

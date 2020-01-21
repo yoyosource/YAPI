@@ -4,11 +4,11 @@ import yapi.manager.yapion.YAPIONVariable;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 import yapi.math.coordinates.CartesianCoordinate;
-import yapi.math.coordinates.PolarCoordinate;
 
 public class ComplexNumber {
 
-    private double r, i;
+    private double r;
+    private double i;
 
     public ComplexNumber(double real, double imag) {
         r = real;

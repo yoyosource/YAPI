@@ -199,11 +199,7 @@ public class Vector {
      * @return
      */
     public Vector copy() {
-        double[] nDouble = new double[vec.length];
-        for (int i = 0; i < vec.length; i++) {
-            nDouble[i] = vec[i];
-        }
-        return new Vector(nDouble);
+        return new Vector(Arrays.copyOf(vec, vec.length));
     }
 
 

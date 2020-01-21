@@ -135,7 +135,7 @@ public class Graph {
 
             int px = (x - dx) * (x - dx);
             int py = (y - dy) * (y - dy);
-            if (Math.sqrt(px + py) < entry.getKey().getName().length() + 5) {
+            if (Math.sqrt(px + (double)py) < entry.getKey().getName().length() + 5) {
                 if (output) {
                     System.out.println("near: " + x + " " + y + " -> " + entry.getKey().getName());
                 }

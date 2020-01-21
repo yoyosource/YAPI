@@ -9,10 +9,6 @@ public class YAPIONArray extends YAPIONType {
 
     private List<YAPIONType> array = new ArrayList<>();
 
-    public YAPIONArray() {
-
-    }
-
     public int size() {
         return array.size();
     }

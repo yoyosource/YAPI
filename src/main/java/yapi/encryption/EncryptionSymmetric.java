@@ -4,7 +4,6 @@ import yapi.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
 import yapi.string.StringCrpyting;
 import yapi.string.StringFormatting;
-import yapi.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,7 +96,7 @@ public class EncryptionSymmetric {
         return rotate(createKey(password, security - 1, true) + createKey(username, security - 1, true), checksum);
     }
 
-    @Deprecated(since = "Version 1.2, please use the new createKey method and convert old systems to new one.")
+    @Deprecated(since = "Version 1.2, please use the new createKey method and convert old systems to new one. This feature will be removed in the Version 1.3.")
     public static String createKey(String username, String password, int security) {
         long checksum = 0;
         for (char c : username.toCharArray()) {
@@ -117,7 +116,7 @@ public class EncryptionSymmetric {
         if (security > 16) {
             security = 16;
         }
-        security = (int)Math.pow(2, security + 10);
+        security = (int)Math.pow(2, security + 10.0);
 
         long checksum = 0;
         for (char c : password.toCharArray()) {
@@ -135,7 +134,7 @@ public class EncryptionSymmetric {
         return key;
     }
 
-    @Deprecated(since = "Version 1.2, please use the new createKey method and convert old systems to new one.")
+    @Deprecated(since = "Version 1.2, please use the new createKey method and convert old systems to new one. This feature will be removed in the Version 1.3.")
     public static String createKey(String password, int security) {
         if (security < 0) {
             security = 0;
@@ -143,7 +142,7 @@ public class EncryptionSymmetric {
         if (security > 16) {
             security = 16;
         }
-        security = (int)Math.pow(2, security + 8);
+        security = (int)Math.pow(2, security + 8.0);
 
         long checksum = 0;
         for (char c : password.toCharArray()) {
@@ -195,10 +194,6 @@ public class EncryptionSymmetric {
 
     private static String pad() {
         return new NumberRandom().getString(8);
-    }
-
-    private static String pad(int length) {
-        return new NumberRandom().getString(length);
     }
 
     private static String[] keys(String key) {
@@ -262,7 +257,7 @@ public class EncryptionSymmetric {
             byte b = (byte)chars[i];
 
             for (int j = l; j >= l - remove; j--) {
-                b = encrypt(b, rotate(keys[((int)chars[j] + 128) % keys.length], bytes[j] + 128));
+                b = encrypt(b, rotate(keys[((int)chars[j] + 128) % keys.length], bytes[j] + (long)128));
             }
             for (int j = 0; j < keys.length; j++) {
                 b = (encrypt(b, keys[j]));
@@ -324,7 +319,7 @@ public class EncryptionSymmetric {
                 b = (decrypt(b, keys[j]));
             }
             for (int j = l - remove; j <= l; j++) {
-                b = decrypt(b, rotate(keys[((int)intermediate[j] + 128) % keys.length], bytes[j] + 128));
+                b = decrypt(b, rotate(keys[((int)intermediate[j] + 128) % keys.length], bytes[j] + (long)128));
             }
 
             intermediate[i] = b;
@@ -447,19 +442,6 @@ public class EncryptionSymmetric {
             b ^= chars[i];
         }
         return b;
-    }
-
-    private static byte[] checksum(String[] keys) {
-        byte[] bytes = new byte[keys.length];
-        for (int i = 0; i < keys.length; i++) {
-            byte b = 0;
-            char[] chars = keys[i].toCharArray();
-            for (int j = 0; j < keys[i].length(); j++) {
-                b += chars[j];
-            }
-            bytes[i] = b;
-        }
-        return bytes;
     }
 
     private static String rotate(String key, long rotation) {

@@ -1,7 +1,5 @@
 package yapi.math.mathscript.state;
 
-import yapi.math.calculator.fractions.Fraction;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;

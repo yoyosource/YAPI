@@ -1,5 +1,7 @@
 package yapi.math.calculator.fractions;
 
+import yapi.string.StringFormatting;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -48,6 +50,7 @@ public class Fraction {
         boolean working = true;
         while (working) {
             try {
+                // This method call is done to check if the BigDecimal can be a BigInteger by trying it and catching a exception if it did not work.
                 bigDecimal.toBigIntegerExact();
                 working = false;
             } catch (ArithmeticException e) {
@@ -70,37 +73,39 @@ public class Fraction {
         if (number.endsWith("%") && !number.contains("|")) {
             try {
                 return new Fraction(Long.parseLong(number.substring(0, number.length() - 1)), 100).setPercent(true);
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+                // Ignore
+            }
             try {
                 return new Fraction(new BigDecimal(number.substring(0, number.length() - 1)).divide(BigDecimal.valueOf(100), mathContext)).setPercent(true);
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+                // Ignore
+            }
             throw new NumberFormatException("No fraction input.");
         }
         if (!number.contains("|")) {
             try {
                 return new Fraction(new BigDecimal(number));
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+                // Ignore
+            }
             try {
                 return new Fraction(new BigInteger(number));
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+                // Ignore
+            }
+            throw new NumberFormatException("No fraction input.");
+        }
+        int i = StringFormatting.occurrences(number, '|');
+        if (!(i == 2 || i == 3) || number.startsWith("(") || number.endsWith(")")) {
             throw new NumberFormatException("No fraction input.");
         }
         String[] strings = number.split("\\|");
-        if (!(strings.length == 2 || strings.length == 3)) {
-            throw new NumberFormatException("No fraction input.");
-        }
-        if (strings[0].startsWith("(")) {
-            strings[0] = strings[0].substring(1);
-        }
-        if (strings[strings.length - 1].endsWith(")")) {
-            strings[strings.length - 1] = strings[strings.length - 1].substring(0, strings[strings.length - 1].length() - 1);
-        }
         if (strings.length == 3) {
             BigInteger denominator = new BigInteger(strings[2]);
             return new Fraction(denominator.multiply(new BigInteger(strings[0])).add(new BigInteger(strings[1])), denominator);
-        } else {
-            return new Fraction(new BigInteger(strings[0]), new BigInteger(strings[1]));
         }
+        return new Fraction(new BigInteger(strings[0]), new BigInteger(strings[1]));
     }
 
     public static Fraction valueOf(long l) {

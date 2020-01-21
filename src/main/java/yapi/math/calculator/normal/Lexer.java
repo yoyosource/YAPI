@@ -226,10 +226,10 @@ public class Lexer {
     }
 
     private List<Token> tokify(String s) {
-        ArrayList<Token> tokens = new ArrayList<>();
+        ArrayList<Token> ts = new ArrayList<>();
 
         if (s.length() == 0) {
-            return tokens;
+            return ts;
         }
 
         s = s.trim();
@@ -237,133 +237,133 @@ public class Lexer {
         if (s.startsWith("'") && s.endsWith("'")) {
             s = s.replaceAll("\\\\n", "\n");
             if (s.substring(1, s.length() - 1).length() == 1) {
-                tokens.add(new Token("chr", s.substring(1, s.length() - 1)));
-                return tokens;
+                ts.add(new Token("chr", s.substring(1, s.length() - 1)));
+                return ts;
             }
-            tokens.add(new Token("str", s.substring(1, s.length() - 1)));
-            return tokens;
+            ts.add(new Token("str", s.substring(1, s.length() - 1)));
+            return ts;
         }
         if (s.startsWith("\"") && s.endsWith("\"")) {
             s = s.replaceAll("\\\\n", "\n");
-            tokens.add(new Token("str", s.substring(1, s.length() - 1)));
-            return tokens;
+            ts.add(new Token("str", s.substring(1, s.length() - 1)));
+            return ts;
         }
         if (s.matches("-?(\\d+)(\\.(\\d+))")) {
-            tokens.add(new Token("num", Double.parseDouble(s)));
-            return tokens;
+            ts.add(new Token("num", Double.parseDouble(s)));
+            return ts;
         }
         if (s.matches("-?(\\d+)D")) {
-            tokens.add(new Token("num", Double.parseDouble(s.substring(0, s.length() - 1))));
-            return tokens;
+            ts.add(new Token("num", Double.parseDouble(s.substring(0, s.length() - 1))));
+            return ts;
         }
         if (s.matches("-?(\\d+)L")) {
-            tokens.add(new Token("lon", Long.parseLong(s.substring(0, s.length() - 1))));
-            return tokens;
+            ts.add(new Token("lon", Long.parseLong(s.substring(0, s.length() - 1))));
+            return ts;
         }
         if (s.matches("-?(\\d+)")) {
             long l = Long.parseLong(s);
             if (l >= -2147483647 && l <= 2147483647) {
-                tokens.add(new Token("int", (int)l));
+                ts.add(new Token("int", (int)l));
             } else {
-                tokens.add(new Token("lon", l));
+                ts.add(new Token("lon", l));
             }
-            return tokens;
+            return ts;
         }
         if (s.matches("(##|0x)[0-9a-f]+L")) {
             s = s.substring(2, s.length() - 1);
             long l = Long.parseLong(s, 16);
-            tokens.add(new Token("lon", l));
-            return tokens;
+            ts.add(new Token("lon", l));
+            return ts;
         }
         if (s.matches("(##|0x)[0-9a-f]+")) {
             s = s.substring(2);
             long l = Long.parseLong(s, 16);
             if (l >= -2147483647 && l <= 2147483647) {
-                tokens.add(new Token("int", (int)l));
+                ts.add(new Token("int", (int)l));
             } else {
-                tokens.add(new Token("lon", l));
+                ts.add(new Token("lon", l));
             }
-            return tokens;
+            return ts;
         }
         if (s.matches("(true)|(false)")) {
             if (s.equals("true")) {
-                tokens.add(new Token("bol", true));
-                return tokens;
+                ts.add(new Token("bol", true));
+                return ts;
             } else {
-                tokens.add(new Token("bol", false));
-                return tokens;
+                ts.add(new Token("bol", false));
+                return ts;
             }
         }
 
         if (s.matches("[|]")) {
-            tokens.add(new Token("MAT", s));
-            return tokens;
+            ts.add(new Token("MAT", s));
+            return ts;
         }
         if (s.matches("[+\\-*/%^]|(root)|(sin|cos|tan|asin|acos|atan)|(simoid|gauss|sig)|(ln|log)")) {
-            tokens.add(new Token("OPE", s));
-            return tokens;
+            ts.add(new Token("OPE", s));
+            return ts;
         }
         if (s.matches("(==)|((<|>)[=]?)|(!=)|(equals|equalsIgnoreCase|contains|containsIgnoreCase)|(typeof|canbe)")) {
-            tokens.add(new Token("COM", s));
-            return tokens;
+            ts.add(new Token("COM", s));
+            return ts;
         }
         if (s.matches("(=)")) {
-            tokens.add(new Token("ASG", s));
-            return tokens;
+            ts.add(new Token("ASG", s));
+            return ts;
         }
         if (s.matches("->")) {
-            tokens.add(new Token("RET", s));
-            return tokens;
+            ts.add(new Token("RET", s));
+            return ts;
         }
         if (s.matches("(&&)|(\\|\\|)|(!!)|(!&)|(x\\|)|(n\\|)|(xn)")) {
-            tokens.add(new Token("LOG", s));
-            return tokens;
+            ts.add(new Token("LOG", s));
+            return ts;
         }
 
         if (s.matches("\\(|\\)")) {
-            tokens.add(new Token("STb", s));
-            return tokens;
+            ts.add(new Token("STb", s));
+            return ts;
         }
         if (s.matches("\\[|\\]")) {
-            tokens.add(new Token("ACb", s));
-            return tokens;
+            ts.add(new Token("ACb", s));
+            return ts;
         }
         if (s.matches("[\\{\\}]")) {
-            tokens.add(new Token("BLb", s));
-            return tokens;
+            ts.add(new Token("BLb", s));
+            return ts;
         }
         if (s.equals(".") || s.equals(":") || s.equals(",")) {
-            tokens.add(new Token("SEP", s));
-            return tokens;
+            ts.add(new Token("SEP", s));
+            return ts;
         }
 
         if (s.equals("*char") || s.equals("*character") || s.equals("*chr")) {
-            tokens.add(new Token("typ", "chr"));
-            return tokens;
+            ts.add(new Token("typ", "chr"));
+            return ts;
         }
         if (s.equals("*boolean") || s.equals("*bool") || s.equals("*bol")) {
-            tokens.add(new Token("typ", "bol"));
-            return tokens;
+            ts.add(new Token("typ", "bol"));
+            return ts;
         }
         if (s.equals("*number") || s.equals("*num")) {
-            tokens.add(new Token("typ", "num"));
-            return tokens;
+            ts.add(new Token("typ", "num"));
+            return ts;
         }
         if (s.equals("*integer") || s.equals("*int")) {
-            tokens.add(new Token("typ", "int"));
-            return tokens;
+            ts.add(new Token("typ", "int"));
+            return ts;
         }
         if (s.equals("*string") || s.equals("*str")) {
-            tokens.add(new Token("typ", "str"));
-            return tokens;
+            ts.add(new Token("typ", "str"));
+            return ts;
         }
         if (s.equals("*lon") || s.equals("*long")) {
-            tokens.add(new Token("typ", "lon"));
-            return tokens;
+            ts.add(new Token("typ", "lon"));
+            return ts;
         }
         if (s.equals("*any")) {
-            tokens.add(new Token("typ", "any"));
-            return tokens;
+            ts.add(new Token("typ", "any"));
+            return ts;
         }
 
         String[] splitter = new String[]{"+", "-", "*", "/", "%", "^", "|", "(", ")", "root", "sin", "cos", "tan", "asin", "acos", "atan", "sigmoid", "gauss", "ln", "log", ",", ":", ".", "<", ">", "<=", ">=", "==", "!=", "="};
@@ -377,12 +377,12 @@ public class Lexer {
         if (checks > 0) {
             String[] strings = splitString(s, splitter, true, false);
             for (String s1 : strings) {
-                tokens.addAll(tokify(s1));
+                ts.addAll(tokify(s1));
             }
         } else {
-            tokens.add(new Token("COD", s));
+            ts.add(new Token("COD", s));
         }
-        return tokens;
+        return ts;
     }
 
 }

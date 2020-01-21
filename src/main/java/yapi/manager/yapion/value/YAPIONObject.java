@@ -12,10 +12,6 @@ public class YAPIONObject extends YAPIONType {
 
     private List<YAPIONVariable> variables = new ArrayList<>();
 
-    public YAPIONObject() {
-
-    }
-
     public List<String> getKeys() {
         List<String> keys = new ArrayList<>();
         for (YAPIONVariable yapionVariable : variables) {

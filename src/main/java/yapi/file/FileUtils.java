@@ -138,9 +138,8 @@ public class FileUtils {
         try (InputStream inputStream = new FileInputStream(file)) {
             return inputStream.readAllBytes();
         } catch (IOException e) {
-
+            return new byte[0];
         }
-        return new byte[0];
     }
 
     /**
@@ -159,9 +158,8 @@ public class FileUtils {
             }
             return strings.toArray(new String[0]);
         } catch (IOException e) {
-
+            return new String[0];
         }
-        return new String[0];
     }
 
     /**
