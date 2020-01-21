@@ -11,12 +11,14 @@ Y for YoyoNow or @YoyoSource. API for application programming interface. You cou
 ## Version Log
 - **1.0** [R] > Focus on Math and Encryption
 - **1.1** [A] > Pre release of **1.2**. Focus on String Manipulation and Compression
-- **1.2** [C] > Planned release.
+- **1.2** [C] > Focus on String Manipulation, Compression, and Mathscripts (something like a 'Calculator')
+- **1.3** [P] > Focus Mathscripts
 
 * [R] Release
 * [A] Alpha
 * [B] Beta
 * [C] Coming soon
+* [P] Planned
 
 ## Planned Features
 
