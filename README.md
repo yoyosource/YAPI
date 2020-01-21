@@ -1,7 +1,8 @@
-[![YAPI Version V1.0](https://img.shields.io/badge/YAPI%20Version-1.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
-[![YAPI Latest V1.1-alpha](https://img.shields.io/badge/YAPI%20Latest-1.1--alpha-red)](https://github.com/yoyosource/YAPI/releases/tag/1.1)
-[![Methods 695](https://img.shields.io/badge/Methods-695-yellow)](https://github.com/yoyosource/YAPI)
-[![Code Lines 15542](https://img.shields.io/badge/Code%20Lines-15542-yellow)](https://github.com/yoyosource/YAPI)
+[![YAPI Release V1.0](https://img.shields.io/badge/YAPI%20Release-1.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
+[![YAPI Pre-Release V1.1-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-1.1--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/1.1)
+[![YAPI Version V1.2](https://img.shields.io/badge/YAPI%20Version-1.2-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
+[![Methods 695](https://img.shields.io/badge/Methods-695-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 15542](https://img.shields.io/badge/Code%20Lines-15542-inactive)](https://github.com/yoyosource/YAPI)
 [![License: GPL v3+](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # YAPI
