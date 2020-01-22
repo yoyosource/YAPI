@@ -437,6 +437,10 @@ public class StringFormatting {
         return false;
     }
 
+    public static boolean contains(String s, String t) {
+        return contains(s, t.toCharArray());
+    }
+
     /**
      *
      * @param s
@@ -462,6 +466,10 @@ public class StringFormatting {
         }
 
         return count;
+    }
+
+    public static int occurrences(String s, String t) {
+        return occurrences(s, t.toCharArray());
     }
 
     /**

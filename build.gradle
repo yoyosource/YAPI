@@ -1,3 +1,5 @@
+import org.codehaus.groovy.runtime.GStringImpl
+
 plugins {
     id 'java'
     id 'application'
@@ -6,6 +8,13 @@ plugins {
 
 group 'YAPI'
 version '1.2-SNAPSHOT'
+
+ext {
+    uberJarName = "${group}-${version}-all.jar" as GStringImpl
+    jarName = "${group}-${version}.jar" as GStringImpl
+    archive = "${rootDir}/archive" as GStringImpl
+    libs = "${buildDir}/libs"
+}
 
 sourceCompatibility = 1.12
 targetCompatibility = 1.12
@@ -38,10 +47,42 @@ task compileInfo {
     doLast {
         def command = "java -classpath ${buildDir}/classes/java/main main.CreateInteractiveMain ${buildDir} /graphics /packagekeep"
         def retval = command.execute().text.trim()
-
         print(retval)
     }
 }
-
-jar.dependsOn compileInfo
 shadowJar.dependsOn compileInfo
+
+task buildYAPI {
+    description 'Build YAPI'
+    group "YAPI"
+
+    dependsOn 'shadowJar'
+
+    doLast {
+        if ("${buildDir}" == null) {
+            return
+        }
+        delete fileTree("${libs}").matching {
+            include "${jarName}"
+        }
+        delete fileTree("${archive}").matching {
+            include "${jarName}"
+        }
+        copy {
+            from("${libs}")
+            into("${archive}")
+            exclude("${uberJarName}")
+        }
+        delete fileTree("${libs}").matching {
+            exclude("${uberJarName}")
+        }
+        copy {
+            from("${buildDir}")
+            into("${buildDir}")
+            rename("${uberJarName}", "${jarName}")
+        }
+        delete fileTree("${libs}").matching {
+            include "${uberJarName}"
+        }
+    }
+}
