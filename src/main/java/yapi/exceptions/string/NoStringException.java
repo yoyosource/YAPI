@@ -1,6 +1,8 @@
-package yapi.exceptions;
+package yapi.exceptions.string;
 
-public class NoStringException extends YAPIException {
+import yapi.exceptions.StringException;
+
+public class NoStringException extends StringException {
 
     public NoStringException() {
         super();

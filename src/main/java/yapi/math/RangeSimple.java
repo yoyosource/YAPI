@@ -1,6 +1,6 @@
 package yapi.math;
 
-import yapi.exceptions.NoStringException;
+import yapi.exceptions.string.NoStringException;
 import yapi.exceptions.math.RangeException;
 
 import java.util.ArrayList;

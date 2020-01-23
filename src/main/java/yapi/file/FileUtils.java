@@ -1,6 +1,6 @@
 package yapi.file;
 
-import yapi.exceptions.NoStringException;
+import yapi.exceptions.string.NoStringException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

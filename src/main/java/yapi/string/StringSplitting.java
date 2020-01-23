@@ -1,6 +1,6 @@
 package yapi.string;
 
-import yapi.exceptions.NoStringException;
+import yapi.exceptions.string.NoStringException;
 
 import java.util.ArrayList;
 import java.util.List;

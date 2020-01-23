@@ -1,6 +1,7 @@
 package yapi.string;
 
 import yapi.encryption.EncryptionSymmetric;
+import yapi.encryption.PasswordTable;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

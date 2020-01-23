@@ -1,6 +1,6 @@
 package yapi.string;
 
-import yapi.exceptions.NoStringException;
+import yapi.exceptions.string.NoStringException;
 import yapi.math.NumberRandom;
 
 import java.util.ArrayList;
