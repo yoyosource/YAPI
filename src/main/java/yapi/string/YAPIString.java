@@ -79,18 +79,6 @@ public class YAPIString {
         return chars.length;
     }
 
-    public static YAPIString deserialize(YAPIONObject yapionObject) {
-        YAPIString yapiString = null;
-        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("yapi-string")) {
-            if (yapionObject.getKeys().size() == 3 && yapionObject.getKeys().contains("value") && yapionObject.getKeys().contains("reversed")) {
-                String value = ((YAPIONValue)yapionObject.getValue("value")).getString();
-                boolean reversed = ((YAPIONValue)yapionObject.getValue("reversed")).getBoolean();
-                yapiString = new YAPIString(value, reversed);
-            }
-        }
-        return yapiString;
-    }
-
     public boolean isEmpty() {
         return chars.length == 0;
     }
@@ -1367,5 +1355,17 @@ public class YAPIString {
         yapionObject.add(new YAPIONVariable("value", new YAPIONValue(toString())));
         yapionObject.add(new YAPIONVariable("reversed", new YAPIONValue(reversed + "")));
         return yapionObject;
+    }
+
+    public static YAPIString deserialize(YAPIONObject yapionObject) {
+        YAPIString yapiString = null;
+        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("yapi-string")) {
+            if (yapionObject.getKeys().size() == 3 && yapionObject.getKeys().contains("value") && yapionObject.getKeys().contains("reversed")) {
+                String value = ((YAPIONValue)yapionObject.getValue("value")).getString();
+                boolean reversed = ((YAPIONValue)yapionObject.getValue("reversed")).getBoolean();
+                yapiString = new YAPIString(value, reversed);
+            }
+        }
+        return yapiString;
     }
 }
