@@ -62,14 +62,6 @@ public class YAPIString {
         this.reversed = reversed;
     }
 
-    public static void main(String[] args) {
-        YAPIString yapiString = new YAPIString("Hello World!");
-
-        System.out.println(yapiString);
-        yapiString.insert("pip ", 6);
-        System.out.println(yapiString.contains("orl"));
-    }
-
     public YAPIString reverse() {
         reversed = !reversed;
         return this;
@@ -610,14 +602,31 @@ public class YAPIString {
         return false;
     }
 
+    public static void main(String[] args) {
+        YAPIString yapiString = new YAPIString("abcabcabd");
+
+        System.out.println(yapiString);
+        System.out.println(yapiString.contains("abcabd"));
+    }
+
     public boolean contains(YAPIString yapiString) {
         // TODO: fix abcabcabd -> abcabd
         int index = 0;
+        int jumpIndex = -1;
+        System.out.println(yapiString);
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == yapiString.getChar(index)) {
                 index++;
-            } else {
+            } else if (index > 0) {
                 index = 0;
+                if (jumpIndex != -1) {
+                    i = jumpIndex;
+                    jumpIndex = -1;
+                }
+            }
+            if (chars[i] == yapiString.getChar(0) && index > 1 && i + yapiString.length() - 1 < chars.length && jumpIndex == -1 && chars[i + yapiString.length() - 1] == yapiString.getChar(yapiString.length() - 1)) {
+                jumpIndex = i;
+                System.out.println(jumpIndex);
             }
 
             if (index == yapiString.length()) {
@@ -1262,6 +1271,21 @@ public class YAPIString {
         return yapiString;
     }
 
+    public void join(YAPIString... yapiStrings) {
+        for (YAPIString yapiString : yapiStrings) {
+            append(yapiString);
+        }
+    }
+
+    public void join(YAPIString delimiter, YAPIString... yapiStrings) {
+        for (int i = 0; i < yapiStrings.length; i++) {
+            if (i != 0) {
+                append(delimiter);
+            }
+            append(yapiStrings[i]);
+        }
+    }
+
     public boolean equals(YAPIString yapiString) {
         if (this == yapiString) {
             return true;
@@ -1277,15 +1301,6 @@ public class YAPIString {
         return true;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder st = new StringBuilder();
-        for (int i = 0; i < length(); i++) {
-            st.append(getChar(i));
-        }
-        return st.toString();
-    }
-
     public boolean equalsLossy(YAPIString yapiString) {
         if (this == yapiString) {
             return true;
@@ -1296,19 +1311,13 @@ public class YAPIString {
         return Arrays.equals(chars, yapiString.chars);
     }
 
-    public void join(YAPIString... yapiStrings) {
-        for (YAPIString yapiString : yapiStrings) {
-            append(yapiString);
+    @Override
+    public String toString() {
+        StringBuilder st = new StringBuilder();
+        for (int i = 0; i < length(); i++) {
+            st.append(getChar(i));
         }
-    }
-
-    public void join(YAPIString delimiter, YAPIString... yapiStrings) {
-        for (int i = 0; i < yapiStrings.length; i++) {
-            if (i != 0) {
-                append(delimiter);
-            }
-            append(yapiStrings[i]);
-        }
+        return st.toString();
     }
 
     @Override

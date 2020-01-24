@@ -3,6 +3,7 @@
 [![YAPI Version V1.2](https://img.shields.io/badge/YAPI%20Version-1.2-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![Methods 695](https://img.shields.io/badge/Methods-695-inactive)](https://github.com/yoyosource/YAPI)
 [![Code Lines 15542](https://img.shields.io/badge/Code%20Lines-15542-inactive)](https://github.com/yoyosource/YAPI)
+[![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: GPL v3+](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # YAPI
