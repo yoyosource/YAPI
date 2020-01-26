@@ -4,6 +4,7 @@ import yapi.exceptions.string.YAPIStringException;
 import yapi.manager.yapion.YAPIONVariable;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
+import yapi.quick.Timer;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -602,19 +603,20 @@ public class YAPIString {
         return false;
     }
 
-    public static void main(String[] args) {
-        YAPIString yapiString = new YAPIString("abcabcabd");
-
-        System.out.println(yapiString);
-        System.out.println(yapiString.contains("abcabd"));
-    }
-
     public boolean contains(YAPIString yapiString) {
-        // TODO: fix abcabcabd -> abcabd
+        // TODO: Done
         int index = 0;
         int jumpIndex = -1;
-        System.out.println(yapiString);
-        for (int i = 0; i < chars.length; i++) {
+        int i = 0;
+        while (i <= chars.length) {
+            if (chars.length == i) {
+                if (jumpIndex == -1) {
+                    break;
+                } else {
+                    i = jumpIndex;
+                    jumpIndex = -1;
+                }
+            }
             if (chars[i] == yapiString.getChar(index)) {
                 index++;
             } else if (index > 0) {
@@ -625,9 +627,9 @@ public class YAPIString {
                 }
             }
             if (chars[i] == yapiString.getChar(0) && index > 1 && i + yapiString.length() - 1 < chars.length && jumpIndex == -1 && chars[i + yapiString.length() - 1] == yapiString.getChar(yapiString.length() - 1)) {
-                jumpIndex = i;
-                System.out.println(jumpIndex);
+                jumpIndex = i - 1;
             }
+            i++;
 
             if (index == yapiString.length()) {
                 return true;
@@ -1181,16 +1183,67 @@ public class YAPIString {
         }
     }
 
+    public static void main(String[] args) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        long time = 0;
+        int cycles = 1000000;
+        for (int i = 1; i <= cycles; i++) {
+            YAPIString yapiString = new YAPIString("HelloWorld");
+            Timer timer = new Timer();
+            timer.start();
+            yapiString.repeat(10000);
+            timer.stop();
+            time += timer.getTime() / 1000;
+            if (i % (cycles / 10) == 0) {
+                System.out.println(i + " " + time);
+            }
+        }
+        System.out.println(time / (double)cycles + "µs");
+
+        // length:10 repeat:10    cycles:10000000 time:   0.0908675 µs
+        // length:10 repeat:100   cycles:10000000 time:   1.4532998 µs
+        // length:10 repeat:1000  cycles:10000000 time:  14.248193  µs
+        // length:10 repeat:10000 cycles:1000000  time: 254.308807  µs
+    }
+
     public int[] indentionLevel() {
-        // TODO: End Implemetation
-        return new int[0];
+        int[] ints = new int[occurrences('\n') + 1];
+        int index = 0;
+        int indention = 0;
+        boolean tracking = true;
+        for (int i = 0; i < length(); i++) {
+            if (getChar(i) == ' ' && tracking) {
+                indention++;
+            } else if (getChar(i) == '\n') {
+                tracking = true;
+                ints[index++] = indention;
+                indention = 0;
+            } else if (getChar(i) != ' ') {
+                tracking = false;
+            }
+        }
+        if (indention != 0) {
+            ints[index] = indention;
+        }
+        return ints;
     }
 
     public void repeat(int count) {
-        // TODO: End Implemetation
-        if (count < 0) {
+        if (count < 2) {
             return;
         }
+        char[] cs = new char[chars.length * count];
+        for (int i = 0; i < chars.length; i++) {
+            for (int j = 0; j < count; j++) {
+                cs[i + j * chars.length] = chars[i];
+            }
+        }
+        chars = cs;
+        bytes = StringFormatting.toBytes(chars);
     }
 
     public YAPIString[] lines() {

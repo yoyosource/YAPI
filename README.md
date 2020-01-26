@@ -1,13 +1,12 @@
 [![YAPI Release V1.0](https://img.shields.io/badge/YAPI%20Release-1.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![YAPI Pre-Release V1.1-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-1.1--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/1.1)
 [![YAPI Version V1.2](https://img.shields.io/badge/YAPI%20Version-1.2-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
-[![Methods 695](https://img.shields.io/badge/Methods-695-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 15542](https://img.shields.io/badge/Code%20Lines-15542-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 813](https://img.shields.io/badge/Methods-813-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 16928](https://img.shields.io/badge/Code%20Lines-16928-inactive)](https://github.com/yoyosource/YAPI)
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: GPL v3+](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # YAPI
-
 My Java API **YAPI** is a diversed and powerfull API to make you live easier with coding. Some problems and ideas have neat solutions within this api. To use it just import it and for questions ask me on GitHub. Feel free to leave suggestions and improvements to any method, class or structure. 
 
 ## YAPI's naming
