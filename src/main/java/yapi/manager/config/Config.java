@@ -14,13 +14,17 @@ import java.io.IOException;
 public class Config {
 
     String name;
+    String password;
     ConfigFileType configFileType;
     ConfigSecurityType configSecurityType;
     ConfigLoadType configLoadType;
     ConfigSaveType configSaveType;
 
-    public Config(String name, ConfigFileType configFileType, ConfigSecurityType configSecurityType, ConfigLoadType configLoadType, ConfigSaveType configSaveType) {
+    private String fileSuffix = ".yconfig";
+
+    public Config(String name, String password, ConfigFileType configFileType, ConfigSecurityType configSecurityType, ConfigLoadType configLoadType, ConfigSaveType configSaveType) {
         this.name = FileUtils.getName(name);
+        this.password = password;
         this.configFileType = configFileType;
         this.configSecurityType = configSecurityType;
         this.configLoadType = configLoadType;
@@ -28,14 +32,18 @@ public class Config {
     }
 
     boolean checkState(String path) {
-        return new File(path + "/" + name + ".config").exists();
+        return getFile(path).exists();
+    }
+
+    File getFile(String path) {
+        return new File(path + File.separator + name + fileSuffix);
     }
 
     boolean createConfig(String path) throws IOException {
         if (checkState(path)) {
             throw new ConfigFileExistsException();
         }
-        File f = new File(path + "/" + name + ".config");
+        File f = getFile(path);
         boolean b = f.createNewFile();
         if (configSaveType == ConfigSaveType.DELETEONEXIT) {
             f.deleteOnExit();
@@ -49,15 +57,13 @@ public class Config {
         }
         if (configSecurityType == ConfigSecurityType.NONE) {
             if (configFileType == ConfigFileType.JSON) {
-                FileUtils.dump(new File(path + "/" + name + ".config"), yapionObject.toJson().toString());
+                FileUtils.dump(getFile(path), yapionObject.toJson().toString());
             } else if (configFileType == ConfigFileType.YAPION) {
-                FileUtils.dump(new File(path + "/" + name + ".config"), yapionObject.toString());
+                FileUtils.dump(getFile(path), yapionObject.toString());
             } else if (configFileType == ConfigFileType.YAPIONHIERARCHY) {
-                FileUtils.dump(new File(path + "/" + name + ".config"), yapionObject.toHierarchyString());
+                FileUtils.dump(getFile(path), yapionObject.toHierarchyString());
             }
         } else if (configSecurityType == ConfigSecurityType.PASSWORD) {
-
-        } else if (configSecurityType == ConfigSecurityType.BOUNDTOPC) {
 
         }
     }

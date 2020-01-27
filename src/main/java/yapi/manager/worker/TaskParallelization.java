@@ -2,22 +2,11 @@ package yapi.manager.worker;
 
 import yapi.exceptions.YAPIException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class TaskParalyse <T> {
+public class TaskParallelization<T> {
 
-    private Map<String, List<T>> tMap = new HashMap<>();
-
-    public static void main(String[] args) {
-
-    }
-
-    public TaskParalyse() {
-
-    }
+    private final Map<String, List<T>> tMap = new HashMap<>();
 
     public List<List<T>> split(List<T> ts, int poolSize) {
         if (poolSize > ts.size()) {
@@ -44,14 +33,23 @@ public class TaskParalyse <T> {
     }
 
     public void addResult(T t) {
+        String key = Thread.currentThread().getName() + Thread.currentThread().getId();
         synchronized (tMap) {
-            tMap.get(Thread.currentThread().getName() + Thread.currentThread().getId()).add(t);
+            if (tMap.containsKey(key)) {
+                tMap.get(key).add(t);
+            } else {
+                List<T> ts = new ArrayList<>(Collections.singletonList(t));
+                tMap.put(key, ts);
+            }
         }
     }
 
     public List<T> merge() {
         List<T> merge = new ArrayList<>();
         synchronized (tMap) {
+            if (tMap.isEmpty()) {
+                return merge;
+            }
             for (Map.Entry<String, List<T>> entry : tMap.entrySet()) {
                 merge.addAll(entry.getValue());
             }

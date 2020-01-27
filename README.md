@@ -27,6 +27,15 @@ Y for YoyoNow or @YoyoSource. API for application programming interface. You cou
 * [C] Coming soon
 * [P] Planned
 
+### Version 1.0
+Version 1.0 is the initial release of the [YAPI](https://github.com/yoyosource/YAPI). This Version focuses on Math, Encryption and Password cracking through bruteforce. As the [YAPI](https://github.com/yoyosource/YAPI) is just a Hobby project the releases won't be regular and what gets released will be heavily influenced by my mood.
+I will although try to remove any [Issue](https://github.com/yoyosource/YAPI/issues) and [Bug](https://github.com/yoyosource/YAPI/issues) as soon as possible. [Enhancements](https://github.com/yoyosource/YAPI/issues) are encouraged but will be worked off `.dequeue()` after [Bugs](https://github.com/yoyosource/YAPI/issues) or [Issues](https://github.com/yoyosource/YAPI/issues). As I am alone I prefer that you can help me with a [pull request](https://github.com/yoyosource/YAPI/pulls) on GitHub. I will look into any and try to implement your idea or pull request with the existing system if it is useful and possible.
+The [Wiki](https://github.com/yoyosource/YAPI/wiki) will be done soon. If you want to help me fell free to help me on the Wiki with ideas how to create it and so. 
+### Version 1.1-alpha
+Released on 21 Jan 2020
+### Version 1.2
+### Version 1.3
+
 ## Planned Features
 
 - **config** System
