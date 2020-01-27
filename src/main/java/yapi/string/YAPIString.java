@@ -6,7 +6,9 @@ import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 import yapi.quick.Timer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class YAPIString {
