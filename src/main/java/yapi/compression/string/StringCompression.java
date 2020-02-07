@@ -32,8 +32,26 @@ public class StringCompression {
         String c = "Danke ".repeat(1024*80);
         String h = StringFormatting.toHex(StringCrpyting.hash("Hallo InProgressing")).repeat(64) + StringFormatting.toHex(StringCrpyting.hash("Hallo inProgressing")).repeat(64);
         String l = "DankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDanke";
+        String m = "Eigentum (Schutz leben, Freiheiten und Vermögen)\n" +
+                "größter Grund ^ zu zusammeschließung\n" +
+                "es fehlt feststehend und geordneten und bekannten Gesetz\n" +
+                "-> allgemeine Zustimmung\n" +
+                "-> Norm für Recht und Unrecht\n" +
+                "-> allgemeine Maßstab zur Entscheidung ihrer Streitigkeiten (angenommen und anerkannt)\n" +
+                "Gesetz Natur ist klar\n" +
+                "-> Interesse beeinflusst\n" +
+                "-> nicht nachdenken => zu wenig kennen -> keine Rechtsanerkennung, keine anwendungsverpfilchtung gesehen\n" +
+                "es feht anerkannte und unparteiische Richter\n" +
+                "-> Recht alle zwistigkeiten nach dem festehenden Gesetz zu entscheiden\n" +
+                "=> Jeder Richter und Vollzieher dieses Gesetztes; Menschen sich selbst gegenüber parteiisch\n" +
+                "-> eigenen Sache Leidenschaft und Rache zu weit fortreißend\n" +
+                "es fehlt and Gewalt\n" +
+                "-> dem gerechten Urteil Rückhalt\n" +
+                "-> unterstützung\n" +
+                "-> und gebührende Vollstreckung sichern\n";
 
-        String i = l;
+        String i = m;
+
         System.out.println("Input");
         System.out.println(i);
         System.out.println(i.length());

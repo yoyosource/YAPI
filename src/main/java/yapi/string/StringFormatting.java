@@ -419,6 +419,7 @@ public class StringFormatting {
      * @return
      */
     public static boolean contains(String s, char[] chars) {
+        // Todo: Fix cotains Error
         int index = 0;
         char[] input = s.toCharArray();
 

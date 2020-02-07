@@ -26,6 +26,8 @@ public class CreateInteractiveMain {
     private static BigInteger methodCount = new BigInteger("0");
     private static BigInteger initCount = new BigInteger("0");
 
+    private static int[] ints = new int[256];
+
     private static long fileCount = 0;
 
     public static void main(String[] args) {
@@ -63,13 +65,66 @@ public class CreateInteractiveMain {
             List<String> strings = new BufferedReader(new FileReader(readme)).lines().collect(Collectors.toList());
             updateReadMe(strings, "Methods", methodCount, "inactive", "https://github.com/yoyosource/YAPI");
             updateReadMe(strings, "Code Lines", lineCount, "inactive", "https://github.com/yoyosource/YAPI");
-            FileUtils.dump(readme, strings.stream().collect(Collectors.joining("\n")));
+            FileUtils.dump(readme, String.join("\n", strings));
+
+            String s1 = createString(ints, 20, null);
+            String s2 = createString(ints, 20, "qwertzuiopüasdfghjklöäyxcvbnmQWERTZUIOPÜASDFGHJKLÖÄYXCVBNM");
+
+            System.out.println(s1);
+            System.out.println(s2);
 
             //[![Methods 695](https://img.shields.io/badge/Methods-695-inactive)](https://github.com/yoyosource/YAPI)
             //[![Code Lines 15542](https://img.shields.io/badge/Code%20Lines-15542-inactive)](https://github.com/yoyosource/YAPI)
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static String createString(int[] ints, int size, String ignore) {
+        if (ignore == null) {
+            ignore = "";
+        }
+        int[] highest = highest(ints, size, ignore.toCharArray());
+        StringBuilder st = new StringBuilder();
+        for (int i = 0; i < highest.length; i++) {
+            if (i != 0) {
+                st.append(", ");
+            }
+            st.append("'").append((char)highest[i]).append("'").append(":").append(ints[highest[i]]);
+        }
+        return st.toString();
+    }
+
+    private static int[] highest(int[] ints, int size, char... ignore) {
+        int[] highest = new int[size];
+        Arrays.fill(highest, 0);
+        for (int i = 0; i < ints.length; i++) {
+            boolean b = true;
+            for (int k = 0; k < ignore.length; k++) {
+                if (i == ignore[k]) {
+                    b = false;
+                }
+            }
+            if (!b) {
+                continue;
+            }
+            int value = ints[i];
+            int j = 0;
+            int index = -1;
+            while (j < highest.length) {
+                if (ints[highest[j]] < value) {
+                    index++;
+                }
+                j++;
+            }
+            if (index > -1) {
+                for (int k = 0; k < index; k++) {
+                    highest[k] = highest[k + 1];
+                }
+                highest[index] = i;
+            }
+        }
+        return highest;
     }
 
     private static void updateReadMe(List<String> strings, String line, BigInteger value, String color, String link) {
@@ -119,6 +174,11 @@ public class CreateInteractiveMain {
 
         for (String s : strings) {
             s = s.trim();
+            for (char c : s.toCharArray()) {
+                if (c < 256) {
+                    ints[c]++;
+                }
+            }
             charCount = charCount.add(new BigInteger(s.length() + ""));
             if (s.startsWith("public class " + FileUtils.getName(file) + " extends ")) {
                 String ext = s.substring(("public class " + FileUtils.getName(file) + " extends ").length());

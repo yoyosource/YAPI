@@ -15,10 +15,11 @@ public class StringCompression {
             StringCompression stringCompression = new StringCompression();
             byte[] bytes;
             //bytes = stringCompression.compress("Danke   ".repeat(1024 * 512));
-            bytes = stringCompression.compress("Danke   ".repeat(1024 * 1));
+            //bytes = stringCompression.compress("Danke   ".repeat(1024 * 1));
             //bytes = stringCompression.compress((StringUtils.toHex(StringUtils.hash("Hallo InProgressing")).repeat(64) + StringUtils.toHex(StringUtils.hash("Hallo inProgressing")).repeat(64)));
             //bytes = stringCompression.compress(("❤❤❤ " + (("Danke ❤❤❤ ".repeat(10)).repeat(10)).repeat(10).trim()));
             //bytes = stringCompression.compress(StringUtils.merge(FileUtils.fileContentFromResourceAsString("main/yapi.info"), "\n"));
+            bytes = stringCompression.compress("Eigentum (Schutz leben, Freiheiten und Vermögen)\ngrößter Grund ^ zu zusammeschließung\nes fehlt feststehend und geordneten und bekannten Gesetz\n-> allgemeine Zustimmung\n-> Norm für Recht und Unrecht\n-> allgemeine Maßstab zur Entscheidung ihrer Streitigkeiten (angenommen und anerkannt)\nGesetz Natur ist klar\n-> Interesse beeinflusst\n-> nicht nachdenken => zu wenig kennen -> keine Rechtsanerkennung, keine anwendungsverpfilchtung gesehen\nes feht anerkannte und unparteiische Richter\n-> Recht alle zwistigkeiten nach dem festehenden Gesetz zu entscheiden\n=> Jeder Richter und Vollzieher dieses Gesetztes; Menschen sich selbst gegenüber parteiisch\n-> eigenen Sache Leidenschaft und Rache zu weit fortreißend\nes fehlt and Gewalt\n-> dem gerechten Urteil Rückhalt\n-> unterstützung\n-> und gebührende Vollstreckung sichern\n");
             String s = stringCompression.decompress(bytes);
             System.out.println(s.length());
             System.out.println(s);

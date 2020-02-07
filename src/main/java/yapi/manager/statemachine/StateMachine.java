@@ -8,15 +8,18 @@ public class StateMachine {
 
     public static final State STATE_START = new State("$START");
     public static final State STATE_END = new State("$END");
+
     private List<State> states = new ArrayList<>();
     private Map<State, List<Transition>> transitions = new HashMap<>();
     private boolean valid = false;
+
     public StateMachine() {
         states.add(STATE_START);
         states.add(STATE_END);
     }
 
     public static void main(String[] args) {
+        // TODO: redo this StateMachine System
         StateMachine stateMachine = parse(".+");
         stateMachine.build();
 
@@ -162,7 +165,6 @@ public class StateMachine {
 
                     System.out.println(leading(chars.length, i) + i + ": " + transition.toString());
                     currentState = transition.getNextState();
-                    continue;
                 }
 
             }
