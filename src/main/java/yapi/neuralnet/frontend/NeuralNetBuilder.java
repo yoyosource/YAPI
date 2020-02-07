@@ -9,7 +9,7 @@ import java.util.List;
 public class NeuralNetBuilder {
 
     private NeuralNetLayer neuralNetLayer = new NeuralNetLayer(this);
-    private List<NeuralNetLayerInformation> informations = new ArrayList<>();
+    private List<NeuralNetLayerInformation> information = new ArrayList<>();
 
     public NeuralNetBuilder() {
 
@@ -20,11 +20,11 @@ public class NeuralNetBuilder {
     }
 
     public void addLayer(NeuralNetLayerInformation neuralNetLayerInformation) {
-        informations.add(neuralNetLayerInformation);
+        information.add(neuralNetLayerInformation);
     }
 
-    public void build() {
-
+    public NeuralNet build() {
+        return new NeuralNet(information);
     }
 
 }
