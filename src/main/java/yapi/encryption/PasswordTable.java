@@ -13,6 +13,11 @@ import java.util.List;
 
 public class PasswordTable {
 
+    public static void main(String[] args) {
+        PasswordTable passwordTable = new PasswordTable("\\d \\d\\d");
+        passwordTable.crack("3C 5A C8 33 F9 44 4C EC C0 70 C1 04 E6 DC 3B 96 6A 38 C5 09 A2 4B 04 9F B4 E0 CD 0A EC 8E 08 29 E2 95 27 BA 2F 68 82 25 AB E9 38 31 AC 2E", 0);
+    }
+
     private List<PWObject> pwObjects = new ArrayList<>();
     private BigInteger possibilities = new BigInteger("1");
     private BigInteger done = new BigInteger("0");
