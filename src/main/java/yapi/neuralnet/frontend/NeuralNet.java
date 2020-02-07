@@ -1,5 +1,6 @@
 package yapi.neuralnet.frontend;
 
+import yapi.exceptions.NeuralNetException;
 import yapi.neuralnet.backend.InputLayer;
 import yapi.neuralnet.backend.NeuronLayer;
 import yapi.neuralnet.backend.utils.NeuralNetLayerInformation;
@@ -14,7 +15,7 @@ public class NeuralNet {
 
     NeuralNet(List<NeuralNetLayerInformation> information) {
         if (information.isEmpty()) {
-            throw new IllegalStateException("At least one layer is needed");
+            throw new NeuralNetException("At least one layer is needed");
         }
         int lastSize = 0;
         for (NeuralNetLayerInformation neuralNetLayerInformation : information) {
