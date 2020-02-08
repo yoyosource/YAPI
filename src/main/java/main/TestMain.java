@@ -7,11 +7,11 @@ import java.math.BigInteger;
 public class TestMain {
 
     public static void main(String[] args) {
-        BigInteger number = new BigInteger("1");
-        BigInteger bigInteger = new BigInteger("49");
-        while (bigInteger.compareTo(new BigInteger("43")) > 0) {
+        BigInteger number = BigInteger.ONE;
+        BigInteger bigInteger = BigInteger.valueOf(49);
+        while (bigInteger.compareTo(BigInteger.valueOf(43)) > 0) {
             number = number.multiply(bigInteger);
-            bigInteger = bigInteger.subtract(new BigInteger("1"));
+            bigInteger = bigInteger.subtract(BigInteger.ONE);
         }
         System.out.println(Fraction.decode(number.toString() + "|" + factorial(6)).toString());
         // 13.983.816
