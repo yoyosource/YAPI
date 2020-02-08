@@ -4,7 +4,6 @@ import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.file.FileUtils;
 import yapi.string.StringSplitting;
-import yapi.string.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;

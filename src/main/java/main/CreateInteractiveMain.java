@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class CreateInteractiveMain {
 
     private static List<String> exclude = new ArrayList<>();
-    private static BigInteger lineCount = new BigInteger("0");
-    private static BigInteger charCount = new BigInteger("0");
+    private static BigInteger lineCount = BigInteger.ZERO;
+    private static BigInteger charCount = BigInteger.ZERO;
 
-    private static BigInteger methodCount = new BigInteger("0");
-    private static BigInteger initCount = new BigInteger("0");
+    private static BigInteger methodCount = BigInteger.ZERO;
+    private static BigInteger initCount = BigInteger.ZERO;
 
     private static int[] ints = new int[256];
 

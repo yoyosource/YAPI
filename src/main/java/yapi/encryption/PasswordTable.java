@@ -19,10 +19,10 @@ public class PasswordTable {
     }
 
     private List<PWObject> pwObjects = new ArrayList<>();
-    private BigInteger possibilities = new BigInteger("1");
-    private BigInteger done = new BigInteger("0");
+    private BigInteger possibilities = BigInteger.ONE;
+    private BigInteger done = BigInteger.ZERO;
     private BigDecimal percent;
-    private BigDecimal donePercent = new BigDecimal("0");
+    private BigDecimal donePercent = BigDecimal.ZERO;
     private int doneNumber = 0;
     private boolean show = false;
     private Timer timer = new Timer();
@@ -53,19 +53,19 @@ public class PasswordTable {
             if (escaped && (chars[i] == 'd' || chars[i] == '.' || chars[i] == 'l' || chars[i] == 'u' || chars[i] == 'w' || chars[i] == '{')) {
                 char c = chars[i];
                 if (c == 'd') {
-                    possibilities = possibilities.multiply(new BigInteger("10"));
+                    possibilities = possibilities.multiply(BigInteger.TEN);
                     pwObjects.add(new PWNumber());
                 } else if (c == '.') {
-                    possibilities = possibilities.multiply(new BigInteger("107"));
+                    possibilities = possibilities.multiply(BigInteger.valueOf(107));
                     pwObjects.add(new PWAnyCharacter());
                 } else if (c == 'l') {
-                    possibilities = possibilities.multiply(new BigInteger("26"));
+                    possibilities = possibilities.multiply(BigInteger.valueOf(26));
                     pwObjects.add(new PWCharacterLowerCase());
                 } else if (c == 'u') {
-                    possibilities = possibilities.multiply(new BigInteger("26"));
+                    possibilities = possibilities.multiply(BigInteger.valueOf(26));
                     pwObjects.add(new PWCharacterUpperCase());
                 } else if (c == 'w') {
-                    possibilities = possibilities.multiply(new BigInteger("52"));
+                    possibilities = possibilities.multiply(BigInteger.valueOf(52));
                     pwObjects.add(new PWCharacter());
                 } else if (c == '{') {
                     String st = getBracket(chars, i);

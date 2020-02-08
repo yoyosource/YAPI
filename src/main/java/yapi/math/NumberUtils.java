@@ -497,7 +497,7 @@ public class NumberUtils {
         if (bigInteger.compareTo(BigInteger.ZERO) < 0) {
             throw new MathException("factorial of negatives is not defined");
         }
-        BigInteger num = new BigInteger("1");
+        BigInteger num = BigInteger.ONE;
         BigInteger b = bigInteger.add(BigInteger.ZERO);
         while (b.compareTo(BigInteger.ZERO) > 0) {
             num = num.multiply(b);
