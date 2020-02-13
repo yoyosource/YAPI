@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.math.coordinates;
 
 import yapi.manager.yapion.YAPIONVariable;
@@ -42,8 +46,8 @@ public class PolarCoordinate extends Coordinate {
 
     public static PolarCoordinate deserialize(YAPIONObject yapionObject) {
         PolarCoordinate polarCoordinate = null;
-        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("polar-coordinate")) {
-            polarCoordinate = new PolarCoordinate(((YAPIONValue) yapionObject.getValue("r")).getDouble(), ((YAPIONValue) yapionObject.getValue("theta")).getDouble());
+        if (yapionObject.getKeys().contains("object-type") && yapionObject.getValue("object-type").getString().equals("polar-coordinate")) {
+            polarCoordinate = new PolarCoordinate(yapionObject.getValue("r").getDouble(), yapionObject.getValue("theta").getDouble());
         }
         return polarCoordinate;
     }

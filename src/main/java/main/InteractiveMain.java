@@ -1,3 +1,16 @@
+/**
+ * Copyright 2019,2020 yoyosource
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package main;
 
 import yapi.manager.yapion.YAPIONParser;
@@ -46,7 +59,6 @@ public class InteractiveMain {
         }
         */
         YAPIONObject yapionObject = YAPIONParser.parse(StringSplitting.merge(FileUtils.fileContentFromResourceAsString("main/yapi.info"), "\n"));
-        System.out.println(yapionObject.toString());
         System.out.println("YAPI");
         version(yapionObject, 0, new ArrayList<>());
     }
@@ -62,7 +74,7 @@ public class InteractiveMain {
                 remove.remove((Integer)(recursion + 1));
             } else {
                 System.out.println(lines(recursion, i, strings.size(), remove) + "/" + s);
-                version((YAPIONObject) yapionObject.getValue(s), recursion + 1, remove);
+                version(yapionObject.getObject(s), recursion + 1, remove);
             }
         }
         remove.remove((Integer)recursion);

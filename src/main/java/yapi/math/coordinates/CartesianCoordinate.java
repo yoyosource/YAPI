@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.math.coordinates;
 
 import yapi.manager.yapion.YAPIONVariable;
@@ -54,8 +58,8 @@ public class CartesianCoordinate extends Coordinate {
 
     public static CartesianCoordinate deserialize(YAPIONObject yapionObject) {
         CartesianCoordinate cartesianCoordinate = null;
-        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("cartesian-coordinate")) {
-            cartesianCoordinate = new CartesianCoordinate(((YAPIONValue) yapionObject.getValue("x")).getDouble(), ((YAPIONValue) yapionObject.getValue("y")).getDouble());
+        if (yapionObject.getKeys().contains("object-type") && yapionObject.getValue("object-type").getString().equals("cartesian-coordinate")) {
+            cartesianCoordinate = new CartesianCoordinate(yapionObject.getValue("x").getDouble(), yapionObject.getValue("y").getDouble());
         }
         return cartesianCoordinate;
     }

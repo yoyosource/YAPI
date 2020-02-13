@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.string;
 
 import yapi.encryption.EncryptionSymmetric;
@@ -6,6 +10,7 @@ import yapi.encryption.PasswordTable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class StringCrpyting {
 
@@ -100,6 +105,14 @@ public class StringCrpyting {
         String key = EncryptionSymmetric.createKey(userName, password, security, true);
         byte[] r = EncryptionSymmetric.decrypt(bytes, key);
         return StringFormatting.toString(r);
+    }
+
+    public static String encodeBase64(String s) {
+        return new String(Base64.getEncoder().encode(s.getBytes()), StandardCharsets.UTF_8);
+    }
+
+    public static String decodeBase64(String s) {
+        return new String(Base64.getDecoder().decode(s), StandardCharsets.UTF_8);
     }
 
 }

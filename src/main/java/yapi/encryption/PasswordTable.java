@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.encryption;
 
 import yapi.encryption.passwordtable.*;
@@ -15,7 +19,8 @@ public class PasswordTable {
 
     public static void main(String[] args) {
         PasswordTable passwordTable = new PasswordTable("\\d \\d\\d");
-        passwordTable.crack("3C 5A C8 33 F9 44 4C EC C0 70 C1 04 E6 DC 3B 96 6A 38 C5 09 A2 4B 04 9F B4 E0 CD 0A EC 8E 08 29 E2 95 27 BA 2F 68 82 25 AB E9 38 31 AC 2E", 0);
+        passwordTable.showProgress();
+        passwordTable.crack("3C 5A C8 33 F9 44 4C EC C1 70 C1 04 E6 DC 3B 96 6A 38 C5 09 A2 4B 04 9F B4 E0 CD 0A EC 8E 08 29 E2 95 27 BA 2F 68 82 25 AB E9 38 31 AC 2E", 0);
     }
 
     private List<PWObject> pwObjects = new ArrayList<>();
@@ -26,6 +31,10 @@ public class PasswordTable {
     private int doneNumber = 0;
     private boolean show = false;
     private Timer timer = new Timer();
+
+    private long attempts = 0;
+    private long time = System.currentTimeMillis();
+    private String eta = "";
 
     private String pwd = null;
 
@@ -140,6 +149,14 @@ public class PasswordTable {
             }
         }
         done = done.add(BigInteger.ONE);
+
+        attempts++;
+        if (System.currentTimeMillis() - time > 1000) {
+            time = System.currentTimeMillis();
+            eta();
+            attempts = 0;
+        }
+
         if (show) {
             boolean newNumber = false;
             while (new BigDecimal(done).compareTo(donePercent) > 0) {
@@ -147,11 +164,22 @@ public class PasswordTable {
                 doneNumber++;
                 donePercent = donePercent.add(percent, new MathContext(2));
             }
+            if (donePercent.toPlainString().equals(possibilities.toString())) {
+                return null;
+            }
             if (newNumber) {
-                System.out.println("[" + "=".repeat(doneNumber - 1) + ">" + " ".repeat(100 - doneNumber) + "] " + leading(donePercent.divide(new BigDecimal(possibilities), new MathContext(4)).multiply(new BigDecimal("100")).toPlainString(), 10) + "%");
+                message();
             }
         }
         return st.toString();
+    }
+
+    private void message() {
+        System.out.println("[" + "=".repeat(doneNumber - 1) + ">" + " ".repeat(100 - doneNumber) + "] " + leading(donePercent.divide(new BigDecimal(possibilities), new MathContext(4)).multiply(new BigDecimal("100")).toPlainString(), 10) + "%" + "   " + leading(eta, 10) + "ms");
+    }
+
+    private void eta() {
+        eta = BigInteger.valueOf(timer.currentTime()).multiply(possibilities.divide(done)).divide(BigInteger.valueOf(1000000)).toString();
     }
 
     public String crack(String toCrack, int security, int threads) {

@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.compression.yapion;
 
 import yapi.manager.yapion.YAPIONParser;
@@ -126,7 +130,7 @@ public class YAPIONCompression {
         List<String> keys = yapionObject.getKeys();
         s = s.substring(yapionObject.toString().length());
         for (String str : keys) {
-            s = s.replace("\\$" + str, ((YAPIONValue)yapionObject.getValue(str)).getValue().toString());
+            s = s.replace("\\$" + str, yapionObject.getValue(str).getValue().toString());
         }
         s = s.replace("%", "\\$");
         s = s.replace("\\%", "%");

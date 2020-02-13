@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.manager.yapion;
 
 import yapi.manager.yapion.value.YAPIONObject;
@@ -9,10 +13,6 @@ import java.awt.*;
 
 public class YAPIONObjectParser {
 
-    public static void main(String[] args) {
-        System.out.println(toYAPIONObject(new Color(0, 0, 0)));
-    }
-
     public static YAPIONObject toYAPIONObject(Color color) {
         YAPIONObject yapionObject = new YAPIONObject();
         yapionObject.add(getTypeVariable("color"));
@@ -22,7 +22,7 @@ public class YAPIONObjectParser {
 
     public static Color toColor(YAPIONObject yapionObject) {
         if (yapionObject.getKeys().size() == 2 && yapionObject.getKeys().contains("object-type") && yapionObject.getKeys().contains("color")) {
-            if (((YAPIONValue)yapionObject.getValue("object-type")).getString().equals("color")) {
+            if (yapionObject.getValue("object-type").getString().equals("color")) {
                 return ColorUtils.getColor(yapionObject.getValue("color").toString());
             }
         }

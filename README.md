@@ -1,10 +1,10 @@
 [![YAPI Release V1.0](https://img.shields.io/badge/YAPI%20Release-1.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![YAPI Pre-Release V1.1-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-1.1--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/1.1)
 [![YAPI Version V1.2](https://img.shields.io/badge/YAPI%20Version-1.2-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
-[![Methods 923](https://img.shields.io/badge/Methods-923-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 18369](https://img.shields.io/badge/Code%20Lines-18369-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 989](https://img.shields.io/badge/Methods-989-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 19821](https://img.shields.io/badge/Code%20Lines-19821-inactive)](https://github.com/yoyosource/YAPI)
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
-[![License: GPL v3+](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)
 
 # YAPI
 My Java API **YAPI** is a diverse and powerful API to make your live easier with coding. Some problems and ideas have neat solutions within this api. To use it just import it and for questions ask me on GitHub. Feel free to leave suggestions and improvements to any method, class or structure there too. 
@@ -12,8 +12,82 @@ My Java API **YAPI** is a diverse and powerful API to make your live easier with
 ## YAPI's naming
 Y for YoyoNow or @YoyoSource. API for application programming interface. You could even say library as this is a consortium of methods and data structures.
 
-## API's used
+## License
+
+YAPI is licensed under the terms of the Apache License 2.0.
+See the file LICENSE or visit [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0) for details.
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+# APIs used
 - eobermuhlner/big-math (https://github.com/eobermuhlner/big-math/tree/master)
+
+## Code Tags
+- Math
+  - Calculator
+    - Fraction
+    - Normal
+    - `Mathscript` (Unfinished)
+  - Coordinates
+  - Distributions
+  - Random
+  - Utility
+  - `NeuralNet` (Unfinished)
+- String
+  - Compression (Unfinished)
+  - Encryption
+  - Hashing
+  - Formatting
+  - `TemplateEngine` (Unfinished)
+- Regex
+- State-Machine
+- FileUtils
+- ResourceManager
+- Worker
+- YAPION
+- JSON
+- Config (Unfinished)
+- Sockets (Unfinished)
+- UI/GUI (Unfinished)
+- Color
+- Data-structures
+
+
+- Mathscript (Unfinished)
+  - Math functions
+  - Vectors
+  - Numbers
+
+
+- NeuralNet (Unfinished)
+  - Teaching
+  - Learning
+  - Saving
+  - Loading 
+
+
+- TemplateEngine (Unfinished)
+  - Variable System
+  - Variable Replace
+  - Method calls
+  
+## Goals
+| Goal    | Type       | Reach Date |
+| ------: | :--------: | ---------: |
+|   1,000 | Methods    |          ? |
+|  20,000 | Code Lines |          ? |
+|   1,500 | Methods    |          ? |
+|  40,000 | Code Lines |          ? |
+|   2,000 | Methods    |          ? |
+|  60,000 | Code Lines |          ? |
+|   4,000 | Methods    |          ? |
+|  80,000 | Code Lines |          ? |
+|   5,000 | Methods    |          ? |
+| 100,000 | Code Lines |          ? |
 
 ## Version Log
 - `1.0` [R] `06 Nov 2019` > Focus on Math, Encryption, and Password cracking
@@ -33,7 +107,7 @@ I will although try to remove any [Issue](https://github.com/yoyosource/YAPI/iss
 The [Wiki](https://github.com/yoyosource/YAPI/wiki) will be done soon. If you want to help me fell free to do so with ideas on how to create the Wiki. 
 ### Version 1.1-alpha
 Version 1.1-alpha is a pre-release of the [YAPI](https://github.com/yoyosource/YAPI) and is unfinished. There shouldn't be any problems with this version and everything should work alright. The focus of this version was on some String-Utilities, an efficient Object-Notation (YAPION) and a Compression algorithm for this Object-Notation. 
-I also want to thank everyone, who participated in helping me with this project. Without every tester I had the YAPI got a bit better and I am pleased with this. I hope you all will help even more. To give me an Idea or Bug-Report just make a [pull request](https://github.com/yoyosource/YAPI/pulls) or open an [issue](https://github.com/yoyosource/YAPI/issues) on GitHub
+I also want to thank everyone, who participated in helping me with this project. With every tester I had the YAPI got a bit better and I am pleased with this. I hope you all will help even more. To give me an Idea or Bug-Report just make a [pull request](https://github.com/yoyosource/YAPI/pulls) or open an [issue](https://github.com/yoyosource/YAPI/issues) on GitHub.
 ### Version 1.2
 ### Version 1.3
 

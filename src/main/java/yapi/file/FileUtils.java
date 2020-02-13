@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.file;
 
 import yapi.exceptions.string.NoStringException;
@@ -261,6 +265,29 @@ public class FileUtils {
             long s = getSize(file) / l - size * 1024;
             s = (s / t);
             return size + "." + s + chars[i];
+        }
+    }
+
+    public static void dump(File file, String[] strings) throws IOException {
+        if (!file.exists()) {
+            throw new FileNotFoundException();
+        }
+        if (!file.isFile()) {
+            throw new FileNotFoundException();
+        }
+        if (strings == null) {
+            throw new NoStringException();
+        }
+        try (OutputStream outputStream = new FileOutputStream(file)) {
+            for (int i = 0; i < strings.length; i++) {
+                if (i != 0) {
+                    outputStream.write(new byte[]{'\n'});
+                }
+                outputStream.write(strings[i].getBytes());
+                outputStream.flush();
+            }
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
         }
     }
 

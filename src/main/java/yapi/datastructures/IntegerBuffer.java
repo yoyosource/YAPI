@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.datastructures;
 
 import yapi.manager.yapion.YAPIONVariable;
@@ -216,15 +220,15 @@ public class IntegerBuffer {
 
     public static IntegerBuffer deserialize(YAPIONObject yapionObject) {
         IntegerBuffer integerBuffer = null;
-        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("integer-buffer")) {
+        if (yapionObject.getKeys().contains("object-type") && yapionObject.getValue("object-type").getString().equals("integer-buffer")) {
             if (yapionObject.getKeys().size() == 3 && yapionObject.getKeys().contains("seed") && yapionObject.getKeys().contains("gets")) {
-                long l = ((YAPIONValue)yapionObject.getValue("seed")).getLong();
-                int g = ((YAPIONValue)yapionObject.getValue("gets")).getInteger();
+                long l = (yapionObject.getValue("seed")).getLong();
+                int g = (yapionObject.getValue("gets")).getInteger();
                 integerBuffer = new IntegerBuffer(new NumberRandom(l));
                 integerBuffer.next(g);
             }
             if (yapionObject.getKeys().size() == 2 && yapionObject.getKeys().contains("values")) {
-                YAPIONArray yapionArray = (YAPIONArray)yapionObject.getValue("values");
+                YAPIONArray yapionArray = yapionObject.getArray("values");
                 List<Integer> integers = new ArrayList<>();
                 for (int i = 0; i < yapionArray.size(); i++) {
                     integers.add(((YAPIONValue)yapionArray.get(i)).getInteger());

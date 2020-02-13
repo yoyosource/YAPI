@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.manager.yapion.value;
 
 import yapi.manager.json.value.JSONObject;
@@ -20,11 +24,47 @@ public class YAPIONObject extends YAPIONType {
         return keys;
     }
 
-    public YAPIONType getValue(String key) {
+    public YAPIONVariable getVariable(String key) {
         for (YAPIONVariable yapionVariable : variables) {
             if (yapionVariable.getName().equals(key)) {
-                return yapionVariable.getYapionType();
+                return yapionVariable;
             }
+        }
+        return null;
+    }
+
+    public YAPIONObject getObject(String key) {
+        YAPIONVariable yapionVariable = getVariable(key);
+        if (yapionVariable == null) {
+            return null;
+        }
+        YAPIONType yapionType = yapionVariable.getYapionType();
+        if (yapionType instanceof YAPIONObject) {
+            return (YAPIONObject) yapionType;
+        }
+        return null;
+    }
+
+    public YAPIONValue getValue(String key) {
+        YAPIONVariable yapionVariable = getVariable(key);
+        if (yapionVariable == null) {
+            return null;
+        }
+        YAPIONType yapionType = yapionVariable.getYapionType();
+        if (yapionType instanceof YAPIONValue) {
+            return (YAPIONValue) yapionType;
+        }
+        return null;
+    }
+
+    public YAPIONArray getArray(String key) {
+        YAPIONVariable yapionVariable = getVariable(key);
+        if (yapionVariable == null) {
+            return null;
+        }
+        YAPIONType yapionType = yapionVariable.getYapionType();
+        if (yapionType instanceof YAPIONArray) {
+            return (YAPIONArray) yapionType;
         }
         return null;
     }

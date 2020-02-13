@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.encryption;
 
 import yapi.exceptions.EncryptionException;
@@ -82,6 +86,16 @@ public class EncryptionSymmetric {
                 operations.add(XOR_MINUS);
             }
         }
+    }
+
+    public static double checkPassword(String password) {
+        return passwordStrength(password);
+    }
+
+    public static double passwordStrength(String password) {
+        double strength = 0;
+        strength += password.length() * 4;
+        throw new IllegalStateException("Not done");
     }
 
     public static String createKey(String username, String password, int security, boolean newMode) {

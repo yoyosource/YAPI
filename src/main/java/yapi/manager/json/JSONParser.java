@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.manager.json;
 
 import yapi.exceptions.objectnotation.JSONException;
@@ -18,11 +22,11 @@ public class JSONParser {
         throw new IllegalStateException();
     }
 
-    public static YAPIONObject toYAPION(JSONObject jsonObject) {
+    public static synchronized YAPIONObject toYAPION(JSONObject jsonObject) {
         YAPIONObject yapionObject = new YAPIONObject();
         List<String> keys = jsonObject.getKeys();
         for (String s : keys) {
-            JSONType jsonType = jsonObject.getValue(s);
+            JSONType jsonType = jsonObject.getVariable(s).getJsonType();
             if (jsonType instanceof JSONValue) {
                 yapionObject.add(new YAPIONVariable(s, toYAPION((JSONValue) jsonType)));
             } else if (jsonType instanceof JSONArray) {
@@ -53,7 +57,7 @@ public class JSONParser {
         return new YAPIONValue(jsonValue.toString());
     }
 
-    public static JSONObject parse(String json) {
+    public static synchronized JSONObject parse(String json) {
         char[] chars = json.toCharArray();
         return parse(chars);
     }

@@ -1,10 +1,17 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.math;
 
+import ch.obermuhlner.math.big.stream.BigDecimalStream;
 import yapi.exceptions.MathException;
 import yapi.exceptions.math.RangeException;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class NumberUtils {
 
@@ -467,6 +474,10 @@ public class NumberUtils {
      *
      * @since Version 1.2
      *
+     *             input > 1 -> input * (input - 1)!
+     * input! := { input = 0 -> 1
+     *             input < 0 -> Error
+     *
      * @param input
      * @return
      */
@@ -477,9 +488,26 @@ public class NumberUtils {
         if (input == 0) {
             return 1;
         }
-        int output = 1;
+        long output = 1;
         while (input > 0) {
             output *= input--;
+        }
+        return output;
+    }
+
+    public static long factorialNegative(long input) {
+        if (input == 0) {
+            return 1;
+        }
+        long output = 1;
+        if (input < 0) {
+            while (input < 0) {
+                output *= input++;
+            }
+        } else {
+            while (input > 0) {
+                output *= input--;
+            }
         }
         return output;
     }
@@ -490,12 +518,19 @@ public class NumberUtils {
      *
      * @since Version 1.2
      *
+     *             input > 1 -> input * (input - 1)!
+     * input! := { input = 0 -> 1
+     *             input < 0 -> Error
+     *
      * @param bigInteger
      * @return
      */
     public static BigInteger factorial(BigInteger bigInteger) {
         if (bigInteger.compareTo(BigInteger.ZERO) < 0) {
             throw new MathException("factorial of negatives is not defined");
+        }
+        if (bigInteger.compareTo(BigInteger.ZERO) == 0) {
+            return BigInteger.ONE;
         }
         BigInteger num = BigInteger.ONE;
         BigInteger b = bigInteger.add(BigInteger.ZERO);
@@ -504,6 +539,315 @@ public class NumberUtils {
             b = b.subtract(BigInteger.ONE);
         }
         return num;
+    }
+
+    // TODO: Check reduce out
+    // Swift CODE
+    // func factorial(_ n: Int) -> Int { return n < 2 ? 1 : (2...n).reduce(1, *) }
+
+    public static BigInteger factorialNegative(BigInteger input) {
+        if (input.compareTo(BigInteger.ZERO) == 0) {
+            return BigInteger.ONE;
+        }
+        BigInteger num = BigInteger.ONE;
+        BigInteger b = input.add(BigInteger.ZERO);
+        if (input.compareTo(BigInteger.ZERO) < 0) {
+            while (b.compareTo(BigInteger.ZERO) < 0) {
+                num = num.multiply(b);
+                b = b.add(BigInteger.ONE);
+            }
+        } else {
+            while (b.compareTo(BigInteger.ZERO) > 0) {
+                num = num.multiply(b);
+                b = b.subtract(BigInteger.ONE);
+            }
+        }
+        return num;
+    }
+
+    /**
+     *
+     * @since Version 1.2
+     *
+     * n over r := n! / (r! * (n-r)!)
+     *
+     * @param n
+     * @param r
+     * @return n over r or -1 if r < 0 or r > n
+     */
+    public static long over(long n, long r) {
+        if (r < 0 || r > n) {
+            return -1;
+        }
+        return factorial(n) / (factorial(r) * factorial(n - r));
+    }
+
+    /**
+     *
+     * @since Version 1.2
+     *
+     * n over r := n! / (r! * (n-r)!)
+     *
+     * @param n
+     * @param r
+     * @return n over r or -1 if r < 0 or r > n
+     */
+    public static BigInteger over(BigInteger n, BigInteger r) {
+        if (r.compareTo(BigInteger.ZERO) < 0 || r.compareTo(n) > 0) {
+            return BigInteger.valueOf(-1);
+        }
+        return factorial(n).divide(factorial(r).multiply(factorial(n.subtract(r))));
+    }
+
+    public static long square(long n) {
+        return n * n;
+    }
+
+    public static BigInteger square(BigInteger n) {
+        return n.multiply(n);
+    }
+
+    public static long cube(long n) {
+        return n * n * n;
+    }
+
+    public static BigInteger cube(BigInteger n) {
+        return n.multiply(n).multiply(n);
+    }
+
+    public static long power(long n, long s) {
+        if (s == 0) {
+            return 1;
+        }
+        if (s == 1) {
+            return n;
+        }
+        if (s == 2) {
+            return square(n);
+        }
+        if (s == 3) {
+            return cube(n);
+        }
+        if (s < 0) {
+            return 1 / power(n, s * -1);
+        }
+
+        long t = 1;
+        for (long i = s; i >= 0; i--) {
+            t *= n;
+        }
+        return t;
+    }
+
+    public static BigInteger power(BigInteger n, BigInteger s) {
+        if (s.compareTo(BigInteger.ZERO) == 0) {
+            return BigInteger.ONE;
+        }
+        if (s.compareTo(BigInteger.ONE) == 0) {
+            return n;
+        }
+        if (s.compareTo(BigInteger.TWO) == 0) {
+            return square(n);
+        }
+        if (s.compareTo(BigInteger.valueOf(3)) == 0) {
+            return cube(n);
+        }
+        if (s.compareTo(BigInteger.ZERO) < 0) {
+            return BigInteger.ONE.divide(power(n, s.multiply(BigInteger.valueOf(-1))));
+        }
+
+        BigInteger t = BigInteger.ONE;
+        BigInteger m = new BigInteger(s.toByteArray());
+        while (m.compareTo(BigInteger.ZERO) >= 0) {
+            t = t.multiply(n);
+            m = m.subtract(BigInteger.ONE);
+        }
+        return t;
+    }
+
+    public static long sumOfNumbers(long n) {
+        if (n < 1) {
+            return -1;
+        }
+        return (n * (n + 1)) / 2;
+    }
+
+    public static BigInteger sumOfNumbers(BigInteger n) {
+        if (n.compareTo(BigInteger.ONE) < 0) {
+            return BigInteger.valueOf(-1);
+        }
+        return n.multiply(n.add(BigInteger.ONE)).divide(BigInteger.valueOf(2));
+    }
+
+    public static long sumOfSquares(long n) {
+        if (n < 1) {
+            return -1;
+        }
+        return (n * (n + 1) * (2 * n + 1)) / 6;
+    }
+
+    public static BigInteger sumOfSquares(BigInteger n) {
+        if (n.compareTo(BigInteger.ONE) < 0) {
+            return BigInteger.valueOf(-1);
+        }
+        return n.multiply(n.add(BigInteger.ONE)).multiply(BigInteger.valueOf(2).multiply(n).add(BigInteger.ONE)).divide(BigInteger.valueOf(6));
+    }
+
+    public static long sumOfCubes(long n) {
+        if (n < 1) {
+            return -1;
+        }
+        return square(n) * square(n + 1) / 4;
+    }
+
+    public static BigInteger sumOfCubes(BigInteger n) {
+        if (n.compareTo(BigInteger.ONE) < 0) {
+            return BigInteger.valueOf(-1);
+        }
+        return square(n).multiply(square(n.add(BigInteger.ONE))).divide(BigInteger.valueOf(4));
+    }
+
+    public static long sumOfPowers(long n, long s) {
+        if (n < 1) {
+            return -1;
+        }
+        long t = 0;
+        for (long i = 0; i < n; i++) {
+            t += power(i, s);
+        }
+        return t;
+    }
+
+    public static BigInteger sumOfPowers(BigInteger n, BigInteger s) {
+        if (n.compareTo(BigInteger.ONE) < 0) {
+            return BigInteger.valueOf(-1);
+        }
+        BigInteger t = BigInteger.ZERO;
+        BigInteger m = n.add(BigInteger.ZERO);
+        while (m.compareTo(BigInteger.ZERO) >= 0) {
+            t = t.add(power(m, s));
+            m = m.subtract(BigInteger.ONE);
+        }
+        return t;
+    }
+
+    public static long sumOfDigits(long n) {
+        char[] chars = (n + "").toCharArray();
+        long t = 0;
+        for (char c : chars) {
+            if (c == '-') {
+                continue;
+            }
+            t += c - '0';
+        }
+        return t;
+    }
+
+    public static BigInteger sumOfDigits(BigInteger n) {
+        char[] chars = n.toString().toCharArray();
+        BigInteger t = BigInteger.ZERO;
+        for (char c : chars) {
+            if (c == '-') {
+                continue;
+            }
+            t = t.add(BigInteger.valueOf(c - '0'));
+        }
+        return t;
+    }
+
+    public static long multiplicationOfDigits(long n) {
+        char[] chars = (n + "").toCharArray();
+        long t = 1;
+        for (char c : chars) {
+            if (c == '-') {
+                continue;
+            }
+            t *= c - '0';
+        }
+        return t;
+    }
+
+    public static BigInteger multiplicationOfDigits(BigInteger n) {
+        char[] chars = n.toString().toCharArray();
+        BigInteger t = BigInteger.ONE;
+        for (char c : chars) {
+            if (c == '-') {
+                continue;
+            }
+            t = t.multiply(BigInteger.valueOf(c - '0'));
+        }
+        return t;
+    }
+
+    public static long[] sortedSquares(long... input) {
+        long[] longs = new long[input.length];
+        int indexLow = 0;
+        int indexHigh = input.length - 1;
+        int index = input.length - 1;
+
+        for (int i = 0; i < input.length; i++) {
+            if (i != 0 && input[i - 1] > input[i]) {
+                return new long[0];
+            }
+
+            if (Math.abs(input[indexLow]) > input[indexHigh]) {
+                longs[index] = square(input[indexLow]);
+                indexLow++;
+                index--;
+            } else {
+                longs[index] = square(input[indexHigh]);
+                indexHigh--;
+                index--;
+            }
+        }
+        return longs;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(formatNumber(new BigDecimal("82723745636.134765")));
+    }
+
+    public static String formatNumber(BigDecimal bigDecimal) {
+        String s = bigDecimal.toPlainString();
+        if (!s.contains(".")) {
+            return addCommas(s);
+        }
+        return addCommas(s.substring(0, s.indexOf('.') - 1)) + s.substring(s.indexOf('.'));
+    }
+
+    public static String formatNumber(BigInteger bigInteger) {
+        return addCommas(bigInteger.toString());
+    }
+
+    public static String formatNumber(int i) {
+        return addCommas(i + "");
+    }
+
+    public static String formatNumber(long l) {
+        return addCommas(l + "");
+    }
+
+    public static String formatNumber(double d) {
+        String s = d + "";
+        if (!s.contains(".")) {
+            return addCommas(s);
+        }
+        return addCommas(s.substring(0, s.indexOf('.') - 1)) + s.substring(s.indexOf('.'));
+    }
+
+    private static String addCommas(String s) {
+        if (s.length() <= 6) {
+            return s;
+        }
+        char[] chars = s.toCharArray();
+        StringBuilder st = new StringBuilder();
+        for (int i = chars.length - 1; i >= 0; i--) {
+            st.append(chars[i]);
+            if ((chars.length - i) % 3 == 0 && i != 0) {
+                st.append(',');
+            }
+        }
+        return st.reverse().toString();
     }
 
 }

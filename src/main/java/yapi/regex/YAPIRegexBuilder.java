@@ -1,9 +1,14 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.regex;
 
 import yapi.exceptions.YAPIException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class YAPIRegexBuilder {
@@ -12,9 +17,7 @@ public class YAPIRegexBuilder {
     private static List<Character> escapeNeededCharacters = new ArrayList<>();
 
     static {
-        for (char c : characters) {
-            escapeNeededCharacters.add(c);
-        }
+        for (char c : characters) escapeNeededCharacters.add(c);
     }
 
     public static void main(String[] args) {

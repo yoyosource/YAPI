@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.math;
 
 import yapi.manager.yapion.YAPIONVariable;
@@ -84,8 +88,8 @@ public class ComplexNumber {
 
     public static ComplexNumber deserialize(YAPIONObject yapionObject) {
         ComplexNumber complexNumber = null;
-        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("complex-number")) {
-            complexNumber = new ComplexNumber(((YAPIONValue) yapionObject.getValue("real")).getDouble(), ((YAPIONValue) yapionObject.getValue("imaginary")).getDouble());
+        if (yapionObject.getKeys().contains("object-type") && yapionObject.getValue("object-type").getString().equals("complex-number")) {
+            complexNumber = new ComplexNumber(yapionObject.getValue("real").getDouble(), yapionObject.getValue("imaginary").getDouble());
         }
         return complexNumber;
     }

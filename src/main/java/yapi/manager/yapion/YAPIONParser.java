@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.manager.yapion;
 
 import yapi.exceptions.YAPIException;
@@ -16,11 +20,11 @@ public class YAPIONParser {
 
     private static int escapes = 0;
 
-    public static JSONObject toJSON(YAPIONObject yapionObject) {
+    public synchronized static JSONObject toJSON(YAPIONObject yapionObject) {
         JSONObject jsonObject = new JSONObject();
         List<String> keys = yapionObject.getKeys();
         for (String s : keys) {
-            YAPIONType yapionType = yapionObject.getValue(s);
+            YAPIONType yapionType = yapionObject.getVariable(s).getYapionType();
             if (yapionType instanceof YAPIONValue) {
                 jsonObject.add(new JSONVariable(s, toJSON((YAPIONValue) yapionType)));
             } else if (yapionType instanceof YAPIONArray) {
@@ -55,18 +59,23 @@ public class YAPIONParser {
         System.out.println("{Test{Hallo({}\\))}}");
         System.out.println(parse("{Test{Hallo({}\\))}}").toHierarchyString());
         System.out.println(parse("{Test{Hallo({}\\))}}").toString());
+        YAPIONObject yapionObject = parse("{Test{Hallo({}\\))}}");
+        System.out.println(yapionObject.getObject("Test").getValue("Hallo").getValue());
     }
 
     /**
-     * A new YAPION object starts with '{' and end with '}'.
-     * A key starts with any character stat is a non whitespace character and ends with '(', '[' or '{'.
+     * A new YAPION structure starts with '{' and ends with '}'.
+     * A key starts with any character that is a non whitespace character and ends with '(', '[' or '{'.
      * The normal bracket indicates a value like a string, character, number or boolean.
-     * The square bracket indicates a array out of values.
+     * The square bracket indicates a array out of values. In an array every value is separated by a comma and can be followed by a space.
      * The curly bracket indicates a object out of key-value pares.
      *
      * Example
      *   {}
      *   {Test(Hello World)}
+     *   {TRUE(true)FALSE(false)}
+     *   {Number(23746)}
+     *   {Number(23746.827364)}
      *   {Test[10, 9, 8]}
      *   {Test{Test(Hello World)}}
      *
@@ -75,7 +84,7 @@ public class YAPIONParser {
      * @param yapion
      * @return
      */
-    public static YAPIONObject parse(String yapion) {
+    public static synchronized YAPIONObject parse(String yapion) {
         char[] chars = yapion.toCharArray();
         if (chars[0] != '{' || chars[chars.length - 1] != '}') {
             throw new YAPIONException("No object input\n" + createErrorMessage(chars, 0, chars.length));

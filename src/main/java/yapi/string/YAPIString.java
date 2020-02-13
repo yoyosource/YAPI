@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.string;
 
 import yapi.exceptions.string.YAPIStringException;
@@ -1423,10 +1427,10 @@ public class YAPIString {
 
     public static YAPIString deserialize(YAPIONObject yapionObject) {
         YAPIString yapiString = null;
-        if (yapionObject.getKeys().contains("object-type") && ((YAPIONValue) yapionObject.getValue("object-type")).getString().equals("yapi-string")) {
+        if (yapionObject.getKeys().contains("object-type") && yapionObject.getValue("object-type").getString().equals("yapi-string")) {
             if (yapionObject.getKeys().size() == 3 && yapionObject.getKeys().contains("value") && yapionObject.getKeys().contains("reversed")) {
-                String value = ((YAPIONValue)yapionObject.getValue("value")).getString();
-                boolean reversed = ((YAPIONValue)yapionObject.getValue("reversed")).getBoolean();
+                String value = yapionObject.getValue("value").getString();
+                boolean reversed = yapionObject.getValue("reversed").getBoolean();
                 yapiString = new YAPIString(value, reversed);
             }
         }
