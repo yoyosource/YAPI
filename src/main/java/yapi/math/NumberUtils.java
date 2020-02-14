@@ -573,7 +573,7 @@ public class NumberUtils {
         //fastFactorial(BigInteger.valueOf(4000000));
         Timer timer = new Timer();
         timer.start();
-        fastFactorial(BigInteger.valueOf(1000000));
+        fastFactorial(BigInteger.valueOf(2000000));
         //  6318995µs ->  100000
         // 12416465µs ->  200000
         // 11633725µs ->  300000
@@ -619,8 +619,8 @@ public class NumberUtils {
         if (threads <= 0) {
             threads = 1;
         }
-        if (threads > 16) {
-            threads = 16;
+        if (threads > Runtime.getRuntime().availableProcessors()) {
+            threads = Runtime.getRuntime().availableProcessors();
         }
 
         TaskParallelization<BigInteger> bigIntegerTaskParallelization = new TaskParallelization<>();
@@ -642,9 +642,30 @@ public class NumberUtils {
         if (value.compareTo(BigInteger.ONE) >= 0) {
             bigIntegerTaskParallelization.addResult(factorial(value));
         }
-        workerPool.awaitClose();
-        List<BigInteger> bigIntegers = bigIntegerTaskParallelization.merge();
+        workerPool.await();
 
+        List<BigInteger> bigIntegers = bigIntegerTaskParallelization.merge();
+        while (bigIntegers.size() > threads) {
+            List<List<BigInteger>> integers = bigIntegerTaskParallelization.split(bigIntegers, threads);
+            bigIntegerTaskParallelization.clear();
+            for (List<BigInteger> i : integers) {
+                List<BigInteger> bI = new ArrayList<>(i);
+                workerPool.work(new Task() {
+                    @Override
+                    public void run() {
+                        BigInteger result = BigInteger.ONE;
+                        for (BigInteger b : bI) {
+                            result = result.multiply(b);
+                        }
+                        bigIntegerTaskParallelization.addResult(result);
+                    }
+                });
+            }
+            workerPool.await();
+            bigIntegers = bigIntegerTaskParallelization.merge();
+        }
+
+        workerPool.awaitClose();
         BigInteger result = BigInteger.ONE;
         for (BigInteger b : bigIntegers) {
             result = result.multiply(b);

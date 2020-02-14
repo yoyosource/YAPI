@@ -61,6 +61,12 @@ public class TaskParallelization<T> {
         return merge;
     }
 
+    public void clear() {
+        synchronized (tMap) {
+            tMap.clear();
+        }
+    }
+
     @Override
     public String toString() {
         return "TaskParallelization{" +
