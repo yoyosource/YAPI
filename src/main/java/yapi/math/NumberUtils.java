@@ -599,22 +599,23 @@ public class NumberUtils {
         }
     }
 
-    public static BigInteger fastFactorial(BigInteger bigInteger) {
-        BigInteger threads = bigInteger.divide(BigInteger.valueOf(100000));
-        return fastFactorial(bigInteger, threads);
-    }
-
-    private static BigInteger fastFactorial(BigInteger bigInteger, BigInteger threads) {
+    private static int calculateThreadCount(BigInteger bigInteger, BigInteger count) {
+        BigInteger threads = bigInteger.divide(count);
         if (threads.compareTo(BigInteger.ZERO) <= 0) {
             threads = BigInteger.ONE;
         }
         if (threads.compareTo(BigInteger.valueOf(16)) > 0) {
             threads = BigInteger.valueOf(16);
         }
-        return fastFactorial(bigInteger, threads.intValue());
+        return threads.intValue();
     }
 
-    public static BigInteger fastFactorial(BigInteger bigInteger, int threads) {
+    public static BigInteger fastFactorial(BigInteger bigInteger) {
+        return fastFactorial(bigInteger, BigInteger.valueOf(100000));
+    }
+
+    public static BigInteger fastFactorial(BigInteger bigInteger, BigInteger blocks) {
+        int threads = calculateThreadCount(bigInteger, blocks);
         if (threads <= 0) {
             threads = 1;
         }
@@ -626,7 +627,7 @@ public class NumberUtils {
         WorkerPool workerPool = new WorkerPool(threads);
 
         BigInteger value = bigInteger.add(BigInteger.ZERO);
-        BigInteger t = BigInteger.valueOf(100000);
+        BigInteger t = blocks.add(BigInteger.ZERO);
 
         while (value.compareTo(t) > 0) {
             BigInteger v = value.add(BigInteger.ZERO);
