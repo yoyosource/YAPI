@@ -61,4 +61,10 @@ public class TaskParallelization<T> {
         return merge;
     }
 
+    @Override
+    public String toString() {
+        return "TaskParallelization{" +
+                "tMap=" + tMap +
+                '}';
+    }
 }

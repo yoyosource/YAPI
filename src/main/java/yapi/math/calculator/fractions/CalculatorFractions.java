@@ -14,6 +14,13 @@ import java.util.stream.Collectors;
 
 public class CalculatorFractions {
 
+    public static void main(String[] args) {
+        CalculatorFractions calculatorFractions = new CalculatorFractions("6|5^9|16*36|10");
+        //CalculatorFractions calculatorFractions = new CalculatorFractions("100000000000^10000");
+        Fraction fraction = calculatorFractions.getResult();
+        System.out.println(fraction.encodeFlat() + "   " + fraction.encodePercent() + "   " + fraction.encodeMixed() + "   " + fraction.encodeNumber());
+    }
+
     private Fraction result;
 
     public CalculatorFractions(String toCalculate) {
@@ -21,14 +28,13 @@ public class CalculatorFractions {
         List<Part> parts = parts(strings);
         List<Long> priorities = priorities(parts);
         result = calculate(parts, priorities);
-
     }
 
     public Fraction getResult() {
         return result;
     }
 
-    private List<String> split(String s) {
+    private List<String>  split(String s) {
         List<String> strings = Arrays.stream(StringSplitting.splitString(s.replaceAll(" +", " "), new String[]{"+", "-", "*", "/", "%", "(", ")", "^", " "}, true, false)).collect(Collectors.toList());
         for (int i = 0; i < strings.size() - 1; i++) {
             if (strings.get(i).matches("[0-9]+(\\.[0-9]+)?") && strings.get(i + 1).equals("%")) {
@@ -67,11 +73,11 @@ public class CalculatorFractions {
         for (Part part : parts) {
             if (part.isOperator()) {
                 if (part.getOperator().equals("(")) {
-                    l += 2;
+                    l += 3;
                     priorities.add(0L);
                     continue;
                 } else if (part.getOperator().equals(")")) {
-                    l -= 2;
+                    l -= 3;
                     priorities.add(0L);
                     continue;
                 }
@@ -85,6 +91,8 @@ public class CalculatorFractions {
                     priorities.add(l + 2);
                 } else if (part.getOperator().equals("%")) {
                     priorities.add(l + 2);
+                } else if (part.getOperator().equals("^")) {
+                    priorities.add(l + 3);
                 }
                 else {
                     priorities.add(l);
@@ -106,7 +114,7 @@ public class CalculatorFractions {
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
-        return parts.get(0).getFraction().add(Fraction.decode("0|1"));
+        return parts.get(0).getFraction().add(Fraction.decode("1|1"));
     }
 
     private long getIndex(List<Long> priorities) {
@@ -139,6 +147,8 @@ public class CalculatorFractions {
             f = number1.getFraction().divide(number2.getFraction());
         } else if (operation.getOperator().equals("%")) {
             f = number1.getFraction().remainder(number2.getFraction());
+        } else if (operation.getOperator().equals("^")) {
+            f = number1.getFraction().power(number2.getFraction());
         }
         if (f != null) {
             parts.set((int)index, new Part(f));

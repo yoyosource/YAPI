@@ -1,8 +1,8 @@
 [![YAPI Release V1.0](https://img.shields.io/badge/YAPI%20Release-1.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![YAPI Pre-Release V1.1-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-1.1--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/1.1)
 [![YAPI Version V1.2](https://img.shields.io/badge/YAPI%20Version-1.2-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
-[![Methods 989](https://img.shields.io/badge/Methods-989-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 19821](https://img.shields.io/badge/Code%20Lines-19821-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1024](https://img.shields.io/badge/Methods-1024-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 20177](https://img.shields.io/badge/Code%20Lines-20177-inactive)](https://github.com/yoyosource/YAPI)
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)
 
@@ -76,18 +76,18 @@ limitations under the License.
   - Method calls
   
 ## Goals
-| Goal    | Type       | Reach Date |
-| ------: | :--------: | ---------: |
-|   1,000 | Methods    |          ? |
-|  20,000 | Code Lines |          ? |
-|   1,500 | Methods    |          ? |
-|  40,000 | Code Lines |          ? |
-|   2,000 | Methods    |          ? |
-|  60,000 | Code Lines |          ? |
-|   4,000 | Methods    |          ? |
-|  80,000 | Code Lines |          ? |
-|   5,000 | Methods    |          ? |
-| 100,000 | Code Lines |          ? |
+| Goal    | Type       | Reach Date  |
+| ------: | :--------: | ----------: |
+|  20,000 | Code Lines | 14 Feb 2020 |
+|   1,000 | Methods    | 14 Feb 2020 |
+|   1,500 | Methods    |           ? |
+|  40,000 | Code Lines |           ? |
+|   2,000 | Methods    |           ? |
+|  60,000 | Code Lines |           ? |
+|   4,000 | Methods    |           ? |
+|  80,000 | Code Lines |           ? |
+|   5,000 | Methods    |           ? |
+| 100,000 | Code Lines |           ? |
 
 ## Version Log
 - `1.0` [R] `06 Nov 2019` > Focus on Math, Encryption, and Password cracking

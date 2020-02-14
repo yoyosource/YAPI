@@ -4,6 +4,7 @@
 
 package yapi.ui.yapiframe;
 
+import yapi.file.FileUtils;
 import yapi.ui.yapiframe.handler.YAPIKeyHandler;
 import yapi.ui.yapiframe.handler.YAPIMouseHandler;
 
@@ -77,8 +78,12 @@ public class YAPIFrame {
         open = false;
     }
 
-    public void setSize(double width, double height) {
-        frame.setSize((int)width, (int)height);
+    public void setSize(int width, int height) {
+        frame.setSize(width, height);
+    }
+
+    public void setSize(double ratioWidth, double ratioHeight) {
+        frame.setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().width * ratioWidth), (int)(Toolkit.getDefaultToolkit().getScreenSize().height * ratioHeight));
     }
 
     public void setTitle() {
@@ -89,12 +94,20 @@ public class YAPIFrame {
         frame.setTitle(s);
     }
 
-    public void show() {
-        visible();
+    public void setDefaultTitle() {
+        setTitle("YAPIFrame");
+    }
+
+    public void invisible() {
+        hide();
     }
 
     public void hide() {
         setVisible(false);
+    }
+
+    public void show() {
+        visible();
     }
 
     public void visible() {

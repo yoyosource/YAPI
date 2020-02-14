@@ -43,7 +43,7 @@ task compileInfo {
     mustRunAfter classes
 
     doLast {
-        def command = "java -classpath ${buildDir}/classes/java/main main.CreateInteractiveMain ${buildDir} /graphics /packagekeep"
+        def command = "java -classpath ${buildDir}/classes/java/main main.CreateInteractiveMain ${buildDir}"
         def retval = command.execute().text.trim()
         print(retval)
     }

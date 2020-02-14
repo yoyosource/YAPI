@@ -7,7 +7,10 @@ package yapi.math.distributions;
 import yapi.exceptions.MathException;
 import yapi.math.NumberUtils;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class BinomialDistribution {
 
@@ -16,6 +19,8 @@ public class BinomialDistribution {
 
     private double mu;
     private double sigma;
+
+    private static MathContext mathContext = new MathContext(200, RoundingMode.HALF_UP);
 
     public BinomialDistribution(long size, double probability) {
         this.size = size;
@@ -36,18 +41,18 @@ public class BinomialDistribution {
         sigma = Math.sqrt(size * probability * (1 - probability));
     }
 
-    public double getBinomial(long experiment) {
+    public BigDecimal getBinomial(long experiment) {
         if (experiment < 0 || experiment > size) {
-            return -1;
+            return BigDecimal.valueOf(-1);
         }
-        return over(size, experiment) * Math.pow(probability, experiment) * Math.pow(1 - probability, size - experiment);
+        return new BigDecimal(over(size, experiment)).multiply(BigDecimal.valueOf(probability).pow((int)experiment, mathContext), mathContext).multiply(BigDecimal.valueOf(1 - probability).pow((int)(size - experiment), mathContext), mathContext);
     }
 
-    public double[] getBinomial(long startExperiment, long stopExperiment) {
+    public BigDecimal[] getBinomial(long startExperiment, long stopExperiment) {
         if (stopExperiment < startExperiment) {
-            return new double[0];
+            return new BigDecimal[0];
         }
-        double[] doubles = new double[(int)(stopExperiment - startExperiment + 1)];
+        BigDecimal[] doubles = new BigDecimal[(int)(stopExperiment - startExperiment + 1)];
         int j = 0;
         for (long i = startExperiment; i <= stopExperiment; i++) {
             doubles[j] = getBinomial(i);
@@ -56,68 +61,68 @@ public class BinomialDistribution {
         return doubles;
     }
 
-    public double[] getBinomial() {
+    public BigDecimal[] getBinomial() {
         return getBinomial(0, size);
     }
 
-    private long over(long n, long r) {
-        return NumberUtils.over(BigInteger.valueOf(n), BigInteger.valueOf(r)).longValue();
+    private BigInteger over(long n, long r) {
+        return NumberUtils.over(BigInteger.valueOf(n), BigInteger.valueOf(r));
     }
 
-    public double getFunction(long experiment) {
-        double d = 0;
+    public BigDecimal getFunction(long experiment) {
+        BigDecimal d = BigDecimal.ZERO;
         for (long i = 0; i <= experiment; i++) {
-            d += getBinomial(i);
+            d = d.add(getBinomial(i), mathContext);
         }
         return d;
     }
 
-    public double getProbability(long experiment) {
+    public BigDecimal getProbability(long experiment) {
         return getBinomial(experiment);
     }
 
-    public double getProbabilityEqual(long experiment) {
+    public BigDecimal getProbabilityEqual(long experiment) {
         return getBinomial(experiment);
     }
 
-    public double getProbabilityNotEqual(long experiment) {
-        return 1 - getBinomial(experiment);
+    public BigDecimal getProbabilityNotEqual(long experiment) {
+        return BigDecimal.ONE.subtract(getBinomial(experiment), mathContext);
     }
 
-    public double getProbabilityBetween(int x1, int x2) {
+    public BigDecimal getProbabilityBetween(int x1, int x2) {
         if (x2 < x1) {
             int x3 = x2;
             x2 = x1;
             x1 = x3;
         }
         x2--;
-        return getFunction(x2) - getFunction(x1);
+        return getFunction(x2).subtract(getFunction(x1), mathContext);
     }
 
-    public double getProbabilityBetweenAndEqual(int x1, int x2) {
+    public BigDecimal getProbabilityBetweenAndEqual(int x1, int x2) {
         if (x2 < x1) {
             int x3 = x2;
             x2 = x1;
             x1 = x3;
         }
         x1--;
-        return getFunction(x2) - getFunction(x1);
+        return getFunction(x2).subtract(getFunction(x1), mathContext);
     }
 
-    public double getProbabilityBelow(long experiment) {
+    public BigDecimal getProbabilityBelow(long experiment) {
         return getFunction(experiment - 1);
     }
 
-    public double getProbabilityBelowAndEqual(long experiment) {
+    public BigDecimal getProbabilityBelowAndEqual(long experiment) {
         return getFunction(experiment);
     }
 
-    public double getProbabilityAbove(long experiment) {
-        return 1 - getFunction(experiment);
+    public BigDecimal getProbabilityAbove(long experiment) {
+        return BigDecimal.ONE.subtract(getFunction(experiment), mathContext);
     }
 
-    public double getProbabilityAboveAndEqual(long experiment) {
-        return 1 - getFunction(experiment - 1);
+    public BigDecimal getProbabilityAboveAndEqual(long experiment) {
+        return BigDecimal.ONE.subtract(getFunction(experiment - 1), mathContext);
     }
 
     public double getMu() {

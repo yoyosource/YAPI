@@ -4,14 +4,17 @@
 
 package yapi.math;
 
-import ch.obermuhlner.math.big.stream.BigDecimalStream;
 import yapi.exceptions.MathException;
 import yapi.exceptions.math.RangeException;
+import yapi.manager.worker.Task;
+import yapi.manager.worker.TaskParallelization;
+import yapi.manager.worker.WorkerPool;
+import yapi.quick.Timer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NumberUtils {
 
@@ -513,8 +516,9 @@ public class NumberUtils {
     }
 
     /**
-     * @see BigInteger#compareTo(BigInteger)
-     * If input is bigger 100.000 it can take some time to compute.
+     * Inputs bigger than   100.000 can need more than    20 seconds
+     * Inputs bigger than   400.000 can need more than  1:00 minute
+     * Inputs bigger than 1.000.000 can need more than 10:00 minutes
      *
      * @since Version 1.2
      *
@@ -561,6 +565,107 @@ public class NumberUtils {
                 num = num.multiply(b);
                 b = b.subtract(BigInteger.ONE);
             }
+        }
+        return num;
+    }
+
+    public static void main(String[] args) {
+        //fastFactorial(BigInteger.valueOf(4000000));
+        Timer timer = new Timer();
+        timer.start();
+        fastFactorial(BigInteger.valueOf(1000000));
+        //  6318995µs ->  100000
+        // 12416465µs ->  200000
+        // 11633725µs ->  300000
+        // 14663832µs ->  400000
+        // 18217963µs ->  500000
+        // 20134973µs ->  600000
+        // 23867773µs ->  700000
+        // 29343748µs ->  800000
+        // 32119835µs ->  900000
+
+        // 37174959µs -> 1000000 (100000 Blocks)
+        // 37700641µs -> 1000000 ( 50000 Blocks)
+        // 38959835µs -> 1000000 ( 25000 Blocks)
+        // 61877676µs -> 1000000 ( 10000 Blocks)
+        // 97177108µs -> 1000000 (  5000 Blocks)
+
+        // 43806860µs -> 1100000
+        // 47806848µs -> 1200000
+        timer.stop();
+        System.out.println(timer.getTime() / 1000 + "µs");
+        if (false) {
+            fastFactorial(BigInteger.valueOf(4000000));
+        }
+    }
+
+    public static BigInteger fastFactorial(BigInteger bigInteger) {
+        BigInteger threads = bigInteger.divide(BigInteger.valueOf(100000));
+        return fastFactorial(bigInteger, threads);
+    }
+
+    private static BigInteger fastFactorial(BigInteger bigInteger, BigInteger threads) {
+        if (threads.compareTo(BigInteger.ZERO) <= 0) {
+            threads = BigInteger.ONE;
+        }
+        if (threads.compareTo(BigInteger.valueOf(16)) > 0) {
+            threads = BigInteger.valueOf(16);
+        }
+        return fastFactorial(bigInteger, threads.intValue());
+    }
+
+    public static BigInteger fastFactorial(BigInteger bigInteger, int threads) {
+        if (threads <= 0) {
+            threads = 1;
+        }
+        if (threads > 16) {
+            threads = 16;
+        }
+
+        TaskParallelization<BigInteger> bigIntegerTaskParallelization = new TaskParallelization<>();
+        WorkerPool workerPool = new WorkerPool(threads);
+
+        BigInteger value = bigInteger.add(BigInteger.ZERO);
+        BigInteger t = BigInteger.valueOf(100000);
+
+        while (value.compareTo(t) > 0) {
+            BigInteger v = value.add(BigInteger.ZERO);
+            workerPool.work(new Task(){
+                @Override
+                public void run() {
+                    bigIntegerTaskParallelization.addResult(factorial(v, v.subtract(t)));
+                }
+            });
+            value = value.subtract(t);
+        }
+        if (value.compareTo(BigInteger.ONE) >= 0) {
+            bigIntegerTaskParallelization.addResult(factorial(value));
+        }
+        workerPool.awaitClose();
+        List<BigInteger> bigIntegers = bigIntegerTaskParallelization.merge();
+
+        BigInteger result = BigInteger.ONE;
+        for (BigInteger b : bigIntegers) {
+            result = result.multiply(b);
+        }
+        return result;
+    }
+
+    private static BigInteger factorial(BigInteger bigInteger, BigInteger limit) {
+        if (bigInteger.compareTo(BigInteger.ZERO) < 0) {
+            throw new MathException("factorial of negatives is not defined");
+        }
+        if (bigInteger.compareTo(BigInteger.ZERO) == 0) {
+            return BigInteger.ONE;
+        }
+        if (limit.compareTo(BigInteger.ZERO) == 0) {
+            return BigInteger.ZERO;
+        }
+        BigInteger num = BigInteger.ONE;
+        BigInteger b = bigInteger.add(BigInteger.ZERO);
+        while (b.compareTo(limit) > 0) {
+            num = num.multiply(b);
+            b = b.subtract(BigInteger.ONE);
         }
         return num;
     }
@@ -803,22 +908,6 @@ public class NumberUtils {
         return longs;
     }
 
-    public static void main(String[] args) {
-        System.out.println(formatNumber(new BigDecimal("82723745636.134765")));
-    }
-
-    public static String formatNumber(BigDecimal bigDecimal) {
-        String s = bigDecimal.toPlainString();
-        if (!s.contains(".")) {
-            return addCommas(s);
-        }
-        return addCommas(s.substring(0, s.indexOf('.') - 1)) + s.substring(s.indexOf('.'));
-    }
-
-    public static String formatNumber(BigInteger bigInteger) {
-        return addCommas(bigInteger.toString());
-    }
-
     public static String formatNumber(int i) {
         return addCommas(i + "");
     }
@@ -827,12 +916,32 @@ public class NumberUtils {
         return addCommas(l + "");
     }
 
+    public static String formatNumber(BigInteger bigInteger) {
+        return addCommas(bigInteger.toString());
+    }
+
+    public static String formatNumber(float f) {
+        String s = f + "";
+        if (!s.contains(".")) {
+            return addCommas(s);
+        }
+        return addCommas(s.substring(0, s.indexOf('.'))) + s.substring(s.indexOf('.'));
+    }
+
     public static String formatNumber(double d) {
         String s = d + "";
         if (!s.contains(".")) {
             return addCommas(s);
         }
-        return addCommas(s.substring(0, s.indexOf('.') - 1)) + s.substring(s.indexOf('.'));
+        return addCommas(s.substring(0, s.indexOf('.'))) + s.substring(s.indexOf('.'));
+    }
+
+    public static String formatNumber(BigDecimal bigDecimal) {
+        String s = bigDecimal.toPlainString();
+        if (!s.contains(".")) {
+            return addCommas(s);
+        }
+        return addCommas(s.substring(0, s.indexOf('.'))) + s.substring(s.indexOf('.'));
     }
 
     private static String addCommas(String s) {
