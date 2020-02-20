@@ -18,9 +18,7 @@ import java.io.*;
 
 public class NYAPIONParser {
 
-    // Todo: Delete unix path
     public static void main(String[] args) {
-        //YAPIONType yapionType = parse(new File(FileUtils.getUserHome() + "/Documents/YAPIONTest/sample.yapion"));
         parse("{project(yapi)contributors[{name(yoyosource)owner(true)},{name(chaoscaot444)owner(false)}]reference->0000000000000000}");
     }
 
