@@ -59,7 +59,11 @@ public class YAPIONParser {
     }
 
     public static void main(String[] args) {
-        YAPIONArray yapionArray = parseArray(Arrays.stream(FileUtils.fileContentFromResourceAsString("sample.yapion")).collect(Collectors.joining("\n")));
+        YAPIONObject yapionObject = parseObject("{hello[true,false,null,Hello]}");
+        YAPIONType yapionType = yapionObject.getArray("hello").get(3);
+        if (yapionType instanceof YAPIONValue) {
+            System.out.println(((YAPIONValue) yapionType).getValueType());
+        }
     }
 
     /**
