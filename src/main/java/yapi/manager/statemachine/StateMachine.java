@@ -4,7 +4,7 @@
 
 package yapi.manager.statemachine;
 
-import yapi.exceptions.StateMachineException;
+import yapi.internal.exceptions.StateMachineException;
 
 import java.util.*;
 

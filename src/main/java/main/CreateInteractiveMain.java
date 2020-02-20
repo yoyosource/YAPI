@@ -175,18 +175,9 @@ public class CreateInteractiveMain {
         }
     }
 
-    private static boolean changed = false;
-
     private static void fillFileObject(YAPIONObject yapionObject, File file) {
         String[] strings = FileUtils.fileContentAsString(file);
-        strings = addLicense(strings);
-        if (changed) {
-            try {
-                FileUtils.dump(file, strings);
-            } catch (IOException e) {
 
-            }
-        }
         lineCount = lineCount.add(new BigInteger(strings.length + ""));
         fileCount++;
         YAPIONObject init    = new YAPIONObject();
@@ -281,50 +272,6 @@ public class CreateInteractiveMain {
 
         yapionObject.add(new YAPIONVariable("init", init));
         yapionObject.add(new YAPIONVariable("methods", methods));
-    }
-
-    private static final String longLicense = "/**\n" +
-            " * Copyright 2019,2020 yoyosource\n" +
-            " * Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
-            " * you may not use this file except in compliance with the License.\n" +
-            " * You may obtain a copy of the License at\n" +
-            " * http://www.apache.org/licenses/LICENSE-2.0\n" +
-            " * Unless required by applicable law or agreed to in writing, software\n" +
-            " * distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
-            " * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
-            " * See the License for the specific language governing permissions and\n" +
-            " * limitations under the License.\n" +
-            " */";
-    private static final String shortLicense = "// SPDX-License-Identifier: Apache-2.0\n" +
-            "// YAPI\n" +
-            "// Copyright (C) 2019,2020 yoyosource";
-
-    private static String[] addLicense(String[] strings) {
-        StringBuilder st = new StringBuilder();
-        for (int i = 0; i < 12; i++) {
-            if (i != 0) {
-                st.append('\n');
-            }
-            st.append(strings[0]);
-        }
-
-        String license = shortLicense;
-        if (st.toString().startsWith("/**")) {
-            license = longLicense;
-        }
-
-        st = new StringBuilder();
-        for (int i = 0; i < strings.length; i++) {
-            if (st.length() != 0) {
-                st.append('\n');
-                st.append(strings[i]);
-            } else if (strings[i].trim().startsWith("package")) {
-                st.append(strings[i]);
-            }
-        }
-
-        changed = true;
-        return (license + "\n\n" + st.toString()).split("\n");
     }
 
 }

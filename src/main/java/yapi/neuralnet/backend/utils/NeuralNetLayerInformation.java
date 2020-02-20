@@ -4,7 +4,7 @@
 
 package yapi.neuralnet.backend.utils;
 
-import yapi.exceptions.NeuralNetException;
+import yapi.internal.exceptions.NeuralNetException;
 
 public class NeuralNetLayerInformation {
 

@@ -36,11 +36,25 @@ jar {
     }
 }
 
-task compileInfo {
-    description 'Create the Interactive Main Info file'
+task YAPILicense {
+    description 'Add the License to every file'
     group "YAPI"
 
     mustRunAfter classes
+
+    doLast {
+        def command = "java -classpath ${buildDir}/classes/java/main main.LicenseSystem ${buildDir}"
+        def retval = command.execute().text.trim()
+        print(retval)
+    }
+}
+shadowJar.dependsOn YAPILicense
+
+task YAPIInfo {
+    description 'Create the Interactive Main Info file'
+    group "YAPI"
+
+    mustRunAfter YAPILicense
 
     doLast {
         def command = "java -classpath ${buildDir}/classes/java/main main.CreateInteractiveMain ${buildDir}"
@@ -48,7 +62,7 @@ task compileInfo {
         print(retval)
     }
 }
-shadowJar.dependsOn compileInfo
+shadowJar.dependsOn YAPIInfo
 
 task buildYAPI {
     description 'Build YAPI'

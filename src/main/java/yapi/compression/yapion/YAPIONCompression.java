@@ -134,7 +134,7 @@ public class YAPIONCompression {
         }
         s = s.replace("%", "\\$");
         s = s.replace("\\%", "%");
-        return YAPIONParser.parse(s);
+        return YAPIONParser.parseObject(s);
     }
 
     private static YAPIONObject getDecompressionTable(String s) {
@@ -166,7 +166,7 @@ public class YAPIONCompression {
         }
 
         st.append('}');
-        return YAPIONParser.parse(st.toString());
+        return YAPIONParser.parseObject(st.toString());
     }
 
 }

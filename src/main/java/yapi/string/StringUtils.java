@@ -6,6 +6,7 @@ package yapi.string;
 
 import java.util.*;
 
+@Deprecated(since = "Version 1.2")
 public class StringUtils {
 
     private StringUtils() {
@@ -84,12 +85,12 @@ public class StringUtils {
 
     @Deprecated(since = "Version 1.2, now found in 'StringCrypto'")
     public static byte[] hash(String s) {
-        return StringCrpyting.hash(s);
+        return StringCrypting.hash(s);
     }
 
     @Deprecated(since = "Version 1.2, now found in 'StringCrypto'")
-    public static byte[] hash(String s, String type) {
-        return StringCrpyting.hash(s, type);
+    public static byte[] hash(String s, HashType type) {
+        return StringCrypting.hash(s, type);
     }
 
     @Deprecated(since = "Version 1.2, now found in 'StringSplitting'")

@@ -4,8 +4,8 @@
 
 package yapi.math;
 
-import yapi.exceptions.MathException;
-import yapi.exceptions.math.RangeException;
+import yapi.internal.exceptions.MathException;
+import yapi.internal.exceptions.math.RangeException;
 import yapi.manager.worker.Task;
 import yapi.manager.worker.TaskParallelization;
 import yapi.manager.worker.WorkerPool;
@@ -13,6 +13,8 @@ import yapi.quick.Timer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,29 @@ public class NumberUtils {
             return (((double)(int)r) + 1) / x;
         } else {
             return (((double)(int)r) + 0) / x;
+        }
+    }
+
+    /**
+     * Time Complexity: O(?)
+     *
+     * @since Version 1.2
+     *
+     * @param bigDecimal
+     * @param digits
+     * @return
+     */
+    public static BigDecimal round(BigDecimal bigDecimal, int digits) {
+        BigInteger x = BigInteger.TEN.pow(digits);
+        MathContext m = new MathContext(bigDecimal.precision(), RoundingMode.HALF_UP);
+
+        BigDecimal r = bigDecimal.multiply(new BigDecimal(x));
+        BigDecimal t = r.subtract(new BigDecimal(r.toBigInteger()));
+
+        if (t.compareTo(BigDecimal.valueOf(0.5)) >= 0) {
+            return new BigDecimal(r.toBigInteger()).add(BigDecimal.ONE).divide(new BigDecimal(x), m);
+        } else {
+            return new BigDecimal(r.toBigInteger()).add(BigDecimal.ZERO).divide(new BigDecimal(x), m);
         }
     }
 
@@ -569,36 +594,6 @@ public class NumberUtils {
         return num;
     }
 
-    public static void main(String[] args) {
-        //fastFactorial(BigInteger.valueOf(4000000));
-        Timer timer = new Timer();
-        timer.start();
-        fastFactorial(BigInteger.valueOf(2000000));
-        //  6318995µs ->  100000
-        // 12416465µs ->  200000
-        // 11633725µs ->  300000
-        // 14663832µs ->  400000
-        // 18217963µs ->  500000
-        // 20134973µs ->  600000
-        // 23867773µs ->  700000
-        // 29343748µs ->  800000
-        // 32119835µs ->  900000
-
-        // 37174959µs -> 1000000 (100000 Blocks)
-        // 37700641µs -> 1000000 ( 50000 Blocks)
-        // 38959835µs -> 1000000 ( 25000 Blocks)
-        // 61877676µs -> 1000000 ( 10000 Blocks)
-        // 97177108µs -> 1000000 (  5000 Blocks)
-
-        // 43806860µs -> 1100000
-        // 47806848µs -> 1200000
-        timer.stop();
-        System.out.println(timer.getTime() / 1000 + "µs");
-        if (false) {
-            fastFactorial(BigInteger.valueOf(4000000));
-        }
-    }
-
     private static int calculateThreadCount(BigInteger bigInteger, BigInteger count) {
         BigInteger threads = bigInteger.divide(count);
         if (threads.compareTo(BigInteger.ZERO) <= 0) {
@@ -610,11 +605,46 @@ public class NumberUtils {
         return threads.intValue();
     }
 
+    /**
+     * Inputs bigger than   100.000 can need more than 13 seconds
+     * Inputs bigger than   400.000 can need more than 20 minute
+     * Inputs bigger than 1.000.000 can need more than 30 seconds
+     *
+     * @since Version 1.2
+     *
+     *              input > 1 -> input * (input - 1)!
+     *  input! := { input = 0 -> 1
+     *              input < 0 -> Error
+     *
+     * @param bigInteger
+     * @return
+     */
     public static BigInteger fastFactorial(BigInteger bigInteger) {
         return fastFactorial(bigInteger, BigInteger.valueOf(100000));
     }
 
+    /**
+     * Inputs bigger than   100.000 can need more than 13 seconds
+     * Inputs bigger than   400.000 can need more than 20 minute
+     * Inputs bigger than 1.000.000 can need more than 30 seconds
+     *
+     * @since Version 1.2
+     *
+     *              input > 1 -> input * (input - 1)!
+     *  input! := { input = 0 -> 1
+     *              input < 0 -> Error
+     *
+     * @param bigInteger
+     * @param blocks
+     * @return
+     */
     public static BigInteger fastFactorial(BigInteger bigInteger, BigInteger blocks) {
+        if (bigInteger.compareTo(BigInteger.ZERO) < 0) {
+            throw new ArithmeticException("factorial of negatives is not defined");
+        }
+        if (bigInteger.compareTo(BigInteger.ZERO) == 0 || bigInteger.compareTo(BigInteger.ONE) == 0) {
+            return BigInteger.ONE;
+        }
         int threads = calculateThreadCount(bigInteger, blocks);
         if (threads <= 0) {
             threads = 1;
@@ -709,6 +739,25 @@ public class NumberUtils {
         return factorial(n) / (factorial(r) * factorial(n - r));
     }
 
+    public static void main(String[] args) throws Exception {
+        Timer timer = new Timer();
+        timer.start();
+        //over(BigInteger.valueOf(70000), BigInteger.valueOf(1000));
+        System.out.println(over(6, 3));
+        System.out.println(over(BigInteger.valueOf(6), BigInteger.valueOf(3)));
+        timer.stop();
+        System.out.println(timer.getTime() / 1000 + "µs");
+
+        //  273501µs
+        //
+        //  145639µs
+        //
+        // 70000C1000
+        // 4590651µs
+        // 8374740µs
+        // 5272253µs
+    }
+
     /**
      *
      * @since Version 1.2
@@ -723,7 +772,30 @@ public class NumberUtils {
         if (r.compareTo(BigInteger.ZERO) < 0 || r.compareTo(n) > 0) {
             return BigInteger.valueOf(-1);
         }
-        return factorial(n).divide(factorial(r).multiply(factorial(n.subtract(r))));
+
+        BigInteger a = BigInteger.ONE;
+        BigInteger b = BigInteger.ONE;
+        BigInteger c = n.subtract(r);
+
+        if (n.compareTo(r) > 0) {
+            if (c.compareTo(r) > 0) {
+                BigInteger i = c.subtract(r);
+                // not done yet
+            }
+            a = factorial(n, r);
+        } else if (n.compareTo(r) < 0) {
+            b = factorial(r, n);
+        } else {
+            a = fastFactorial(n);
+            b = fastFactorial(r);
+        }
+
+        return a.divide(b.multiply(fastFactorial(c)));
+    }
+
+    public static BigInteger fastOver(BigInteger n, BigInteger r) {
+        BigInteger blocks = n.divide(BigInteger.TEN);
+        return fastFactorial(n, blocks).divide(fastFactorial(r, blocks).multiply(fastFactorial(n.subtract(r), blocks)));
     }
 
     public static long square(long n) {

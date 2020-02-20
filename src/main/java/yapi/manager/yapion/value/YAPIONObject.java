@@ -71,6 +71,7 @@ public class YAPIONObject extends YAPIONType {
 
     public void add(YAPIONVariable yapionVariable) {
         variables.add(yapionVariable);
+        yapionVariable.getYapionType().setParent(this);
     }
 
     @Override
@@ -108,4 +109,5 @@ public class YAPIONObject extends YAPIONType {
         st.append("}");
         return st.toString();
     }
+
 }

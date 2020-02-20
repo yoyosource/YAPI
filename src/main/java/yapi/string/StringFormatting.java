@@ -4,7 +4,7 @@
 
 package yapi.string;
 
-import yapi.exceptions.string.NoStringException;
+import yapi.internal.exceptions.string.NoStringException;
 import yapi.math.NumberRandom;
 
 import java.util.ArrayList;
@@ -330,6 +330,7 @@ public class StringFormatting {
     }
 
     public static char[] toChars(byte[] bytes) {
+        // Todo: Encoding?
         char[] chars = new char[bytes.length];
         for (int i = 0; i < chars.length; i++) {
             chars[i] = (char)bytes[i];
@@ -345,6 +346,7 @@ public class StringFormatting {
      * @return
      */
     public static String toString(byte[] bytes) {
+        // Todo: Encoding?
         StringBuilder st = new StringBuilder();
         for (byte b : bytes) {
             st.append((char)b);
@@ -368,19 +370,19 @@ public class StringFormatting {
     }
 
     public static String checksum(String s) {
-        return toHex(StringCrpyting.hash(s, StringCrpyting.MD5));
+        return toHex(StringCrypting.hash(s, HashType.MD5));
     }
 
-    public static String checksum(String s, String hashType) {
-        return toHex(StringCrpyting.hash(s, hashType));
+    public static String checksum(String s, HashType hashType) {
+        return toHex(StringCrypting.hash(s, hashType));
     }
 
     public static String checksum(String s, boolean spaces) {
-        return toHex(StringCrpyting.hash(s, StringCrpyting.MD5), spaces);
+        return toHex(StringCrypting.hash(s, HashType.MD5), spaces);
     }
 
-    public static String checksum(String s, String hashType, boolean spaces) {
-        return toHex(StringCrpyting.hash(s, hashType), spaces);
+    public static String checksum(String s, HashType hashType, boolean spaces) {
+        return toHex(StringCrypting.hash(s, hashType), spaces);
     }
 
     /**
@@ -390,9 +392,8 @@ public class StringFormatting {
      * @return
      */
     public static boolean contains(String s, char c) {
-        char[] chars = s.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == c) {
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == c) {
                 return true;
             }
         }
@@ -406,10 +407,9 @@ public class StringFormatting {
      * @return
      */
     public static int occurrences(String s, char c) {
-        char[] chars = s.toCharArray();
         int count = 0;
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == c) {
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == c) {
                 count++;
             }
         }
@@ -527,6 +527,7 @@ public class StringFormatting {
      * @return
      */
     public static List<Integer> getOccurrences(String s, String t) {
+        // Todo: Refactor Exceptions (Empty String)
         if (s == null) throw new NullPointerException();
         if (t == null) throw new NullPointerException();
         if (s.isEmpty()) throw new NoStringException("No String");

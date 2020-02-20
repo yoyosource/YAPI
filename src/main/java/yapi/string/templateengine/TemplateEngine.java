@@ -13,9 +13,11 @@ import java.util.stream.Collectors;
 public class TemplateEngine {
 
     public static void main(String[] args) {
-        TemplateEngine templateEngine = new TemplateEngine(new TemplateEngineVariable("hello", "String"), new TemplateEngineVariable("world", 9));
-        templateEngine.executionMode();
-        templateEngine.replaceString("${hello.substring(1).substring(hello.length() - 1)}");
+        TemplateEngine templateEngine = new TemplateEngine(new TemplateEngineVariable("name", "yoyosource"), new TemplateEngineVariable("world", 9));
+        templateEngine.variableMode();
+        //templateEngine.replaceString("${hello.substring(1).substring(hello.length() - 1)}");
+        String s = templateEngine.replaceString("Hello ${name}");
+        System.out.println(s);
     }
 
     private List<TemplateEngineVariable> variables;

@@ -4,7 +4,7 @@
 
 package yapi.manager.worker;
 
-import yapi.exceptions.YAPIException;
+import yapi.internal.exceptions.YAPIException;
 
 import java.util.*;
 

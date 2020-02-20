@@ -58,7 +58,7 @@ public class InteractiveMain {
 
         }
         */
-        YAPIONObject yapionObject = YAPIONParser.parse(StringSplitting.merge(FileUtils.fileContentFromResourceAsString("main/yapi.info"), "\n"));
+        YAPIONObject yapionObject = YAPIONParser.parseObject(StringSplitting.merge(FileUtils.fileContentFromResourceAsString("main/yapi.info"), "\n"));
         System.out.println("YAPI");
         version(yapionObject, 0, new ArrayList<>());
     }

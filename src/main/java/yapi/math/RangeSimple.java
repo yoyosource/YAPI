@@ -4,8 +4,8 @@
 
 package yapi.math;
 
-import yapi.exceptions.string.NoStringException;
-import yapi.exceptions.math.RangeException;
+import yapi.internal.exceptions.string.NoStringException;
+import yapi.internal.exceptions.math.RangeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

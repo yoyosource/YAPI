@@ -4,15 +4,13 @@
 
 package yapi.string;
 
-import yapi.exceptions.string.YAPIStringException;
+import yapi.internal.exceptions.string.YAPIStringException;
 import yapi.manager.yapion.YAPIONVariable;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 import yapi.quick.Timer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class YAPIString {
@@ -1300,19 +1298,19 @@ public class YAPIString {
     }
 
     public String hash() {
-        return StringCrpyting.hash(toString(), false);
+        return StringCrypting.hash(toString(), false);
     }
 
-    public String hash(String hashType) {
-        return StringCrpyting.hash(toString(), hashType, false);
+    public String hash(HashType hashType) {
+        return StringCrypting.hash(toString(), hashType, false);
     }
 
     public String hash(boolean spaces) {
-        return StringCrpyting.hash(toString(), spaces);
+        return StringCrypting.hash(toString(), spaces);
     }
 
-    public String hash(String hashType, boolean spaces) {
-        return StringCrpyting.hash(toString(), hashType, spaces);
+    public String hash(HashType hashType, boolean spaces) {
+        return StringCrypting.hash(toString(), hashType, spaces);
     }
 
     public YAPIString copy() {

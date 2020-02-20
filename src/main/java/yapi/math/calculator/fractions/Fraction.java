@@ -400,6 +400,10 @@ public class Fraction {
         return new Fraction(BigDecimal.ONE.divide(getBigDecimal(), mathContext));
     }
 
+    public double getDoubleValue() {
+        return getBigDecimal().doubleValue();
+    }
+
     public Fraction copy() {
         return new Fraction(numerator, denominator);
     }

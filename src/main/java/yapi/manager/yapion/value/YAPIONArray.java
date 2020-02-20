@@ -23,6 +23,7 @@ public class YAPIONArray extends YAPIONType {
 
     public void add(YAPIONType yapionType) {
         array.add(yapionType);
+        yapionType.setParent(this);
     }
 
     @Override
@@ -50,6 +51,10 @@ public class YAPIONArray extends YAPIONType {
         return st.toString();
     }
 
+    public String toHierarchyString() {
+        return toHierarchyString(1);
+    }
+
     public String toHierarchyString(int index) {
         StringBuilder st = new StringBuilder();
         st.append("[\n");
@@ -68,7 +73,11 @@ public class YAPIONArray extends YAPIONType {
             }
             b = true;
         }
-        st.append("\n").append(" ".repeat(2 * (index - 1))).append("]");
+        st.append("\n");
+        if (index > 1) {
+            st.append(" ".repeat(2 * (index - 1)));
+        }
+        st.append("]");
         return st.toString();
     }
 

@@ -4,7 +4,7 @@
 
 package yapi.neuralnet.frontend;
 
-import yapi.exceptions.NeuralNetException;
+import yapi.internal.exceptions.NeuralNetException;
 import yapi.neuralnet.backend.InputLayer;
 import yapi.neuralnet.backend.NeuronLayer;
 import yapi.neuralnet.backend.utils.NeuralNetLayerInformation;

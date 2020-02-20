@@ -4,7 +4,8 @@
 
 package yapi.manager.json;
 
-import yapi.exceptions.objectnotation.JSONException;
+import yapi.file.FileUtils;
+import yapi.internal.exceptions.objectnotation.JSONException;
 import yapi.manager.json.value.JSONArray;
 import yapi.manager.json.value.JSONObject;
 import yapi.manager.json.value.JSONValue;
@@ -14,9 +15,20 @@ import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JSONParser {
+
+    public static void main(String[] args) {
+        String s = Arrays.stream(FileUtils.fileContentFromResourceAsString("sample.json")).collect(Collectors.joining("\n"));
+        JSONArray jsonObject = parseArray(s);
+        //System.out.println(jsonObject);
+        YAPIONArray yapionObject = toYAPION(jsonObject);
+        //System.out.println(yapionObject);
+        System.out.println(yapionObject.toHierarchyString());
+    }
 
     private JSONParser() {
         throw new IllegalStateException();
@@ -38,7 +50,7 @@ public class JSONParser {
         return yapionObject;
     }
 
-    private static YAPIONArray toYAPION(JSONArray jsonArray) {
+    public synchronized static YAPIONArray toYAPION(JSONArray jsonArray) {
         YAPIONArray yapionArray = new YAPIONArray();
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONType jsonType = jsonArray.get(i);
@@ -57,12 +69,17 @@ public class JSONParser {
         return new YAPIONValue(jsonValue.toString());
     }
 
-    public static synchronized JSONObject parse(String json) {
+    public static synchronized JSONObject parseObject(String json) {
         char[] chars = json.toCharArray();
-        return parse(chars);
+        return parseObject(chars);
     }
 
-    private static JSONObject parse(char[] chars) {
+    public static synchronized JSONArray parseArray(String json) {
+        char[] chars = json.toCharArray();
+        return parseArray(chars);
+    }
+
+    private static JSONObject parseObject(char[] chars) {
         if (!(chars[0] == '{' && chars[chars.length - 1] == '}')) {
             throw new JSONException("No JSON Object");
         }
@@ -95,7 +112,7 @@ public class JSONParser {
                 if (chars[i] == '{') {
                     char[] object = getObject(chars, i);
                     i += object.length;
-                    JSONObject subObject = parse(object);
+                    JSONObject subObject = parseObject(object);
                     jsonObject.add(new JSONVariable(name, subObject));
                     continue;
                 }
@@ -124,6 +141,9 @@ public class JSONParser {
     }
 
     private static JSONArray parseArray(char[] chars) {
+        if (!(chars[0] == '[' && chars[chars.length - 1] == ']')) {
+            throw new JSONException("No JSON Array");
+        }
         boolean escaped = false;
         boolean inString = false;
 
@@ -176,7 +196,7 @@ public class JSONParser {
         for (String s : strings) {
             s = s.trim();
             if (s.startsWith("{") && s.endsWith("}")) {
-                jsonArray.add(parse(s.toCharArray()));
+                jsonArray.add(parseObject(s.toCharArray()));
             } else if (s.startsWith("[") && s.endsWith("]")) {
                 jsonArray.add(parseArray(s.toCharArray()));
             } else {

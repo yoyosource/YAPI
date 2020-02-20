@@ -4,7 +4,7 @@
 
 package yapi.manager.config;
 
-import yapi.exceptions.config.ConfigFileExistsException;
+import yapi.internal.exceptions.config.ConfigFileExistsException;
 import yapi.manager.config.type.ConfigFileType;
 import yapi.manager.config.type.ConfigLoadType;
 import yapi.manager.config.type.ConfigSaveType;

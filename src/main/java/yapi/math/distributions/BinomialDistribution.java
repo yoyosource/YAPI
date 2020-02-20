@@ -4,7 +4,7 @@
 
 package yapi.math.distributions;
 
-import yapi.exceptions.MathException;
+import yapi.internal.exceptions.MathException;
 import yapi.math.NumberUtils;
 
 import java.math.BigDecimal;
@@ -66,7 +66,7 @@ public class BinomialDistribution {
     }
 
     private BigInteger over(long n, long r) {
-        return NumberUtils.over(BigInteger.valueOf(n), BigInteger.valueOf(r));
+        return NumberUtils.fastOver(BigInteger.valueOf(n), BigInteger.valueOf(r));
     }
 
     public BigDecimal getFunction(long experiment) {
@@ -90,23 +90,37 @@ public class BinomialDistribution {
     }
 
     public BigDecimal getProbabilityBetween(int x1, int x2) {
+        // Todo: Make this method faster
         if (x2 < x1) {
             int x3 = x2;
             x2 = x1;
             x1 = x3;
         }
         x2--;
-        return getFunction(x2).subtract(getFunction(x1), mathContext);
+
+        BigDecimal d1 = getFunction(x1);
+        BigDecimal d2 = d1.add(BigDecimal.ZERO);
+        for (int i = x1 + 1; i <= x2; i++) {
+            d2 = d2.add(getBinomial(i));
+        }
+        return d2.subtract(d1, mathContext);
     }
 
     public BigDecimal getProbabilityBetweenAndEqual(int x1, int x2) {
+        // Todo: Make this method faster
         if (x2 < x1) {
             int x3 = x2;
             x2 = x1;
             x1 = x3;
         }
         x1--;
-        return getFunction(x2).subtract(getFunction(x1), mathContext);
+
+        BigDecimal d1 = getFunction(x1);
+        BigDecimal d2 = d1.add(BigDecimal.ZERO);
+        for (int i = x1 + 1; i <= x2; i++) {
+            d2 = d2.add(getBinomial(i));
+        }
+        return d2.subtract(d1, mathContext);
     }
 
     public BigDecimal getProbabilityBelow(long experiment) {

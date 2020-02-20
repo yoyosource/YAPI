@@ -4,11 +4,11 @@
 
 package yapi.compression.string;
 
-import yapi.exceptions.CompressionUsageException;
+import yapi.internal.exceptions.CompressionUsageException;
 import yapi.file.FileUtils;
 import yapi.math.NumberRandom;
 import yapi.math.NumberUtils;
-import yapi.string.StringCrpyting;
+import yapi.string.StringCrypting;
 import yapi.string.StringFormatting;
 import yapi.string.StringSplitting;
 
@@ -34,7 +34,7 @@ public class StringCompression {
         String s = StringSplitting.merge(FileUtils.fileContentFromResourceAsString("main/yapi.info"), "\n");
         String g = new NumberRandom().getString(1024*140);
         String c = "Danke ".repeat(1024*80);
-        String h = StringFormatting.toHex(StringCrpyting.hash("Hallo InProgressing")).repeat(64) + StringFormatting.toHex(StringCrpyting.hash("Hallo inProgressing")).repeat(64);
+        String h = StringFormatting.toHex(StringCrypting.hash("Hallo InProgressing")).repeat(64) + StringFormatting.toHex(StringCrypting.hash("Hallo inProgressing")).repeat(64);
         String l = "DankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDankeDanke";
         String m = "Eigentum (Schutz leben, Freiheiten und Vermögen)\n" +
                 "größter Grund ^ zu zusammeschließung\n" +

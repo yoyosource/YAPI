@@ -4,7 +4,7 @@
 
 package yapi.math.calculator;
 
-import yapi.exceptions.math.CalculatorException;
+import yapi.internal.exceptions.math.CalculatorException;
 import yapi.math.calculator.fractions.CalculatorFractions;
 import yapi.math.calculator.fractions.Fraction;
 import yapi.math.calculator.normal.CalculatorNormal;

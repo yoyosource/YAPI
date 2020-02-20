@@ -4,7 +4,7 @@
 
 package yapi.file;
 
-import yapi.exceptions.string.NoStringException;
+import yapi.internal.exceptions.string.NoStringException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

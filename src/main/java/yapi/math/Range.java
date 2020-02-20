@@ -4,7 +4,7 @@
 
 package yapi.math;
 
-import yapi.exceptions.math.RangeException;
+import yapi.internal.exceptions.math.RangeException;
 
 import java.util.ArrayList;
 import java.util.List;

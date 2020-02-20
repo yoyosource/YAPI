@@ -4,7 +4,7 @@
 
 package yapi.manager.yapion.value;
 
-import yapi.exceptions.NotNullPointerException;
+import yapi.internal.exceptions.NotNullPointerException;
 import yapi.manager.yapion.YAPIONType;
 
 import java.math.BigDecimal;
@@ -253,10 +253,11 @@ public class YAPIONValue extends YAPIONType {
 
     @Override
     public String toString() {
-        return '(' + value.replaceAll("([({\\[)}\\]\\\\])", "\\\\$1") + ')';
+        return '(' + value.replaceAll("[()]", "\\\\$1") + ')';
     }
 
     public String toHierarchyString(int index) {
-        return " ".repeat(2 * index) + '(' + value.replaceAll("([({\\[)}\\]\\\\])", "\\\\$1") + ')';
+        return " ".repeat(2 * index) + toString();
     }
+
 }

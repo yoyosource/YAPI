@@ -4,7 +4,7 @@
 
 package yapi.math.mathscript;
 
-import yapi.exceptions.math.MathScriptException;
+import yapi.internal.exceptions.math.MathScriptException;
 import yapi.file.FileUtils;
 import yapi.math.mathscript.state.Variable;
 import yapi.math.mathscript.state.VariableState;

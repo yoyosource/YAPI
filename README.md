@@ -1,8 +1,9 @@
 [![YAPI Release V1.0](https://img.shields.io/badge/YAPI%20Release-1.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![YAPI Pre-Release V1.1-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-1.1--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/1.1)
 [![YAPI Version V1.2](https://img.shields.io/badge/YAPI%20Version-1.2-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
-[![Methods 1024](https://img.shields.io/badge/Methods-1024-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 20177](https://img.shields.io/badge/Code%20Lines-20177-inactive)](https://github.com/yoyosource/YAPI)
+[![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
+[![Methods 1074](https://img.shields.io/badge/Methods-1074-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 21207](https://img.shields.io/badge/Code%20Lines-21207-inactive)](https://github.com/yoyosource/YAPI)
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)
 

@@ -4,7 +4,7 @@
 
 package yapi.math;
 
-import yapi.exceptions.math.SetException;
+import yapi.internal.exceptions.math.SetException;
 
 public class Set {
 

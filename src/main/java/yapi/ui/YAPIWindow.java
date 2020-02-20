@@ -4,8 +4,8 @@
 
 package yapi.ui;
 
-import yapi.exceptions.WindowCreatorException;
-import yapi.exceptions.YAPIException;
+import yapi.internal.exceptions.WindowCreatorException;
+import yapi.internal.exceptions.YAPIException;
 
 import javax.swing.*;
 import java.awt.*;

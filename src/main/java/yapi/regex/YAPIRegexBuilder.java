@@ -4,11 +4,10 @@
 
 package yapi.regex;
 
-import yapi.exceptions.YAPIException;
+import yapi.internal.exceptions.YAPIException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class YAPIRegexBuilder {

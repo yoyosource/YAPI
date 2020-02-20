@@ -34,12 +34,17 @@ public class YAPIONVariable {
     }
 
     public String toHierarchyString(int index) {
+        StringBuilder st = new StringBuilder().append(name);
+        if (name.startsWith(" ")) {
+            st.insert(0, '\\');
+        }
+        String n = st.toString().replaceAll("[()\\[\\]{}\\\\]", "\\\\$1");
         if (yapionType instanceof YAPIONArray) {
-            return " ".repeat(2 * index) + name.replaceAll(pattern, replacement) + ((YAPIONArray) yapionType).toHierarchyString(index + 1);
+            return " ".repeat(2 * index) + n + ((YAPIONArray) yapionType).toHierarchyString(index + 1);
         } else if (yapionType instanceof YAPIONObject) {
-            return " ".repeat(2 * index) + name.replaceAll(pattern, replacement) + ((YAPIONObject) yapionType).toHierarchyString(index + 1);
+            return " ".repeat(2 * index) + n + ((YAPIONObject) yapionType).toHierarchyString(index + 1);
         } else {
-            return " ".repeat(2 * index) + name.replaceAll(pattern, replacement) + yapionType.toString();
+            return " ".repeat(2 * index) + n + yapionType.toString();
         }
     }
 

@@ -4,8 +4,9 @@
 
 package yapi.manager.yapion;
 
-import yapi.exceptions.YAPIException;
-import yapi.exceptions.objectnotation.YAPIONException;
+import yapi.file.FileUtils;
+import yapi.internal.exceptions.YAPIException;
+import yapi.internal.exceptions.objectnotation.YAPIONException;
 import yapi.manager.json.JSONVariable;
 import yapi.manager.json.value.JSONArray;
 import yapi.manager.json.value.JSONObject;
@@ -14,7 +15,9 @@ import yapi.manager.yapion.value.YAPIONArray;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class YAPIONParser {
 
@@ -56,11 +59,7 @@ public class YAPIONParser {
     }
 
     public static void main(String[] args) {
-        System.out.println("{Test{Hallo({}\\))}}");
-        System.out.println(parse("{Test{Hallo({}\\))}}").toHierarchyString());
-        System.out.println(parse("{Test{Hallo({}\\))}}").toString());
-        YAPIONObject yapionObject = parse("{Test{Hallo({}\\))}}");
-        System.out.println(yapionObject.getObject("Test").getValue("Hallo").getValue());
+        YAPIONArray yapionArray = parseArray(Arrays.stream(FileUtils.fileContentFromResourceAsString("sample.yapion")).collect(Collectors.joining("\n")));
     }
 
     /**
@@ -84,19 +83,31 @@ public class YAPIONParser {
      * @param yapion
      * @return
      */
-    public static synchronized YAPIONObject parse(String yapion) {
+    public static synchronized YAPIONObject parseObject(String yapion) {
         char[] chars = yapion.toCharArray();
         if (chars[0] != '{' || chars[chars.length - 1] != '}') {
             throw new YAPIONException("No object input\n" + createErrorMessage(chars, 0, chars.length));
         }
         try {
-            return parse(yapion.substring(1, yapion.length() - 1).toCharArray());
+            return parseObject(yapion.substring(1, yapion.length() - 1).toCharArray());
         } catch (YAPIONException e) {
             throw new YAPIException(e.getMessage());
         }
     }
 
-    private static YAPIONObject parse(char[] chars) {
+    public static synchronized YAPIONArray parseArray(String yapion) {
+        char[] chars = yapion.toCharArray();
+        if (chars[0] != '[' || chars[chars.length - 1] != ']') {
+            throw new YAPIONException("No object input\n" + createErrorMessage(chars, 0, chars.length));
+        }
+        try {
+            return parseArray(yapion.substring(1, yapion.length() - 1).toCharArray(), 0, yapion.length() - 1);
+        } catch (YAPIONException e) {
+            throw new YAPIException(e.getMessage());
+        }
+    }
+
+    private static YAPIONObject parseObject(char[] chars) {
         YAPIONObject yapionObject = new YAPIONObject();
 
         boolean escaped = false;
@@ -122,7 +133,7 @@ public class YAPIONParser {
             } else if (!escaped && chars[i] == '{') {
                 String s = getValue(chars, i);
                 i += s.length() + 1;
-                yapionObject.add(new YAPIONVariable(key.toString(), parse(s.toCharArray())));
+                yapionObject.add(new YAPIONVariable(key.toString(), parseObject(s.toCharArray())));
                 key = new StringBuilder();
             } else if ((chars[i] == ' ' || chars[i] == '\t' || chars[i] == '\n' || chars[i] == '\b') && key.length() > 0) {
                 key.append(chars[i]);
@@ -139,9 +150,6 @@ public class YAPIONParser {
     private static String createErrorMessage(char[] chars, int index, int indexEnd) {
         index--;
         indexEnd--;
-        while (chars[indexEnd] == ' ' || chars[indexEnd] == '\t' || chars[indexEnd] == '\n' || chars[indexEnd] == '\b') {
-            indexEnd--;
-        }
         StringBuilder message = new StringBuilder();
         StringBuilder error   = new StringBuilder();
         for (int i = 0; i < chars.length; i++) {
@@ -253,6 +261,11 @@ public class YAPIONParser {
     }
 
     private static YAPIONArray parseArray(char[] chars, int start, int end) {
+        StringBuilder st2 = new StringBuilder();
+        for (int i = start; i < end - 1; i++) {
+            st2.append(chars[i]);
+        }
+        System.out.println(st2.toString().replaceAll("\n", "\\\\n"));
         YAPIONArray yapionArray = new YAPIONArray();
         boolean escaped = false;
         StringBuilder st = new StringBuilder();
@@ -264,7 +277,7 @@ public class YAPIONParser {
             if (!escaped && chars[i] == ',') {
                 String s = st.toString();
                 st = new StringBuilder();
-                yapionArray.add(parseArray(s));
+                yapionArray.add(parseArrayValue(s));
             } else if ((chars[i] == ' ' || chars[i] == '\t' || chars[i] == '\n' || chars[i] == '\b') && st.length() > 0) {
                 st.append(chars[i]);
             } else if (!(chars[i] == ' ' || chars[i] == '\t' || chars[i] == '\n' || chars[i] == '\b')) {
@@ -273,12 +286,12 @@ public class YAPIONParser {
             escaped = false;
         }
         if (st.length() != 0) {
-            yapionArray.add(parseArray(st.toString()));
+            yapionArray.add(parseArrayValue(st.toString()));
         }
         return yapionArray;
     }
 
-    private static YAPIONType parseArray(String s) {
+    private static YAPIONType parseArrayValue(String s) {
         YAPIONType yapionType;
         if (s.length() == 0) {
             return null;
@@ -287,7 +300,7 @@ public class YAPIONParser {
         if (s.startsWith("[") && s.endsWith("]")) {
             yapionType = parseArray(chars, 0, chars.length);
         } else if (s.startsWith("{") && s.endsWith("}")) {
-            yapionType = parse(chars);
+            yapionType = parseObject(chars);
         } else {
             yapionType = new YAPIONValue(s);
         }

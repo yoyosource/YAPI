@@ -4,9 +4,10 @@
 
 package yapi.encryption;
 
-import yapi.exceptions.EncryptionException;
+import yapi.internal.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
-import yapi.string.StringCrpyting;
+import yapi.string.HashType;
+import yapi.string.StringCrypting;
 import yapi.string.StringFormatting;
 
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public class EncryptionSymmetric {
         }
 
         int hashsum = 0;
-        byte[] hash = StringCrpyting.hash(password, "SHA-512");
+        byte[] hash = StringCrypting.hash(password, HashType.SHA512);
         for (byte b : hash) {
             hashsum += b;
         }
@@ -164,7 +165,7 @@ public class EncryptionSymmetric {
         }
 
         int hashsum = 0;
-        byte[] hash = StringCrpyting.hash(password, "SHA-256");
+        byte[] hash = StringCrypting.hash(password, HashType.SHA256);
         for (byte b : hash) {
             hashsum += b;
         }
@@ -252,7 +253,7 @@ public class EncryptionSymmetric {
         byte[] bytes = new byte[text.length + pad().length() + 33];
 
         char[] pad = pad().toCharArray();
-        byte[] checksum = StringCrpyting.hash(toString(text), "SHA-256");
+        byte[] checksum = StringCrypting.hash(toString(text), HashType.SHA256);
         char[] chars = new char[bytes.length];
         for (int i = 0; i < pad.length; i++) {
             chars[i + 1] = pad[i];
@@ -352,7 +353,7 @@ public class EncryptionSymmetric {
         }
         intermediate = Arrays.copyOf(intermediate, intermediate.length - shift);
 
-        byte[] checksum2 = StringCrpyting.hash(toString(intermediate), "SHA-256");
+        byte[] checksum2 = StringCrypting.hash(toString(intermediate), HashType.SHA256);
         if (!Arrays.equals(checksum1, checksum2)) {
             return new byte[0];
         }
