@@ -70,6 +70,11 @@ public class YAPIONObject extends YAPIONType {
     }
 
     public void add(YAPIONVariable yapionVariable) {
+        for (int i = variables.size() - 1; i >= 0; i--) {
+            if (variables.get(i).getName().equals(yapionVariable.getName())) {
+                variables.remove(i);
+            }
+        }
         variables.add(yapionVariable);
         yapionVariable.getYapionType().setParent(this);
     }
