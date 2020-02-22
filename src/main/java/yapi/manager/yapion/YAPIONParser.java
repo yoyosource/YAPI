@@ -4,7 +4,6 @@
 
 package yapi.manager.yapion;
 
-import yapi.file.FileUtils;
 import yapi.internal.exceptions.YAPIException;
 import yapi.internal.exceptions.objectnotation.YAPIONException;
 import yapi.manager.json.JSONVariable;
@@ -15,9 +14,7 @@ import yapi.manager.yapion.value.YAPIONArray;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class YAPIONParser {
 
@@ -265,10 +262,6 @@ public class YAPIONParser {
     }
 
     private static YAPIONArray parseArray(char[] chars, int start, int end) {
-        StringBuilder st2 = new StringBuilder();
-        for (int i = start; i < end - 1; i++) {
-            st2.append(chars[i]);
-        }
         YAPIONArray yapionArray = new YAPIONArray();
         boolean escaped = false;
         StringBuilder st = new StringBuilder();

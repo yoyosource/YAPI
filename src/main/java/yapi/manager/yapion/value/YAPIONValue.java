@@ -253,7 +253,7 @@ public class YAPIONValue extends YAPIONType {
 
     @Override
     public String toString() {
-        return '(' + value.replaceAll("[()]", "\\\\$1") + ')';
+        return '(' + value.replaceAll("([()])", "\\\\$1") + ')';
     }
 
     public String toHierarchyString(int index) {
