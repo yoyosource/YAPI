@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '5.0.0'
+
+    id 'maven-publish'
 }
 
 group 'YAPI'
@@ -20,7 +22,7 @@ targetCompatibility = 1.12
 mainClassName = 'main.InteractiveMain'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -35,6 +37,27 @@ jar {
         )
     }
 }
+
+
+
+publishing {
+    repositories {
+        maven {
+            url = "${rootDir}/releases"
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = 'yoyosource'
+            artifactId = 'YAPI'
+            version = '1.2'
+
+            from components.java
+        }
+    }
+}
+
+
 
 task YAPILicense {
     description 'Add the License to every file'
