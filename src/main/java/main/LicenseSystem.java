@@ -56,6 +56,9 @@ public class LicenseSystem {
                     }
                     directories.addAll(Arrays.stream(fs).collect(Collectors.toList()));
                 } else {
+                    if (f.getName().endsWith(".MD")) {
+                        continue;
+                    }
                     fileCount++;
                     try {
                         String[] strings = addLicense(FileUtils.fileContentAsString(f));
