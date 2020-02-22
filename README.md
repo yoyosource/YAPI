@@ -24,6 +24,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+## Using in other Projects
+YAPI is not published on jcenter or mavenCentral. It is published directly to this GitHub repository. You can declare it as a dependency in your gradle.build with:
+```Groovy
+repositories {
+    maven {
+        url = uri("https://raw.githubusercontent.com/yoyosource/YAPI/master/releases")
+    }
+}
+
+dependencies {
+    implementation 'yoyosource:YAPI:1.2'
+}
+```
+Alternative you can download the jar directly from [releases](https://github.com/yoyosource/YAPI/releases). 
+
 # APIs used
 - eobermuhlner/big-math (https://github.com/eobermuhlner/big-math/tree/master)
 
