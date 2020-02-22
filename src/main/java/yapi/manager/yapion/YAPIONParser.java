@@ -269,7 +269,6 @@ public class YAPIONParser {
         for (int i = start; i < end - 1; i++) {
             st2.append(chars[i]);
         }
-        System.out.println(st2.toString().replaceAll("\n", "\\\\n"));
         YAPIONArray yapionArray = new YAPIONArray();
         boolean escaped = false;
         StringBuilder st = new StringBuilder();
