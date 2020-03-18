@@ -268,6 +268,15 @@ public class FileUtils {
         }
     }
 
+    public static void create(File file) throws IOException {
+        if (file.exists()) {
+            return;
+        }
+        String parent = file.getParent();
+        new File(parent).mkdirs();
+        file.createNewFile();
+    }
+
     public static void dump(File file, String[] strings) throws IOException {
         if (!file.exists()) {
             throw new FileNotFoundException();
