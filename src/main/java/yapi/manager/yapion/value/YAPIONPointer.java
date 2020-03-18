@@ -8,9 +8,7 @@ import yapi.internal.exceptions.objectnotation.YAPIONException;
 import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.YAPIONType;
 import yapi.math.NumberRandom;
-import yapi.string.StringFormatting;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public class YAPIONPointer extends YAPIONType {
@@ -18,7 +16,7 @@ public class YAPIONPointer extends YAPIONType {
     private String id = "";
 
     public YAPIONPointer(String pointer) {
-        if (pointer.matches("[0-9a-z]{16}")) {
+        if (pointer.matches("[01236789abcdefghijklABCDEFGHIJKL]{16}")) {
             id = pointer;
         } else {
             throw new YAPIONException();
@@ -27,6 +25,11 @@ public class YAPIONPointer extends YAPIONType {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "->" + id;
     }
 
     public static void main(String[] args) {
@@ -61,7 +64,7 @@ public class YAPIONPointer extends YAPIONType {
         System.out.println(createReferenceId(yapionObject));
     }
 
-    private static char[] pointerChars = "01236789abcdefghijklABCDEFGHIJKL".toCharArray();
+    public static final char[] pointerChars = "01236789abcdefghijklABCDEFGHIJKL".toCharArray();
     private static NumberRandom numberRandom = new NumberRandom();
 
     private static int[] createBytes(int length) {
@@ -84,7 +87,7 @@ public class YAPIONPointer extends YAPIONType {
      */
     public static String createReferenceId(YAPIONObject yapionObject) {
         List<String> keys = yapionObject.getKeys();
-        int[] ints = createBytes(64);
+        int[] ints = createBytes(6);
         int seed = ints.length * keys.size();
 
         YAPIONType yapionType = yapionObject.getParent();
@@ -108,10 +111,10 @@ public class YAPIONPointer extends YAPIONType {
         }
         calc(ints, numberRandom.setSeed(seed).getString(ints.length * keys.size()) + seed);
 
-        return toString(ints);
+        return toBase32(ints);
     }
 
-    private static String toString(int[] ints) {
+    public static String toBase32(int[] ints) {
         StringBuilder st = new StringBuilder();
         for (int i = 0; i < ints.length; i++) {
             int x = ints[i] % (pointerChars.length * pointerChars.length);

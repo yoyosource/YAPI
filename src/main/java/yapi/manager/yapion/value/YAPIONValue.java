@@ -23,8 +23,18 @@ public class YAPIONValue extends YAPIONType {
     public static final String VALUE_STRING = "string";
     public static final String VALUE_CHARACTER = "character";
     private String value;
-    public YAPIONValue(String input) {
-        this.value = input;
+
+    public YAPIONValue(String s) {
+        value = s;
+    }
+
+    public YAPIONValue(Object object, boolean b) {
+        value = object.toString();
+        if (object instanceof String) {
+            if (value.equals("true") || value.equals("false") || value.matches("[0-9]+(\\.[0-9]+)?")) {
+                value = '"' + object.toString() + '"';
+            }
+        }
     }
 
     public String getValueType() {

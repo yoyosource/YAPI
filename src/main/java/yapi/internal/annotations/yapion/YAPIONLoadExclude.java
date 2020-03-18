@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
-public @interface YAPIONLoad {
+public @interface YAPIONLoadExclude {
     String context() default "";
 }

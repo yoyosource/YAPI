@@ -70,18 +70,10 @@ All pointer shown in here are valid pointer but are mostly meaningless because a
 IMPORTANT: You could represent YAPION pointer as a Key-Value pair with string as value but I won't do this for now because I cannot be sure to have a pointer or just a string on the conversion back to YAPION.
 ```
 Example for an YAPION pointer
-{hello->l6J8F3AHgGhBh6aIC1AEHG3D1AHfH9igDAIeC7aLdFj9Kb0A89EGclhG9fDkhJbH7LDiKglB69ihaCGGDHe1eA98ikg9D72Bci90FiJ8A0KdChgI1lbKddLIjghE1C1k}
+{hello->00026lbCh0lc2geKF6DaJfff0Dd9IIhl}
 These pointer point to another YAPION Object in the same serialization. For reconstructing the recursion this pointer points to the object it is reffering to.
-A pointer is not a hash and is not intended to be secure. If 2 objects in your tree have the same pointer it will point to the first by default. The YAPION serializer will put '*<CHARACTER>' before the pointer to indicate which specific object it is reffering to.
+A pointer is not a hash and is not intended to be secure. If 2 objects in your tree have the same pointer it will point to the first by default.
 
-Example for an YAPION pointer. Referencing the 8th Object with this reference.
-{hello->*al6J8F3AHgGhBh6aIC1AEHG3D1AHfH9igDAIeC7aLdFj9Kb0A89EGclhG9fDkhJbH7LDiKglB69ihaCGGDHe1eA98ikg9D72Bci90FiJ8A0KdChgI1lbKddLIjghE1C1k}
-This pointer starts with '*a', this indicates the deserializer that this should pointer to the 8th Object with this reference.
 The list of prefixes for pointer is as follows:
 01236789abcdefghijklABCDEFGHIJKL
-Have in mind that the '*0' is the same as just having the pointer without the star notation.
-
-These to pointer reference the same Object in the tree. The second one is just 2 characters longer because of the '*0'
-{hello->l6J8F3AHgGhBh6aIC1AEHG3D1AHfH9igDAIeC7aLdFj9Kb0A89EGclhG9fDkhJbH7LDiKglB69ihaCGGDHe1eA98ikg9D72Bci90FiJ8A0KdChgI1lbKddLIjghE1C1k} 
-{hello->*0l6J8F3AHgGhBh6aIC1AEHG3D1AHfH9igDAIeC7aLdFj9Kb0A89EGclhG9fDkhJbH7LDiKglB69ihaCGGDHe1eA98ikg9D72Bci90FiJ8A0KdChgI1lbKddLIjghE1C1k}
 ```

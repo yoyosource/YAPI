@@ -56,6 +56,9 @@ public class YAPIONArray extends YAPIONType {
     }
 
     public String toHierarchyString(int index) {
+        if (array.isEmpty()) {
+            return "[]";
+        }
         StringBuilder st = new StringBuilder();
         st.append("[\n");
         boolean b = false;
