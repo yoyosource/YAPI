@@ -4,6 +4,7 @@
 
 package yapi.manager.statemachine;
 
+@Deprecated(since = "Version 1.2, now found in yapi/statemachine/")
 public class TransitionModifier {
 
     private boolean excludeInCapture = false;

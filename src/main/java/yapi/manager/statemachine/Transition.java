@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Deprecated(since = "Version 1.2, now found in yapi/statemachine/")
 public class Transition {
 
     private State currentState;

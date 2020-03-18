@@ -6,6 +6,7 @@ package yapi.manager.statemachine;
 
 import java.util.Objects;
 
+@Deprecated(since = "Version 1.2, now found in yapi/statemachine/")
 public class State {
 
     private String name;

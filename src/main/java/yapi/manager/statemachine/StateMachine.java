@@ -8,6 +8,7 @@ import yapi.internal.exceptions.StateMachineException;
 
 import java.util.*;
 
+@Deprecated(since = "Version 1.2, now found in yapi/statemachine/StateMachine.java")
 public class StateMachine {
 
     public static final State STATE_START = new State("$START");
