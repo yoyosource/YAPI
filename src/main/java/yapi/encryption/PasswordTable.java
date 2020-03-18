@@ -229,7 +229,7 @@ public class PasswordTable {
             return "";
         }
         byte[] crack = Arrays.copyOf(toCrack, toCrack.length);
-        byte[] bytes = EncryptionSymmetric.decrypt(crack, EncryptionSymmetric.createKey(password, security, true));
+        byte[] bytes = EncryptionSymmetric.decrypt(crack, EncryptionSymmetric.createKey(password, security));
         if (bytes.length != 0) {
             return password;
         }
@@ -248,7 +248,7 @@ public class PasswordTable {
         }
         while (password != null) {
             byte[] crack = Arrays.copyOf(toCrack, toCrack.length);
-            byte[] bytes = EncryptionSymmetric.decrypt(crack, EncryptionSymmetric.createKey(password, security, true));
+            byte[] bytes = EncryptionSymmetric.decrypt(crack, EncryptionSymmetric.createKey(password, security));
             if (bytes.length != 0) {
                 timer.stop();
                 done(password);

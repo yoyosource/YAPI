@@ -6,6 +6,7 @@ package yapi.encryption;
 
 import yapi.internal.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
+import yapi.math.NumberUtils;
 import yapi.string.HashType;
 import yapi.string.StringCrypting;
 import yapi.string.StringFormatting;
@@ -89,29 +90,123 @@ public class EncryptionSymmetric {
         }
     }
 
-    public static double checkPassword(String password) {
-        return passwordStrength(password);
-    }
-
+    /**
+     * @param password Your password to check
+     * @return your password strength as a double between 0 and 1 calculated by the sigmoid() function with the strength
+     */
     public static double passwordStrength(String password) {
         double strength = 0;
-        strength += password.length() * 4;
-        throw new IllegalStateException("Not done");
-    }
+        int length = password.length();
+        strength += length * 4;
 
-    public static String createKey(String username, String password, int security, boolean newMode) {
-        if (!newMode) {
-            return createKey(username, password, security);
+        int consecutive = 0;
+        int consecutiveNumber = 0;
+
+        int upperCase = 0;
+        int upperCaseC = 0;
+        int lowerCase = 0;
+        int lowerCaseC = 0;
+        int numbers = 0;
+        int numbersC = 0;
+        int symbols = 0;
+        int symbolsC = 0;
+        int middleNumbersOrSymbols = 0;
+
+        StringBuilder repeatedChars = new StringBuilder();
+        int repeatedCharsNumber = 0;
+
+        char lC = '\u0000';
+
+        for (int i = 0; i < length; i++) {
+            char c = password.charAt(i);
+            if (repeatedChars.toString().contains(c + "")) {
+                repeatedCharsNumber++;
+            }
+            if (i > 0) {
+                lC = password.charAt(i - 1);
+            }
+            repeatedChars.append(Character.toLowerCase(c));
+
+            if (c >= 'A' && c <= 'Z') {
+                upperCase++;
+                if (lC >= 'A' && lC <= 'Z') {
+                    upperCaseC++;
+                    consecutive++;
+                } else {
+                    consecutive = 0;
+                }
+            }
+            if (c >= 'a' && c <= 'z') {
+                lowerCase++;
+                if (lC >= 'a' && lC <= 'z') {
+                    lowerCaseC++;
+                    consecutive++;
+                } else {
+                    consecutive = 0;
+                }
+            }
+            if (c >= '0' && c <= '9') {
+                numbers++;
+                if (i != 0 && i != length - 1) {
+                    middleNumbersOrSymbols++;
+                }
+                if (lC >= '0' && lC <= '9') {
+                    numbersC++;
+                    consecutive++;
+                } else {
+                    consecutive = 0;
+                }
+            }
+            if ((c >= '!' && c <= '/') || (c >= ':' && c <= '@') || (c >= '[' && c <= '`') || (c >= '{' && c <= '~')) {
+                symbols++;
+                if (i != 0 && i != length - 1) {
+                    middleNumbersOrSymbols++;
+                }
+                if ((lC >= '!' && lC <= '/') || (lC >= ':' && lC <= '@') || (lC >= '[' && lC <= '`') || (lC >= '{' && lC <= '~')) {
+                    symbolsC++;
+                    consecutive++;
+                } else {
+                    consecutive = 0;
+                }
+            }
+            if (consecutive >= 3) {
+                consecutiveNumber++;
+            }
         }
 
-        long checksum = 0;
-        for (char c : username.toCharArray()) {
-            checksum += c;
+        if (upperCase > 0 && upperCase < length) {
+            strength += (length - upperCase) * 2;
         }
-        return rotate(createKey(password, security - 1, true) + createKey(username, security - 1, true), checksum);
+        if (lowerCase > 0 && lowerCase < length) {
+            strength += (length - lowerCase) * 2;
+        }
+        if (numbers > 0 && numbers < length) {
+            strength += numbers * 4;
+        }
+        strength += symbols * 6;
+        strength += middleNumbersOrSymbols * 2;
+
+        if (symbols == 0 && numbers == 0) {
+            strength -= length;
+        }
+        if (symbols == 0 && upperCase == 0 && lowerCase == 0) {
+            strength -= length;
+        }
+
+        strength -= upperCaseC * 2;
+        strength -= lowerCaseC * 2;
+        strength -= numbersC * 2;
+        strength -= symbolsC * 2;
+
+        strength -= consecutiveNumber * 3;
+        strength -= repeatedCharsNumber;
+        return NumberUtils.sigmoid(strength - 50);
     }
 
-    @Deprecated(since = "Version 1.2, please use the new createKey method and convert old systems to new one. This feature will be removed in the Version 1.3.")
+    static String deriveKey(String key) {
+        return createKey(key, (int)Math.floor(Math.log(key.length()) / Math.log(2)) - 8);
+    }
+
     public static String createKey(String username, String password, int security) {
         long checksum = 0;
         for (char c : username.toCharArray()) {
@@ -120,36 +215,6 @@ public class EncryptionSymmetric {
         return rotate(createKey(password, security - 1) + createKey(username, security - 1), checksum);
     }
 
-    public static String createKey(String password, int security, boolean newMode) {
-        if (!newMode) {
-            return createKey(password, security);
-        }
-
-        if (security < 0) {
-            security = 0;
-        }
-        if (security > 16) {
-            security = 16;
-        }
-        security = (int)Math.pow(2, security + 10.0);
-
-        long checksum = 0;
-        for (char c : password.toCharArray()) {
-            checksum += c;
-        }
-
-        int hashsum = 0;
-        byte[] hash = StringCrypting.hash(password, HashType.SHA512);
-        for (byte b : hash) {
-            hashsum += b;
-        }
-
-        String key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2 - 128) + new NumberRandom(hashsum).getString(security / 2 - 128);
-        key = toHex(hash).replace(" ", "") + mixUP(key, checksum + hashsum);
-        return key;
-    }
-
-    @Deprecated(since = "Version 1.2, please use the new createKey method and convert old systems to new one. This feature will be removed in the Version 1.3.")
     public static String createKey(String password, int security) {
         if (security < 0) {
             security = 0;
@@ -165,12 +230,12 @@ public class EncryptionSymmetric {
         }
 
         int hashsum = 0;
-        byte[] hash = StringCrypting.hash(password, HashType.SHA256);
+        byte[] hash = StringCrypting.hash(password, HashType.SHA512);
         for (byte b : hash) {
             hashsum += b;
         }
 
-        String key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2 - 64) + new NumberRandom(hashsum).getString(security / 2 - 64);
+        String key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2 - 128) + new NumberRandom(hashsum).getString(security / 2 - 128);
         key = toHex(hash).replace(" ", "") + mixUP(key, checksum + hashsum);
         return key;
     }
@@ -208,6 +273,9 @@ public class EncryptionSymmetric {
     }
 
     private static String pad() {
+        if (true) {
+            return "        ";
+        }
         return new NumberRandom().getString(8);
     }
 
@@ -266,7 +334,6 @@ public class EncryptionSymmetric {
         }
 
         for (int i = 1; i < bytes.length; i++) {
-
             int l = i - 1;
             int remove = (i < 8 ? i - 1 : 7);
             byte b = (byte)chars[i];
@@ -361,7 +428,7 @@ public class EncryptionSymmetric {
         return Arrays.copyOf(intermediate, intermediate.length);
     }
 
-    private static byte encrypt(byte b, String key) {
+    static byte encrypt(byte b, String key) {
         for (int i = 0; i < operations.size(); i++) {
             if (operations.get(i) == XOR) {
                 b = xor(b, key);
@@ -380,7 +447,7 @@ public class EncryptionSymmetric {
         return b;
     }
 
-    private static byte decrypt(byte b, String key) {
+    static byte decrypt(byte b, String key) {
         for (int i = operations.size() - 1; i >= 0; i--) {
             if (operations.get(i) == XOR) {
                 b = xor(b, key);
@@ -459,7 +526,7 @@ public class EncryptionSymmetric {
         return b;
     }
 
-    private static String rotate(String key, long rotation) {
+    static String rotate(String key, long rotation) {
         if (rotation % key.length() == 0) {
             return key;
         }
