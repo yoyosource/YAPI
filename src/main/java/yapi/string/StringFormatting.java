@@ -214,6 +214,21 @@ public class StringFormatting {
         return (1 / (1 + Math.exp(-input)));
     }
 
+    public static String toHex(long... longs) {
+        return toHex(longs, false);
+    }
+
+    public static String toHex(long[] longs, boolean spaces) {
+        StringBuilder st = new StringBuilder();
+        boolean t = false;
+        for (long l : longs) {
+            if (spaces && t) st.append(' ');
+            st.append(String.format("%016X", l));
+            t = true;
+        }
+        return st.toString();
+    }
+
     /**
      *
      * @since Version 1
@@ -221,7 +236,7 @@ public class StringFormatting {
      * @param bytes
      * @return
      */
-    public static String toHex(byte[] bytes) {
+    public static String toHex(byte... bytes) {
         return toHex(bytes, false);
     }
 
@@ -247,7 +262,7 @@ public class StringFormatting {
      * @param chars
      * @return
      */
-    public static String toHex(char[] chars) {
+    public static String toHex(char... chars) {
         return toHex(chars, false);
     }
 
@@ -336,6 +351,33 @@ public class StringFormatting {
             chars[i] = (char)bytes[i];
         }
         return chars;
+    }
+
+    public static String toBinary(long l) {
+        long x = 1;
+        int bits = 1;
+        while (l >= x) {
+            x *= 2;
+            bits++;
+        }
+
+        return toBinary(l, bits);
+    }
+
+    public static String toBinary(long l, int bits) {
+        long x = (long)Math.pow(2, bits);
+        StringBuilder st = new StringBuilder();
+
+        while (x != 1) {
+            if (l >= x) {
+                st.append("1");
+                l -= x;
+            } else {
+                st.append("0");
+            }
+            x /= 2;
+        }
+        return st.toString();
     }
 
     /**
