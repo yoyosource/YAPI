@@ -13,7 +13,7 @@
 
 package main;
 
-import yapi.math.calculator.fractions.Fraction;
+import yapi.math.Fraction;
 
 import java.math.BigInteger;
 
