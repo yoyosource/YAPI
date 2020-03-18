@@ -2,10 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.math.calculator.fractions;
+package yapi.math;
 
 import ch.obermuhlner.math.big.BigDecimalMath;
-import yapi.math.NumberUtils;
 import yapi.string.StringFormatting;
 
 import java.math.BigDecimal;

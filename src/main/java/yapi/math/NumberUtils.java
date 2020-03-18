@@ -4,6 +4,7 @@
 
 package yapi.math;
 
+import ch.obermuhlner.math.big.BigDecimalMath;
 import yapi.internal.exceptions.MathException;
 import yapi.internal.exceptions.math.RangeException;
 import yapi.manager.worker.Task;
@@ -795,6 +796,9 @@ public class NumberUtils {
 
     public static BigInteger fastOver(BigInteger n, BigInteger r) {
         BigInteger blocks = n.divide(BigInteger.TEN);
+        if (blocks.compareTo(BigInteger.ZERO) == 0) {
+            blocks = BigInteger.TEN;
+        }
         return fastFactorial(n, blocks).divide(fastFactorial(r, blocks).multiply(fastFactorial(n.subtract(r), blocks)));
     }
 
@@ -1051,6 +1055,47 @@ public class NumberUtils {
             }
         }
         return st.reverse().toString();
+    }
+
+    public static BigDecimal sigmoid(BigDecimal bigDecimal) {
+        return sigmoid(bigDecimal, new MathContext(200));
+    }
+
+    public static BigDecimal sigmoid(BigDecimal bigDecimal, MathContext mathContext) {
+        return BigDecimal.ONE.divide(BigDecimal.ONE.add(BigDecimalMath.exp(bigDecimal, mathContext).multiply(BigDecimal.valueOf(-1)), mathContext), mathContext);
+    }
+
+    public static BigDecimal sigmoid(BigDecimal bigDecimal, BigDecimal shiftUP) {
+        return sigmoid(bigDecimal).add(shiftUP);
+    }
+
+    public static BigDecimal sigmoid(BigDecimal bigDecimal, MathContext mathContext, BigDecimal shiftUP) {
+        return sigmoid(bigDecimal, mathContext).add(shiftUP);
+    }
+
+    public static double sigmoid(double d) {
+        return 1 / (1 + Math.exp(-d));
+    }
+
+    public static double sigmoid(double d, double shiftUP) {
+        return 1 / (1 + Math.exp(-d)) + shiftUP;
+    }
+
+    public static double gauss(double x, double a) {
+        return (1 / (Math.sqrt(Math.PI) * a)) * Math.exp(-((x * x) / (a * a)));
+    }
+
+    public static BigDecimal gauss(BigDecimal x, BigDecimal a) {
+        return gauss(x, a, new MathContext(200));
+    }
+
+    public static BigDecimal gauss(BigDecimal x, BigDecimal a, MathContext mathContext) {
+        BigDecimal one = BigDecimal.ONE;
+        BigDecimal pi = BigDecimalMath.pi(mathContext);
+
+        BigDecimal num1 = one.divide(BigDecimalMath.sqrt(pi, mathContext).multiply(a, mathContext));
+        BigDecimal num2 = BigDecimalMath.exp(BigDecimal.ZERO.subtract(x.multiply(x, mathContext).divide(a.multiply(a, mathContext)), mathContext), mathContext);
+        return num1.multiply(num2, mathContext);
     }
 
 }

@@ -185,6 +185,10 @@ public class Vector {
         return Math.sqrt(value);
     }
 
+    public int size() {
+        return vec.length;
+    }
+
     /**
      *
      * @since Version 1
@@ -228,6 +232,17 @@ public class Vector {
             }
         }
         st.append("]");
+        return st.toString();
+    }
+
+    String toMatrixString() {
+        StringBuilder st = new StringBuilder();
+        for (int i = 0; i < vec.length; i++) {
+            if (i != 0) {
+                st.append(", ");
+            }
+            st.append(vec[i]);
+        }
         return st.toString();
     }
 

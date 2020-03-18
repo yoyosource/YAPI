@@ -4,6 +4,7 @@
 
 package yapi.math.calculator.fractions;
 
+import yapi.math.Fraction;
 import yapi.math.NumberUtils;
 import yapi.string.StringSplitting;
 
