@@ -59,6 +59,7 @@ public class CircularBuffer<T> implements Iterable<T> {
     public List<T> list() {
         List<T> list = new ArrayList<>();
         int i = start;
+        i = (i + buf.length - 1) % buf.length;
         int length = 0;
         while (length != buf.length) {
             list.add(buf[i]);
@@ -66,6 +67,45 @@ public class CircularBuffer<T> implements Iterable<T> {
             length++;
         }
         return list;
+    }
+
+    public boolean contains(T t) {
+        return indexOf(t) >= 0;
+    }
+
+    public boolean contains(StringBuilder st) {
+        return contains(st.toString());
+    }
+
+    public boolean contains(String s) {
+        return indexOf(s) >= 0;
+    }
+
+    public int indexOf(T t) {
+        int index = start;
+        int length = 0;
+        while (length != buf.length) {
+            if (buf[index].equals(t)) {
+                return length;
+            }
+            index = (index + buf.length - 1) % buf.length;
+            length++;
+        }
+        return -1;
+    }
+
+    public int indexOf(StringBuilder st) {
+        if (st.length() == 0) {
+            return -1;
+        }
+        return indexOf(st.toString());
+    }
+
+    public int indexOf(String s) {
+        if (s.length() == 0) {
+            return -1;
+        }
+        return toPlainString().indexOf(s);
     }
 
     @Override
@@ -97,6 +137,18 @@ public class CircularBuffer<T> implements Iterable<T> {
                 throw new UnsupportedOperationException();
             }
         };
+    }
+
+    public String toPlainString() {
+        StringBuilder st = new StringBuilder();
+        int index = start;
+        int length = 0;
+        while (length != buf.length) {
+            st.append(buf[index]);
+            index = (index + buf.length - 1) % buf.length;
+            length++;
+        }
+        return st.toString();
     }
 
     @Override
