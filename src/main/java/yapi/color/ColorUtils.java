@@ -4,6 +4,8 @@
 
 package yapi.color;
 
+import yapi.string.StringFormatting;
+
 import java.awt.*;
 
 public class ColorUtils {
@@ -42,4 +44,7 @@ public class ColorUtils {
         }
     }
 
+    public static String getString(Color color) {
+        return "#" + StringFormatting.toHex(new byte[] {(byte) color.getRGB(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha()});
+    }
 }
