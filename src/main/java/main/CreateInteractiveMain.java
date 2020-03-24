@@ -76,6 +76,7 @@ public class CreateInteractiveMain {
 
             File readme = new File(args[0].substring(0, args[0].lastIndexOf('/')) + "/README.md");
             List<String> strings = new BufferedReader(new FileReader(readme)).lines().collect(Collectors.toList());
+            updateReadMe(strings, "Files", BigInteger.valueOf(fileCount), "inactive", "https://github.com/yoyosource/YAPI");
             updateReadMe(strings, "Methods", methodCount, "inactive", "https://github.com/yoyosource/YAPI");
             updateReadMe(strings, "Code Lines", lineCount, "inactive", "https://github.com/yoyosource/YAPI");
             FileUtils.dump(readme, String.join("\n", strings));

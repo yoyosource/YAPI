@@ -2,8 +2,11 @@
 [![YAPI Pre-Release V1.1-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-1.1--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/1.1)
 [![YAPI Version V1.2](https://img.shields.io/badge/YAPI%20Version-1.2-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
-[![Methods 1130](https://img.shields.io/badge/Methods-1130-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 22687](https://img.shields.io/badge/Code%20Lines-22687-inactive)](https://github.com/yoyosource/YAPI)
+
+[![Files 231](https://img.shields.io/badge/Files-231-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1261](https://img.shields.io/badge/Methods-1261-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 25317](https://img.shields.io/badge/Code%20Lines-25317-inactive)](https://github.com/yoyosource/YAPI)
+
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)
 
@@ -41,6 +44,14 @@ Alternative you can download the jar directly from [releases](https://github.com
 
 # APIs used
 - eobermuhlner/big-math (https://github.com/eobermuhlner/big-math/tree/master)
+  - [V] 2.3.0
+  - [L] MIT
+- fusesource/jansi (https://github.com/fusesource/jansi/tree/master)
+  - [V] 1.18
+  - [L] Apache-2.0
+
+* [V] Version
+* [L] Licence
 
 ## Code Tags
 - Math

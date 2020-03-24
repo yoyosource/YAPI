@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 public class LicenseSystem {
 
+    private static List<String> changedFilesName = new ArrayList<>();
+
     public static void main(String[] args) {
         if (args.length < 1) {
             return;
@@ -61,7 +63,7 @@ public class LicenseSystem {
                     }
                     fileCount++;
                     try {
-                        String[] strings = addLicense(FileUtils.fileContentAsString(f));
+                        String[] strings = addLicense(FileUtils.fileContentAsString(f), f);
                         FileUtils.dump(f, strings);
                     } catch (IOException e) {
                         System.out.println("File Exception (IOException): " + f.getName());
@@ -75,6 +77,9 @@ public class LicenseSystem {
         System.out.println("> Stats: License");
         System.out.println("  > File Count:    " + fileCount);
         System.out.println("  > Changed Files: " + changedFiles);
+        if (!changedFilesName.isEmpty()) {
+            System.out.println("  - " + changedFilesName.stream().collect(Collectors.joining("\n  - ")));
+        }
     }
 
     private static long changedFiles = 0;
@@ -95,7 +100,7 @@ public class LicenseSystem {
             "// YAPI\n" +
             "// Copyright (C) 2019,2020 yoyosource";
 
-    private static String[] addLicense(String[] strings) {
+    private static String[] addLicense(String[] strings, File f) {
         StringBuilder st = new StringBuilder();
         int max = Math.min(12, strings.length);
         for (int i = 0; i < max; i++) {
@@ -112,6 +117,7 @@ public class LicenseSystem {
             return strings;
         }
         changedFiles++;
+        changedFilesName.add(f.getName());
 
         String license = shortLicense;
         if (st.toString().startsWith("/**")) {

@@ -27,7 +27,9 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
     compile 'ch.obermuhlner:big-math:2.3.0'
+    compile 'org.fusesource.jansi:jansi:1.18'
 }
 
 jar {
@@ -67,7 +69,7 @@ task YAPILicense {
 
     doLast {
         def command = "java -classpath ${buildDir}/classes/java/main main.LicenseSystem ${buildDir}"
-        def retval = command.execute().text.trim()
+        def retval = command.execute().text
         print(retval)
     }
 }
@@ -81,7 +83,7 @@ task YAPIInfo {
 
     doLast {
         def command = "java -classpath ${buildDir}/classes/java/main main.CreateInteractiveMain ${buildDir}"
-        def retval = command.execute().text.trim()
+        def retval = command.execute().text
         print(retval)
     }
 }
@@ -92,6 +94,7 @@ task buildYAPI {
     group "YAPI"
 
     dependsOn 'shadowJar'
+    //dependsOn 'compileJava'
 
     doLast {
         if ("${buildDir}" == null) {
@@ -111,13 +114,14 @@ task buildYAPI {
         delete fileTree("${libs}").matching {
             exclude("${uberJarName}")
         }
-        copy {
-            from("${buildDir}")
-            into("${buildDir}")
+        file(libs + "/" + uberJarName).renameTo(file(libs + "/" + jarName))
+        /*copy {
+            from("${libs}")
+            into("${libs}")
             rename("${uberJarName}", "${jarName}")
-        }
-        delete fileTree("${libs}").matching {
+        }*/
+        /*delete fileTree("${libs}").matching {
             include "${uberJarName}"
-        }
+        }*/
     }
 }
