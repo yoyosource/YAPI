@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.compression.huffman;
 
 import yapi.file.FileUtils;
@@ -70,10 +74,45 @@ public class HuffmanCompression {
         System.out.println(huffmanNodes.get(0));
         System.out.println(huffmanNodes.get(0).toString().getBytes().length);
         System.out.println(StringFormatting.toHex(huffmanNodes.get(0).toString().getBytes()));
+
+        decompress(huffmanNodes.get(0).toString().toCharArray());
     }
 
-    private void decompress(String tree) {
+    private void decompress(char[] chars) {
+        createTree(chars, 0);
+    }
 
+    private void createTree(char[] chars, int index) {
+        int bracket = 0;
+        boolean escaped = false;
+        for (int i = 0; i < chars.length; i++) {
+            if (escaped) {
+                System.out.println(bracket + ": 0x" + StringFormatting.toHex(chars[i]) + " -> " + chars[i]);
+                escaped = false;
+                continue;
+            }
+            //System.out.print(bracket + " ");
+
+            if (chars[i] == '\\') {
+                escaped = true;
+                continue;
+            }
+
+            if (chars[i] == '(' || chars[i] == ')') {
+                if (chars[i] == '(') {
+                    bracket++;
+                }
+                if (bracket == 0) {
+                    break;
+                }
+                if (chars[i] == ')') {
+                    bracket--;
+                }
+                System.out.println(bracket + ": 0x" + StringFormatting.toHex(chars[i]) + " -> " + chars[i]);
+            } else {
+                System.out.println(bracket + ": 0x" + StringFormatting.toHex(chars[i]) + " -> " + chars[i]);
+            }
+        }
     }
 
     private byte[] createByteArray(List<Byte> bytes) {

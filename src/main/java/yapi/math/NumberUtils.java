@@ -93,6 +93,20 @@ public class NumberUtils {
         return true;
     }
 
+    public static boolean isFibonacci(long number) {
+        return isSquare(5 * number * number + 4) || isSquare(5 * number * number - 4);
+    }
+
+    public static boolean isSquare(long number) {
+        double d = Math.sqrt(number);
+        return (int)d == d;
+    }
+
+    public static boolean _isSquare(long number) {
+        long sqrt = (long) Math.sqrt(number);
+        return sqrt * sqrt == number;
+    }
+
     /**
      * Time Complexity: O(n+n*√n)
      *
@@ -741,22 +755,44 @@ public class NumberUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        Timer timer = new Timer();
-        timer.start();
-        //over(BigInteger.valueOf(70000), BigInteger.valueOf(1000));
-        System.out.println(over(6, 3));
-        System.out.println(over(BigInteger.valueOf(6), BigInteger.valueOf(3)));
-        timer.stop();
-        System.out.println(timer.getTime() / 1000 + "µs");
+        for (int i = 0; i < 2000; i++) {
+            over(BigInteger.valueOf(49), BigInteger.valueOf(6));
+        }
+        long time = 0;
+        int index = 100;
+        for (int times = 0; times < index; times++) {
+            Timer timer = new Timer();
+            timer.start();
+            //over(BigInteger.valueOf(70000), BigInteger.valueOf(1000));
+            //System.out.println(over(6, 3));
+            for (int i = 0; i < 1000; i++) {
+                over(BigInteger.valueOf(49), BigInteger.valueOf(6));
+            }
+            timer.stop();
+            time += timer.getTime() / 1000;
+            System.out.println(timer.getTime() / 1000 + "µs");
+        }
+        System.out.println(time / index + "µs");
 
-        //  273501µs
-        //
-        //  145639µs
-        //
-        // 70000C1000
-        // 4590651µs
-        // 8374740µs
-        // 5272253µs
+        // fastOver
+        // 6 over 3
+        // 1221635µs
+        // 49 over 6
+        // >2h 41m 43s
+        // over (fast)
+        // 6 over 3
+        //  573031µs
+        // 49 over 6
+        //    7842µs (cached)
+        //  695592µs
+    }
+
+    public static BigInteger over(long n, BigInteger r) {
+        return over(BigInteger.valueOf(n), r);
+    }
+
+    public static BigInteger over(BigInteger n, long r) {
+        return over(n, BigInteger.valueOf(r));
     }
 
     /**
@@ -780,6 +816,7 @@ public class NumberUtils {
 
         if (n.compareTo(r) > 0) {
             if (c.compareTo(r) > 0) {
+                //System.out.println("a > " + a + " b > " + b + " c > " + c + " r > " + r + " n > " + n);
                 BigInteger i = c.subtract(r);
                 // not done yet
             }

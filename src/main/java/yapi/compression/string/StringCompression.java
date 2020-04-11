@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.compression.string;
 
-import yapi.datastructures.CircularBuffer;
+import yapi.datastructures.circular.CircularBuffer;
 
 public class StringCompression {
 

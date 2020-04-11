@@ -338,6 +338,15 @@ public class FileUtils {
     }
 
     /**
+     *
+     * @param file
+     * @return
+     */
+    public static InputStream fileFromResourceAsStream(String file) {
+        return FileUtils.class.getResourceAsStream("/" + file);
+    }
+
+    /**
      * This method is a abstraction of the ResourceManager and is recommended when you only want to read 1 file without management or caching it.
      *
      * @param file
@@ -345,7 +354,7 @@ public class FileUtils {
      */
     public static byte[] fileContentFromResourceAsBytes(String file) {
         try {
-            return FileUtils.class.getResourceAsStream("/" + file).readAllBytes();
+            return fileFromResourceAsStream(file).readAllBytes();
         } catch (IOException e) {
             return new byte[0];
         }
@@ -359,7 +368,7 @@ public class FileUtils {
      */
     public static String[] fileContentFromResourceAsString(String file) {
         try {
-            byte[] bytes = FileUtils.class.getResourceAsStream("/" + file).readAllBytes();
+            byte[] bytes = fileFromResourceAsStream(file).readAllBytes();
             List<String> strings = new ArrayList<>();
             StringBuilder st = new StringBuilder();
             for (byte b : bytes) {
@@ -376,6 +385,23 @@ public class FileUtils {
             return strings.toArray(new String[0]);
         } catch (IOException e) {
             return new String[0];
+        }
+    }
+
+    public static void emptyFile(File file) {
+        if (!file.isFile()) {
+            return;
+        }
+        if (getSize(file) == 0) {
+            return;
+        }
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+
         }
     }
 

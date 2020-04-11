@@ -13,14 +13,6 @@ public class YAPIONReader {
 
     public YAPIONReader(InputStream inputStream) {
         this.inputStream = inputStream;
-        try {
-            if (false) {
-                int length = inputStream.readAllBytes().length;
-                System.out.println(length);
-            }
-        } catch (IOException e) {
-
-        }
     }
 
     public Character readChar() throws IOException {

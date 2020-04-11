@@ -42,7 +42,7 @@ Example for an YAPION object with "   price":10 as value pair
 JSON:   {"   price":10}
 YAPION: {\   price(10)}
 Example for an YAPION object with "name":"yoyosource" and "owner":true as value pairs
-JSON:   {"name":"yoyosource","owner":"true"}
+JSON:   {"name":"yoyosource","owner":true}
 YAPION: {name(yoyosource)owner(true)}
 ```
 ### Arrays
@@ -58,10 +58,10 @@ JSON:   [true,false,null,"Hello"]
 YAPION: [true,false,null,Hello]
 Example for an YAPION array with objects
 JSON:   [{"name":"yoyosource","owner":true},{"name":"chaoscaot444","owner":"false"}]
-YAPION: [{name(yoyosource),owner(true)},{name(chaoscaot444)owner(false)}]
+YAPION: [{name(yoyosource),owner(true)},{name(chaoscaot444)owner("false")}]
 Example for embedding an YAPION array in another object.
 JSON:   {"contributor":[{"name":"yoyosource","owner":true},{"name":"chaoscaot444","owner":"false"}]}
-YAPION: {contributor[{name(yoyosource),owner(true)},{name(chaoscaot444)owner(false)}]}
+YAPION: {contributor[{name(yoyosource),owner(true)},{name(chaoscaot444)owner("false")}]}
 ```
 ### Pointer
 Pointers are in YAPION for serialization and deserialization of recursive structures which JSON lacks. All examples now can only exist in YAPION and cannot be converted to JSON.

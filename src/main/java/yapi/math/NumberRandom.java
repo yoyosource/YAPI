@@ -96,6 +96,10 @@ public class NumberRandom {
         return seed;
     }
 
+    public long getCurrentSeed() {
+        return cSeed;
+    }
+
     public NumberRandom setSeed(long newSeed) {
         lastSeeds.add(seed);
         seed = newSeed;

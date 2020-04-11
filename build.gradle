@@ -30,6 +30,15 @@ dependencies {
 
     compile 'ch.obermuhlner:big-math:2.3.0'
     compile 'org.fusesource.jansi:jansi:1.18'
+
+//    compile 'org.jcuda:jcuda:10.1.0'
+//    compile 'org.jcuda:jcublas:10.1.0'
+//    compile 'org.jcuda:jcufft:10.1.0'
+//    compile 'org.jcuda:jcusparse:10.1.0'
+//    compile 'org.jcuda:jcusolver:10.1.0'
+//    compile 'org.jcuda:jcurand:10.1.0'
+//    compile 'org.jcuda:jnvgraph:10.1.0'
+//    compile 'org.jcuda:jcudnn:10.1.0'
 }
 
 jar {
@@ -52,7 +61,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'yoyosource'
             artifactId = 'YAPI'
-            version = '1.2-2'
+            version = '1.2-3'
 
             from components.java
         }

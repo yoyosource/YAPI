@@ -32,6 +32,32 @@ public class PeripheralUtils {
         return getLocalGraphicsEnvironment().getDefaultScreenDevice();
     }
 
+    public static Image takeScreenShot(Window window) {
+        return window.createImage(window.getWidth(), window.getHeight());
+    }
+
+    public static Image takeScreenShot(GraphicsDevice graphicsDevice) {
+        return takeScreenShot(graphicsDevice.getFullScreenWindow());
+    }
+
+    public static Image takeScreenShot() {
+        return takeScreenShot(getDefaultScreenDevice());
+    }
+
+    public static Image[] takeScreenShots() {
+        GraphicsDevice[] graphicsDevices = getScreenDevices();
+        Image[] images = new Image[graphicsDevices.length];
+        for (int i = 0; i < graphicsDevices.length; i++) {
+            images[i] = takeScreenShot(graphicsDevices[i]);
+        }
+        return images;
+    }
+
+    /*public static void takeScreenShotRobot(GraphicsDevice graphicsDevice) {
+        Robot robot = new Robot();
+        robot.createScreenCapture()
+    }*/
+
     public static boolean isHeadless() {
         return RuntimeUtils.isHeadless();
     }

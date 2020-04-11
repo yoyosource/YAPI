@@ -48,6 +48,18 @@ public class TaskParallelization<T> {
         }
     }
 
+    public void addResult(List<T> ts) {
+        String key = Thread.currentThread().getName() + Thread.currentThread().getId();
+        synchronized (tMap) {
+            if (tMap.containsKey(key)) {
+                tMap.get(key).addAll(ts);
+            } else {
+                List<T> tArrayList = new ArrayList<>(ts);
+                tMap.put(key, tArrayList);
+            }
+        }
+    }
+
     public List<T> merge() {
         List<T> merge = new ArrayList<>();
         synchronized (tMap) {

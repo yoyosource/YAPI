@@ -13,20 +13,6 @@
 
 package main;
 
-import yapi.conjecture.Collatz;
-import yapi.datastructures.Graph;
-import yapi.datastructures.LongTree;
-import yapi.datastructures.Node;
-import yapi.manager.worker.Task;
-import yapi.manager.worker.WorkerPool;
-import yapi.math.NumberRandom;
-import yapi.quick.Brainfuck;
-import yapi.ui.YAPIWindow;
-
-import javax.swing.*;
-import java.io.File;
-import java.util.List;
-
 public class Work {
 
     public static void main(String[] args) {

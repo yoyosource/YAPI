@@ -229,6 +229,21 @@ public class StringFormatting {
         return st.toString();
     }
 
+    public static String toHex(int... ints) {
+        return toHex(ints, false);
+    }
+
+    public static String toHex(int[] ints, boolean spaces) {
+        StringBuilder st = new StringBuilder();
+        boolean t = false;
+        for (int i : ints) {
+            if (spaces && t) st.append(' ');
+            st.append(String.format("%08X", i));
+            t = true;
+        }
+        return st.toString();
+    }
+
     /**
      *
      * @since Version 1

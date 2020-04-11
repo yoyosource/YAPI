@@ -4,14 +4,11 @@
 
 package yapi.string;
 
-import yapi.encryption.EncryptionSymmetric;
+import yapi.encryption.encryption.EncryptionSymmetric;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.zip.CRC32;
 

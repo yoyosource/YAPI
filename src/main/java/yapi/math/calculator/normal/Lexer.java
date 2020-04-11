@@ -307,7 +307,7 @@ public class Lexer {
             ts.add(new Token("OPE", s));
             return ts;
         }
-        if (s.matches("(==)|((<|>)[=]?)|(!=)|(equals|equalsIgnoreCase|contains|containsIgnoreCase)|(typeof|canbe)")) {
+        if (s.matches("(==)|([<>][=]?)|(!=)|(equals|equalsIgnoreCase|contains|containsIgnoreCase)|(typeof|canbe)")) {
             ts.add(new Token("COM", s));
             return ts;
         }
@@ -324,15 +324,15 @@ public class Lexer {
             return ts;
         }
 
-        if (s.matches("\\(|\\)")) {
+        if (s.matches("[()]")) {
             ts.add(new Token("STb", s));
             return ts;
         }
-        if (s.matches("\\[|\\]")) {
+        if (s.matches("[\\[\\]]")) {
             ts.add(new Token("ACb", s));
             return ts;
         }
-        if (s.matches("[\\{\\}]")) {
+        if (s.matches("[{}]")) {
             ts.add(new Token("BLb", s));
             return ts;
         }

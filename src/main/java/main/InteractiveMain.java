@@ -13,15 +13,12 @@
 
 package main;
 
-import org.fusesource.jansi.Ansi;
+import yapi.encryption.proveofwork.ProveOfWork;
 import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.file.FileUtils;
 import yapi.string.StringSplitting;
 import yapi.ui.console.Console;
-import yapi.ui.console.ConsoleColor;
-import yapi.ui.console.ConsoleErase;
-import yapi.ui.console.ConsoleMessageBuilder;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,8 +48,9 @@ public class InteractiveMain {
     }
 
     public static void main(String[] args) {
-        if (false) {
-            Console.main(args);
+        if (true) {
+            //Console.main(args);
+            ProveOfWork.main(args);
             return;
         }
 

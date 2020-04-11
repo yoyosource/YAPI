@@ -4,12 +4,12 @@
 
 package yapi.manager.resource;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LoadingQueue {
 
-    private List<QueueEntry> queueEntries = new ArrayList<>();
+    private List<QueueEntry> queueEntries = new CopyOnWriteArrayList<>();
 
     /**
      *

@@ -40,7 +40,7 @@ public class CalculatorFractions {
         for (int i = 0; i < strings.size() - 1; i++) {
             if (strings.get(i).matches("[0-9]+(\\.[0-9]+)?") && strings.get(i + 1).equals("%")) {
                 if (i < strings.size() - 2) {
-                    if (strings.get(i + 2).matches("\\+|-|\\*|/|%")) {
+                    if (strings.get(i + 2).matches("[+\\-*/%]")) {
                         strings.set(i + 1, "");
                         strings.set(i, strings.get(i) + "%");
                     }

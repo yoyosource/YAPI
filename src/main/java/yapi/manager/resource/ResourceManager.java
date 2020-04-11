@@ -4,6 +4,8 @@
 
 package yapi.manager.resource;
 
+import yapi.manager.log.Logging;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -16,6 +18,8 @@ public class ResourceManager {
     private Map<String, byte[]> byteMap = new ConcurrentHashMap<>();
 
     private List<String> loading = new ArrayList<>();
+
+    private Logging log = new Logging("Resource Manager");
 
     /**
      *
@@ -67,6 +71,7 @@ public class ResourceManager {
             return;
         }
         loading.add(name);
+        log.add("Loading from Resource '" + path + "' with name '" + name + "'");
 
         if (!path.startsWith("/")) {
             path = "/" + path;

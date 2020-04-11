@@ -66,7 +66,7 @@ public class BinomialDistribution {
     }
 
     private BigInteger over(long n, long r) {
-        return NumberUtils.fastOver(BigInteger.valueOf(n), BigInteger.valueOf(r));
+        return NumberUtils.over(BigInteger.valueOf(n), BigInteger.valueOf(r));
     }
 
     public BigDecimal getFunction(long experiment) {
@@ -75,6 +75,17 @@ public class BinomialDistribution {
             d = d.add(getBinomial(i), mathContext);
         }
         return d;
+    }
+
+    public BigDecimal[] getFunction() {
+        BigDecimal[] bigDecimals = new BigDecimal[(int)size];
+        for (long i = 0; i < size; i++) {
+            bigDecimals[(int)i] = getBinomial(i);
+            if (i > 0) {
+                bigDecimals[(int)i] = bigDecimals[(int)i].add(bigDecimals[(int)i - 1]);
+            }
+        }
+        return bigDecimals;
     }
 
     public BigDecimal getProbability(long experiment) {

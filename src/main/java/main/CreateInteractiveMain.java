@@ -214,7 +214,7 @@ public class CreateInteractiveMain {
                     ini = ini.substring(0, ini.length() - 1);
                 }
                 init.add(new YAPIONVariable("init-" + initCount++, new YAPIONValue(ini)));
-            } else if (s.matches("public ((static )?|(final )?|(synchronized )?){0,3}[a-zA-Z\\[\\]\\<\\>]+ ([a-z][a-zA-Z0-9]+)\\(.*?\\) (throws .+? )?\\{")) {
+            } else if (s.matches("public ((static )?|(final )?|(synchronized )?){0,3}[a-zA-Z\\[\\]<>]+ ([a-z][a-zA-Z0-9]+)\\(.*?\\) (throws .+? )?\\{")) {
                 boolean isStatic = false;
                 boolean isFinal = false;
                 boolean isSynchronized = false;

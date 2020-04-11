@@ -6,7 +6,6 @@ package yapi.ui.console;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
-import yapi.runtime.Hook;
 import yapi.runtime.TerminalUtils;
 
 import java.util.ArrayList;
@@ -14,52 +13,14 @@ import java.util.List;
 
 public class Console {
 
+    public static void main(String[] args) {
+        Console console = new Console();
+
+        console.send(ConsoleMessageBuilder.build("<RED>Hello World"));
+    }
+
     private ConsoleAlignment alignment = ConsoleAlignment.LEFT;
     private ConsoleClipping clipping = ConsoleClipping.NO_CLIP;
-
-    public static void main(String[] args) {
-        Console console = new Console(ConsoleClipping.WRAP);
-        ConsoleMessageBuilder consoleMessageBuilder = new ConsoleMessageBuilder();
-        consoleMessageBuilder.eraseScreen(ConsoleErase.ALL);
-        consoleMessageBuilder.setColorBright(ConsoleColor.RED);
-        consoleMessageBuilder.addText("Hello");
-        consoleMessageBuilder.setAlignment(ConsoleAlignment.CENTER);
-        consoleMessageBuilder.setColorBright(ConsoleColor.YELLOW);
-        consoleMessageBuilder.addText("World");
-        consoleMessageBuilder.setAlignment(ConsoleAlignment.RIGHT);
-        consoleMessageBuilder.setColorBright(ConsoleColor.BLUE);
-        consoleMessageBuilder.addText("YoyoNow");
-        consoleMessageBuilder.setAlignment(ConsoleAlignment.LEFT);
-        consoleMessageBuilder.setColor(ConsoleColor.DEFAULT);
-        consoleMessageBuilder.addText("Hello\nInProgressing");
-        consoleMessageBuilder.addLine();
-        consoleMessageBuilder.addText("H".repeat(83));
-        consoleMessageBuilder.setAlignment(ConsoleAlignment.CENTER);
-        consoleMessageBuilder.addText("Hello World");
-        consoleMessageBuilder.setAlignment(ConsoleAlignment.RIGHT);
-        consoleMessageBuilder.addText("Hello World ".repeat(4));
-        consoleMessageBuilder.addLine();
-        consoleMessageBuilder.addText("Hello World ".repeat(10));
-        ConsoleMessage message = consoleMessageBuilder.build();
-        console.send(message);
-        //console.send(ConsoleMessageBuilder.build("<center, red>Achtung!</red> Gefahr</center>\n<right>Probleme lassen sich lösen.</left>\n<left>Hallo</left><default>test</default>\n<blue>W</blue><red>i</red><green>t</green><yellow>z</yellow><brown>i</brown><purple>g</purple><white>!</white>\n<black>versteckt?</black>"));
-        //console.send(ConsoleMessageBuilder.build("<color(CC0000), center>Achtung! Gefahr"));
-
-        TerminalUtils.addResizeHook(new Hook() {
-            @Override
-            public void run() {
-                System.out.println("Console Resized");
-            }
-        });
-
-        /*for (int i = 0; i < 60; i++) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }*/
-    }
 
     public Console() {
         AnsiConsole.systemInstall();
@@ -106,7 +67,7 @@ public class Console {
             consoleMessageTasks.add(snippets.get(0).getEraseTask());
         }
 
-        consoleMessageTasks.add(indent(indent(snippets.get(0).getAlgn(), snippets.get(0).getLength(), width)));
+        consoleMessageTasks.add(new InternalTaskIndention(indent(snippets.get(0).getAlgn(), snippets.get(0).getLength(), width)));
         consoleMessageTasks.addAll(snippets.get(0).getTasks());
 
         for (int i = 1; i < snippets.size(); i++) {
@@ -118,10 +79,10 @@ public class Console {
 
             if (previousIndention > currentIndention) {
                 consoleMessageTasks.add(new TaskNewLine());
-                consoleMessageTasks.add(indent(currentIndention));
+                consoleMessageTasks.add(new InternalTaskIndention(currentIndention));
                 consoleMessageTasks.addAll(snippet.getTasks());
             } else {
-                consoleMessageTasks.add(indent(currentIndention - previousIndention));
+                consoleMessageTasks.add(new InternalTaskIndention(currentIndention - previousIndention));
                 consoleMessageTasks.addAll(snippet.getTasks());
             }
         }
@@ -139,13 +100,6 @@ public class Console {
                 return width - length;
         }
         return 0;
-    }
-
-    private ConsoleMessageTask indent(int indention) {
-        if (indention < 0) {
-            return new TaskText("!!!!");
-        }
-        return new TaskText(" ".repeat(indention));
     }
 
     public int getWidth() {

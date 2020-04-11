@@ -15,7 +15,7 @@ public class Set {
         if (!set.matches("[a-zA-Z]+=.+")) {
             throw new SetException("Set has no valid head.");
         }
-        if (!set.matches("[a-zA-Z]+=\\{([a-z])\\|(\\1|[ENZQRC0-9<>=!,])+\\}")) {
+        if (!set.matches("[a-zA-Z]+=\\{([a-z])\\|(\\1|[ENZQRC0-9<>=!,])+}")) {
             throw new SetException("Set has no valid body.");
         }
         name = set.substring(0, set.indexOf('='));

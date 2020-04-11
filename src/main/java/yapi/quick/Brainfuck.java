@@ -164,9 +164,9 @@ public class Brainfuck {
 
     private void setProgram(String program) {
         if (extended) {
-            this.program = program.replaceAll("[^<>\\[\\]+\\-\\.,:={}]", "").toCharArray();
+            this.program = program.replaceAll("[^<>\\[\\]+\\-.,:={}]", "").toCharArray();
         } else {
-            this.program = program.replaceAll("[^<>\\[\\]+\\-\\.,]", "").toCharArray();
+            this.program = program.replaceAll("[^<>\\[\\]+\\-.,]", "").toCharArray();
         }
     }
 

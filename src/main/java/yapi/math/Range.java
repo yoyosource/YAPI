@@ -32,7 +32,7 @@ public class Range {
     }
 
     private boolean checkRange(String range) {
-        if (range.matches("((-?\\d+[.>][.][.<]-?\\d+)|(-?\\d+(\\.\\d+)?[.>]\\.\\.)|(\\.\\.[.<]-?\\d+(\\.\\d+)?))(\\\\\\{[ ,0-9.<>]+\\})")) {
+        if (range.matches("((-?\\d+[.>][.][.<]-?\\d+)|(-?\\d+(\\.\\d+)?[.>]\\.\\.)|(\\.\\.[.<]-?\\d+(\\.\\d+)?))(\\\\\\{[ ,0-9.<>]+})")) {
             if (b) {
                 throw new RangeException("Range Expression was recursive");
             }
@@ -52,7 +52,7 @@ public class Range {
         if (range.matches("-?\\d+(\\.\\d+)?")) {
             return true;
         }
-        return range.matches("((-?\\d+[.>][.][.<]-?\\d+)|(-?\\d+(\\.\\d+)?[.>]\\.\\.)|(\\.\\.[.<]-?\\d+(\\.\\d+)?))(\\\\\\{[ ,0-9.<>]+\\})?");
+        return range.matches("((-?\\d+[.>][.][.<]-?\\d+)|(-?\\d+(\\.\\d+)?[.>]\\.\\.)|(\\.\\.[.<]-?\\d+(\\.\\d+)?))(\\\\\\{[ ,0-9.<>]+})?");
     }
 
     /**
@@ -159,23 +159,23 @@ public class Range {
             else if (range.matches("-?\\d+\\.\\.\\.-?\\d+")) {
                 min = Double.parseDouble(range.split("\\.\\.\\.")[0]);
                 max = Double.parseDouble(range.split("\\.\\.\\.")[1]);
-            } else if (range.matches("-?\\d+\\>\\.\\.-?\\d+")) {
-                min = Double.parseDouble(range.split("\\>\\.\\.")[0]) + 1;
-                max = Double.parseDouble(range.split("\\>\\.\\.")[1]);
-            } else if (range.matches("-?\\d+\\.\\.\\<-?\\d+")) {
-                min = Double.parseDouble(range.split("\\.\\.\\<")[0]);
-                max = Double.parseDouble(range.split("\\.\\.\\<")[1]) - 1;
-            } else if (range.matches("-?\\d+\\>\\.\\<-?\\d+")) {
-                min = Double.parseDouble(range.split("\\>\\.\\<")[0]) + 1;
-                max = Double.parseDouble(range.split("\\>\\.\\<")[1]) - 1;
+            } else if (range.matches("-?\\d+>\\.\\.-?\\d+")) {
+                min = Double.parseDouble(range.split(">\\.\\.")[0]) + 1;
+                max = Double.parseDouble(range.split(">\\.\\.")[1]);
+            } else if (range.matches("-?\\d+\\.\\.<-?\\d+")) {
+                min = Double.parseDouble(range.split("\\.\\.<")[0]);
+                max = Double.parseDouble(range.split("\\.\\.<")[1]) - 1;
+            } else if (range.matches("-?\\d+>\\.<-?\\d+")) {
+                min = Double.parseDouble(range.split(">\\.<")[0]) + 1;
+                max = Double.parseDouble(range.split(">\\.<")[1]) - 1;
             }
             else if (range.matches("\\.\\.\\.-?\\d+")) {
                 max = Double.parseDouble(range.substring(3));
-            } else if (range.matches("\\.\\.\\<-?\\d+")) {
+            } else if (range.matches("\\.\\.<-?\\d+")) {
                 max = Double.parseDouble(range.substring(3)) - 1;
             } else if (range.matches("-?\\d+\\.\\.\\.")) {
                 min = Double.parseDouble(range.substring(0, range.length() - 3));
-            } else if (range.matches("-?\\d+\\>\\.\\.")) {
+            } else if (range.matches("-?\\d+>\\.\\.")) {
                 min = Double.parseDouble(range.substring(0, range.length() - 3)) + 1;
             }
         }

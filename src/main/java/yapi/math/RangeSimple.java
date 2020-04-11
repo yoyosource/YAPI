@@ -230,7 +230,7 @@ public class RangeSimple {
             }
             return longs.get(longs.size() - 1);
         }
-        if (!range.matches("(-?\\d+[.>]\\.[.<]-?\\d+)(\\\\\\{[.0-9\\-, <>{}\\\\]+\\})?")) {
+        if (!range.matches("(-?\\d+[.>]\\.[.<]-?\\d+)(\\\\\\{[.0-9\\-, <>{}\\\\]+})?")) {
             if (!range.matches("(-?\\d+[.>]\\.[.<]-?\\d+)")) {
                 throw new RangeException("Range Expression Exception in Range part of: " + range);
             }

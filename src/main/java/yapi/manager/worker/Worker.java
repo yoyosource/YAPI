@@ -37,7 +37,11 @@ public class Worker extends Thread {
             if (task == null) {
                 continue;
             }
-            task.run();
+            try {
+                task.run();
+            } catch (Exception e) {
+                workerPool.log(getName().substring(13) + " > Task exited with and exception\n" + e.toString());
+            }
             task = null;
             workerPool.done(this);
         }
