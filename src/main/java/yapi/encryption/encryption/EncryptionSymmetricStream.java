@@ -57,7 +57,6 @@ public class EncryptionSymmetricStream {
                     byte[] bytes = stream.readNBytes(2007);
                     bytes = EncryptionSymmetric.encrypt(bytes, k);
                     processData(bytes);
-                    System.out.println(k);
                     k = EncryptionSymmetric.deriveKey(k);
 
                     synchronized (instance) {
@@ -95,11 +94,9 @@ public class EncryptionSymmetricStream {
                     byte[] bytes = stream.readNBytes(2048);
                     bytes = EncryptionSymmetric.decrypt(bytes, k);
                     if (bytes.length == 0) {
-                        System.out.println("Break?");
                         break;
                     }
                     processData(bytes);
-                    System.out.println(k);
                     k = EncryptionSymmetric.deriveKey(k);
 
                     synchronized (instance) {
