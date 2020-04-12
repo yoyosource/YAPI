@@ -5,8 +5,8 @@
 package yapi.manager.log;
 
 import yapi.file.FileUtils;
-import yapi.math.base.BaseConversion;
 import yapi.math.NumberRandom;
+import yapi.math.base.BaseConversion;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class LogManager {
     private static Map<String, Logging> loggingMap = new HashMap<>();
     private static NumberRandom numberRandom = new NumberRandom();
     private static File logPackage = null;
-    private static File logFile = null;
+    private static String fileName = "";
     private static PrintStream printStream = null;
 
     static {
@@ -65,7 +65,14 @@ public class LogManager {
             return;
         }
         LogManager.logPackage = logPackage;
-        logFile = new File(logPackage + "/" + fileName() + ".log");
+        fileName = fileName();
+    }
+
+    private static void openLog() {
+        if (printStream != null) {
+            return;
+        }
+        File logFile = new File(logPackage + "/" + fileName + ".log");
         try {
             logFile.createNewFile();
             printStream = new PrintStream(logFile);
@@ -122,6 +129,7 @@ public class LogManager {
         if (logPackage == null) {
             return;
         }
+        openLog();
         for (LogEntry entry : entries) {
             printStream.println(entry.toString());
         }
