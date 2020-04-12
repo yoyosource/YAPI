@@ -4,15 +4,16 @@
 
 package yapi.encryption.encryption;
 
-import yapi.file.FileUtils;
-import yapi.runtime.ThreadUtils;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Queue;
 
 public class EncryptionSymmetricStream {
+
+    private final int blockSize = 2048;
 
     private InputStream stream;
     private Queue<byte[]> queue = new ArrayDeque<>();
@@ -54,7 +55,7 @@ public class EncryptionSymmetricStream {
             String k = key;
             try {
                 while (stream.available() > 0) {
-                    byte[] bytes = stream.readNBytes(2007);
+                    byte[] bytes = stream.readNBytes(blockSize - 41);
                     bytes = EncryptionSymmetric.encrypt(bytes, k);
                     processData(bytes);
                     k = EncryptionSymmetric.deriveKey(k);
@@ -91,7 +92,7 @@ public class EncryptionSymmetricStream {
             String k = key;
             try {
                 while (stream.available() > 0) {
-                    byte[] bytes = stream.readNBytes(2048);
+                    byte[] bytes = stream.readNBytes(blockSize);
                     bytes = EncryptionSymmetric.decrypt(bytes, k);
                     if (bytes.length == 0) {
                         break;

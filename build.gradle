@@ -12,7 +12,6 @@ version '1.2-SNAPSHOT'
 ext {
     uberJarName = "${group}-${version}-all.jar"
     jarName = "${group}-${version}.jar"
-    archive = "${rootDir}/archive"
     libs = "${buildDir}/libs"
 }
 
@@ -26,10 +25,11 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-
     compile 'ch.obermuhlner:big-math:2.3.0'
     compile 'org.fusesource.jansi:jansi:1.18'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
 
 //    compile 'org.jcuda:jcuda:10.1.0'
 //    compile 'org.jcuda:jcublas:10.1.0'
@@ -41,14 +41,24 @@ dependencies {
 //    compile 'org.jcuda:jcudnn:10.1.0'
 }
 
-jar {
+/*jar {
+
+}*/
+
+shadowJar {
     manifest {
         attributes(
                 'Main-Class': mainClassName
         )
     }
-}
 
+    from(rootDir) {
+        include 'LICENSE'
+    }
+    from(rootDir) {
+        include 'README.md'
+    }
+}
 
 
 publishing {
@@ -61,7 +71,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'yoyosource'
             artifactId = 'YAPI'
-            version = '1.2-3.1'
+            version = '1.2-3.2'
 
             from components.java
         }
@@ -102,35 +112,15 @@ task buildYAPI {
     description 'Build YAPI'
     group "YAPI"
 
-    dependsOn 'shadowJar'
-    //dependsOn 'compileJava'
+    dependsOn 'build'
 
     doLast {
         if ("${buildDir}" == null) {
             return
         }
         delete fileTree("${libs}").matching {
-            include "${jarName}"
-        }
-        delete fileTree("${archive}").matching {
-            include "${jarName}"
-        }
-        copy {
-            from("${libs}")
-            into("${archive}")
-            exclude("${uberJarName}")
-        }
-        delete fileTree("${libs}").matching {
             exclude("${uberJarName}")
         }
         file(libs + "/" + uberJarName).renameTo(file(libs + "/" + jarName))
-        /*copy {
-            from("${libs}")
-            into("${libs}")
-            rename("${uberJarName}", "${jarName}")
-        }*/
-        /*delete fileTree("${libs}").matching {
-            include "${uberJarName}"
-        }*/
     }
 }

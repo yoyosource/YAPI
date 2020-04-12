@@ -44,6 +44,7 @@ public class LogManager {
     private static Map<String, Logging> loggingMap = new HashMap<>();
     private static NumberRandom numberRandom = new NumberRandom();
     private static File logPackage = null;
+    private static File logFile = null;
     private static PrintStream printStream = null;
 
     static {
@@ -64,7 +65,7 @@ public class LogManager {
             return;
         }
         LogManager.logPackage = logPackage;
-        File logFile = new File(logPackage + "/" + fileName() + ".log");
+        logFile = new File(logPackage + "/" + fileName() + ".log");
         try {
             logFile.createNewFile();
             printStream = new PrintStream(logFile);
