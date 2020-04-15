@@ -16,7 +16,10 @@ public class Console {
     public static void main(String[] args) {
         Console console = new Console();
 
-        console.send(ConsoleMessageBuilder.build("<RED>Hello World"));
+        console.send(ConsoleMessageBuilder.build("<RED>\\\\\\\\  <RED:BRIGHT,BOLD>\\\\¸/<WHITE> /¯\\\\ |¯) ˙|˙</BOLD>  <RED>//"));
+        console.send(ConsoleMessageBuilder.build("<RED>//  <RED:BRIGHT,BOLD> |<WHITE>  |¯| |¯  ¸|¸</BOLD>  <RED>\\\\\\\\"));
+        console.send(ConsoleMessageBuilder.build(""));
+        console.send(ConsoleMessageBuilder.build("<WHITE:BRIGHT>(C)<WHITE> 2019,2020 <RED:BRIGHT>y<WHITE>oyosource Apache-2.0"));
     }
 
     private ConsoleAlignment alignment = ConsoleAlignment.LEFT;

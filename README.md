@@ -5,7 +5,7 @@
 
 [![Files 271](https://img.shields.io/badge/Files-271-inactive)](https://github.com/yoyosource/YAPI)
 [![Methods 1499](https://img.shields.io/badge/Methods-1499-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 28826](https://img.shields.io/badge/Code%20Lines-28826-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 28838](https://img.shields.io/badge/Code%20Lines-28838-inactive)](https://github.com/yoyosource/YAPI)
 
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)

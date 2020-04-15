@@ -13,14 +13,14 @@
 
 package main;
 
-import yapi.encryption.proveofwork.ProveOfWork;
+import yapi.file.FileUtils;
 import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.value.YAPIONObject;
-import yapi.file.FileUtils;
 import yapi.string.StringSplitting;
 import yapi.ui.console.Console;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class InteractiveMain {
@@ -49,8 +49,8 @@ public class InteractiveMain {
 
     public static void main(String[] args) {
         if (true) {
-            //Console.main(args);
-            ProveOfWork.main(args);
+            Console.main(args);
+            //ProveOfWork.main(args);
             return;
         }
 

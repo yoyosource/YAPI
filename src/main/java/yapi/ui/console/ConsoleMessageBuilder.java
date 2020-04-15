@@ -147,6 +147,10 @@ public class ConsoleMessageBuilder {
                 st.append(c);
                 String attribute = st.toString();
                 st = new StringBuilder();
+                if (attribute.length() == 1) {
+                    tasks.add(new TaskText(attribute));
+                    continue;
+                }
                 tasks.addAll(buildAttributes(attribute));
             } else {
                 if (c == '\n') {

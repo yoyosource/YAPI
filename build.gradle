@@ -71,7 +71,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'yoyosource'
             artifactId = 'YAPI'
-            version = '1.2-3.3'
+            version = '1.2-3.4'
 
             from components.java
         }

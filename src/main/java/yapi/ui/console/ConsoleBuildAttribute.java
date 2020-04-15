@@ -64,8 +64,8 @@ enum ConsoleBuildAttribute {
     ALIGNMENT_CENTER("center", new TaskAlignment(ConsoleAlignment.CENTER), new TaskAlignment(ConsoleAlignment.LEFT)),
     ALIGNMENT_RIGHT("right", new TaskAlignment(ConsoleAlignment.RIGHT), new TaskAlignment(ConsoleAlignment.LEFT)),
 
-    ATTRIBUTE_INTENSITY_BOLD("intensity:bold", new TaskAttribute(Ansi.Attribute.INTENSITY_BOLD), new TaskAttribute(Ansi.Attribute.INTENSITY_BOLD_OFF)),
-    ATTRIBUTE_INTENSITY_FAINT("intensity:faint", new TaskAttribute(Ansi.Attribute.INTENSITY_FAINT), new TaskAttribute(Ansi.Attribute.INTENSITY_BOLD_OFF)),
+    ATTRIBUTE_INTENSITY_BOLD("bold", new TaskAttribute(Ansi.Attribute.INTENSITY_BOLD), new TaskAttribute(Ansi.Attribute.INTENSITY_BOLD_OFF)),
+    ATTRIBUTE_INTENSITY_FAINT("faint", new TaskAttribute(Ansi.Attribute.INTENSITY_FAINT), new TaskAttribute(Ansi.Attribute.INTENSITY_BOLD_OFF)),
     ATTRIBUTE_ITALIC("italic", new TaskAttribute(Ansi.Attribute.ITALIC), new TaskAttribute(Ansi.Attribute.ITALIC_OFF)),
     ATTRIBUTE_UNDERLINE("underline", new TaskAttribute(Ansi.Attribute.UNDERLINE), new TaskAttribute(Ansi.Attribute.UNDERLINE_OFF)),
     ATTRIBUTE_UNDERLINE_DOUBLE("underline:double", new TaskAttribute(Ansi.Attribute.UNDERLINE_DOUBLE), new TaskAttribute(Ansi.Attribute.UNDERLINE_OFF)),
