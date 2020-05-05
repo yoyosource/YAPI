@@ -21,7 +21,7 @@ public class FastEncryptionSymmetricQueue {
     private List<Integer> cancelQueue = new CopyOnWriteArrayList<>();
 
     private long bytesPerSecond = 0;
-    private int doneBytes = 0;
+    private long doneBytes = 0;
     private String nPerSecond = "";
 
     private FastEncryptionSymmetricQueue instance = this;
@@ -180,7 +180,7 @@ public class FastEncryptionSymmetricQueue {
         return tasks;
     }
 
-    public int getDoneBytes() {
+    public long getDoneBytes() {
         return doneBytes;
     }
 

@@ -36,7 +36,7 @@ public class FastEncryptionSymmetricAsyncStream {
     private static ThreadGroup threadGroup = new ThreadGroup(ThreadUtils.yapiGroup, "EncryptionSymmetricAsyncStream");
 
     private long time = 0;
-    private int doneBytes = 0;
+    private long doneBytes = 0;
 
     public FastEncryptionSymmetricAsyncStream(FileInputStream fileInputStream) {
         this.stream = fileInputStream;
@@ -199,7 +199,7 @@ public class FastEncryptionSymmetricAsyncStream {
         return (long)(doneBytes / ((System.currentTimeMillis() - time) / 1000.0));
     }
 
-    public int getDoneBytes() {
+    public long getDoneBytes() {
         return doneBytes;
     }
 
