@@ -79,7 +79,7 @@ public class FastEncryptionSymmetricQueue {
         return id++;
     }
 
-    private class EncryptionSymmetricTask {
+    public class EncryptionSymmetricTask {
 
         private int id = getID();
 
