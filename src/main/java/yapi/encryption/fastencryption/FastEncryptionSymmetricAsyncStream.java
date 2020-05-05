@@ -36,7 +36,6 @@ public class FastEncryptionSymmetricAsyncStream {
     private static ThreadGroup threadGroup = new ThreadGroup(ThreadUtils.yapiGroup, "EncryptionSymmetricAsyncStream");
 
     private long time = 0;
-    private int allBytes = 0;
     private int doneBytes = 0;
 
     public FastEncryptionSymmetricAsyncStream(FileInputStream fileInputStream) {
@@ -88,7 +87,6 @@ public class FastEncryptionSymmetricAsyncStream {
             int threadCount = Runtime.getRuntime().availableProcessors() * 4 - 1;
             Queue<AsyncResult> results = new ArrayDeque<>();
             try {
-                allBytes = stream.available();
                 while (stream.available() > 0) {
                     byte[] bytes = stream.readNBytes(blockSize - 32);
                     AsyncResult asyncResult = new AsyncResult(id++);
@@ -149,7 +147,6 @@ public class FastEncryptionSymmetricAsyncStream {
             int threadCount = Runtime.getRuntime().availableProcessors() * 4 - 1;
             Queue<AsyncResult> results = new ArrayDeque<>();
             try {
-                allBytes = stream.available();
                 while (stream.available() > 0) {
                     byte[] bytes = stream.readNBytes(blockSize - 41);
                     AsyncResult asyncResult = new AsyncResult(id++);
@@ -200,6 +197,10 @@ public class FastEncryptionSymmetricAsyncStream {
 
     public long bPS() {
         return (long)(doneBytes / ((System.currentTimeMillis() - time) / 1000.0));
+    }
+
+    public int getDoneBytes() {
+        return doneBytes;
     }
 
     public String bytesPerSecond() {

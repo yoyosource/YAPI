@@ -159,7 +159,7 @@ I also want to thank everyone who helped me and tested the YAPI. If you want to 
 - `11 Apr 2020` `1.2-3.4`
 ### Version 1.3
 - `05 May 2020` `1.3`
-
+- `05 May 2020` `1.3-1`
 
 ## Planned Features
 
