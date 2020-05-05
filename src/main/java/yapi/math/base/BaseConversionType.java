@@ -23,10 +23,7 @@ public enum BaseConversionType {
     BASE_16_LOWERCASE ("01234567890abcdef", "32L"),
     BASE_16_UPPERCASE ("01234567890ABCDEF", "16U"),
 
-    BASE_8_NUMBER     ("01234567", "8N"),
-    BASE_8_LOWERCASE  ("abcdefgh", "8L"),
-    BASE_8_UPPERCASE  ("ABCDEFGH", "8U"),
-    BASE_8_SPECIAL    ("+/=#*()&", "8S");
+    BASE_8_NUMBER     ("01234567", "8N");
 
     private String base;
     private String shortName;

@@ -16,9 +16,11 @@ package main;
 import yapi.file.FileUtils;
 import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.value.YAPIONObject;
+import yapi.math.NumberUtils;
 import yapi.string.StringSplitting;
 import yapi.ui.console.Console;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +51,10 @@ public class InteractiveMain {
 
     public static void main(String[] args) {
         if (true) {
+            System.out.println(NumberUtils.factorial(BigInteger.valueOf(1000)));
+            return;
+        }
+        if (true) {
             Console.main(args);
             //ProveOfWork.main(args);
             return;
@@ -59,7 +65,7 @@ public class InteractiveMain {
             byte[] bytes = InteractiveMain.class.getResourceAsStream("/yapi/conjecture/Collatz.class").readAllBytes();
             StringBuilder st = new StringBuilder();
             for (byte b : bytes) {
-                st.append((char)b);
+                st._append((char)b);
             }
             System.out.println(st);
         } catch (IOException e) {

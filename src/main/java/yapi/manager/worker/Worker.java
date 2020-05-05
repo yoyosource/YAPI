@@ -16,7 +16,8 @@ public class Worker extends Thread {
      *
      * @param workerPool
      */
-    public Worker(WorkerPool workerPool) {
+    public Worker(ThreadGroup threadGroup, WorkerPool workerPool) {
+        super(threadGroup, "");
         this.workerPool = workerPool;
         workerPool.done(this);
     }

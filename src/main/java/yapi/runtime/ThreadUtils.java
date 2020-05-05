@@ -10,6 +10,8 @@ public class ThreadUtils {
         throw new IllegalStateException("Utility class");
     }
 
+    public static final ThreadGroup yapiGroup = new ThreadGroup("YAPI");
+
     public static void sleep(long millis) {
         try {
             Thread.sleep(millis);

@@ -4,65 +4,14 @@
 
 package yapi.compression.image;
 
-import yapi.file.FileUtils;
-import yapi.quick.Timer;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ImageCompression {
-
-    public static void main(String[] args) {
-        try {
-            BufferedImage bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_GrayScale_Vertical.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_GrayScale_Horizontal.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_GrayScale_Vertical2.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_GrayScale_Horizontal2.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_BlueGreen.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_BlueRed.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_GreenRed.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_Colors.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_Colors2.png"));
-            bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_Colors3.png"));
-            //bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_Colors4.png"));
-            //bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_Colors5.jpg"));
-            //bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_Diagonal.png"));
-            //bufferedImage1 = ImageIO.read(FileUtils.fileFromResourceAsStream("picture/Test_Radial.png"));
-
-            Timer timer = new Timer();
-            timer.start();
-            for (double i = 0; i < 100; i += 1) {
-                ImageCompression imageCompression = new ImageCompression(bufferedImage1);
-                imageCompression.lossyCompress(COMPRESSION_DEFAULT);
-                imageCompression.compress();
-
-                if (i == 0) {
-                    System.out.println(imageCompression.getCompression() + " " + imageCompression.width + " " + imageCompression.height);
-                    System.out.println(imageCompression.length + " " + imageCompression.lengthAfterCompression);
-                }
-                /*
-                System.out.println();
-                System.out.println(i);
-                System.out.println(imageCompression.getCompression() + " " + imageCompression.width + " " + imageCompression.height);
-                System.out.println(imageCompression.length + " " + imageCompression.lengthAfterCompression);
-                BufferedImage bufferedImage2 = imageCompression.getBufferedImage();
-
-                //ImageIO.write(bufferedImage2, "png", new File("/Users/jojo/IdeaProjects/YAPI/src/main/resources/picture/output/Output_" + (int)(i * 10) + ".png"));
-                ImageIO.write(imageCompression.bufferedImage, "png", new File("/Users/jojo/IdeaProjects/YAPI/src/main/resources/picture/output/Output_" + i + ".png"));
-                */
-            }
-            timer.stop();
-            System.out.println(timer.getTime() / 1000 / 100 + "µs");
-        } catch (IOException e) {
-
-        }
-    }
 
     public static final double COMPRESSION_LOW = 3;
     public static final double COMPRESSION_DEFAULT = 5;
@@ -151,6 +100,15 @@ public class ImageCompression {
         }
     }
 
+    public void lossyCompress(double maxDistance, int threadCount) {
+        if (threadCount <= 1) {
+            lossyCompress(maxDistance);
+            return;
+        }
+
+
+    }
+
     public void blockCompress(double maxDistance) {
 
     }
@@ -162,8 +120,13 @@ public class ImageCompression {
             }
         }
         List<Byte> bytes = new ArrayList<>();
-        System.out.println(width + " " + height);
-        int repetitionLength = 0;
+
+        bytes.add((byte)type);
+        bytes.addAll(getBytes(width));
+        bytes.addAll(getBytes(height));
+
+        System.out.println(type + " " + width + " " + height);
+        byte repetitionLength = 0;
         int[] lastInts = new int[0];
         for (int i = 0; i < colors.length / depth; i++) {
             if (i == 0) {
@@ -175,14 +138,14 @@ public class ImageCompression {
             int[] currentColor = getColor(i * depth);
             if (Arrays.equals(currentColor, lastInts)) {
                 repetitionLength++;
-                if (repetitionLength == 255) {
-                    addLength(bytes, length);
-                    lastInts = new int[0];
+                if (repetitionLength == (byte)0xFF) {
+                    addLength(bytes, repetitionLength);
+                    //lastInts = new int[0];
                     repetitionLength = 0;
                 }
             } else {
                 if (repetitionLength > 0) {
-                    addLength(bytes, length);
+                    addLength(bytes, repetitionLength);
                 }
                 add(bytes, currentColor);
                 lastInts = currentColor;
@@ -193,13 +156,19 @@ public class ImageCompression {
         return toByteArray(bytes);
     }
 
-    public static BufferedImage decompress(byte[] bytes) {
-        return null;
+    private List<Byte> getBytes(int i) {
+        List<Byte> bytes = new ArrayList<>();
+        while (i > 1) {
+            bytes.add((byte)(i - i / 255 * 255));
+            i /= 255;
+        }
+        bytes.add(0, (byte)bytes.size());
+        return bytes;
     }
 
-    private void addLength(List<Byte> bytes, int i) {
+    private void addLength(List<Byte> bytes, byte i) {
         bytes.add((byte)1);
-        bytes.add((byte)i);
+        bytes.add(i);
     }
 
     private void add(List<Byte> bytes, int... ints) {

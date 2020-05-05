@@ -6,6 +6,7 @@ package yapi.encryption.passwordtable;
 
 import yapi.encryption.encryption.EncryptionSymmetric;
 import yapi.quick.Timer;
+import yapi.runtime.ThreadUtils;
 
 import java.io.PrintStream;
 import java.math.BigDecimal;
@@ -32,6 +33,8 @@ public class PasswordTable {
 
     private String pwd = null;
 
+    private String input;
+
     /**
      * \\. is any character
      * \\w is a-zA-Z
@@ -43,6 +46,7 @@ public class PasswordTable {
      * @param s
      */
     public PasswordTable(String s) {
+        this.input = s;
         char[] chars = s.toCharArray();
         boolean escaped = false;
         int i = 0;
@@ -186,6 +190,7 @@ public class PasswordTable {
             return crack(toCrack, security);
         }
         pwd = null;
+        ThreadGroup threadGroup = new ThreadGroup(ThreadUtils.yapiGroup, "PasswordTable: " + input);
         for (int i = 0; i < threads; i++) {
             Runnable runnable = () -> {
                 while (pwd == null) {
@@ -196,7 +201,7 @@ public class PasswordTable {
                     }
                 }
             };
-            Thread t = new Thread(runnable);
+            Thread t = new Thread(threadGroup, runnable);
             t.setName("Cracker: " + i);
             t.start();
         }

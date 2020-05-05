@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.ui.yui;
 
 import java.io.File;
@@ -5,11 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class YUI {
-
-    public static void main(String[] args) {
-        YUI yui = new YUI(new File("/Users/jojo/IdeaProjects/YAPI/src/main/resources/Test.yui"));
-        System.out.println(yui.configs);
-    }
 
     private List<YUIConfig> configs = new ArrayList<>();
 

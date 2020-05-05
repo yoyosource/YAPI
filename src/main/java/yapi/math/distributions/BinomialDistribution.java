@@ -5,6 +5,7 @@
 package yapi.math.distributions;
 
 import yapi.internal.exceptions.MathException;
+import yapi.math.Fraction;
 import yapi.math.NumberUtils;
 
 import java.math.BigDecimal;
@@ -15,17 +16,24 @@ import java.math.RoundingMode;
 public class BinomialDistribution {
 
     private long size;
-    private double probability;
+    private Fraction probability;
 
     private double mu;
     private double sigma;
 
     private static MathContext mathContext = new MathContext(200, RoundingMode.HALF_UP);
 
+    public BinomialDistribution(long size, Fraction fraction) {
+        this.size = size;
+        if (fraction.getBigDecimal().compareTo(BigDecimal.ONE) <= 0 && fraction.getBigDecimal().compareTo(BigDecimal.ZERO) >= 0) {
+            this.probability = fraction;
+        }
+    }
+
     public BinomialDistribution(long size, double probability) {
         this.size = size;
         if (probability <= 1 && probability >= 0) {
-            this.probability = probability;
+            this.probability = Fraction.valueOf(probability);
         } else {
             throw new MathException("Probability needs to be between 0 and 1");
         }
@@ -34,18 +42,18 @@ public class BinomialDistribution {
     }
 
     private void calcMu() {
-        mu = size * probability;
+        mu = probability.multiply(Fraction.valueOf(size)).getDoubleValue();
     }
 
     private void calcSigma() {
-        sigma = Math.sqrt(size * probability * (1 - probability));
+        sigma = probability.multiply(Fraction.valueOf(size)).multiply(Fraction.ONE.subtract(probability)).power(Fraction.valueOf(0.5)).getDoubleValue();
     }
 
     public BigDecimal getBinomial(long experiment) {
         if (experiment < 0 || experiment > size) {
             return BigDecimal.valueOf(-1);
         }
-        return new BigDecimal(over(size, experiment)).multiply(BigDecimal.valueOf(probability).pow((int)experiment, mathContext), mathContext).multiply(BigDecimal.valueOf(1 - probability).pow((int)(size - experiment), mathContext), mathContext);
+        return new BigDecimal(over(size, experiment)).multiply(probability.getBigDecimal().pow((int)experiment, mathContext), mathContext).multiply(Fraction.ONE.subtract(probability).getBigDecimal().pow((int)(size - experiment), mathContext), mathContext);
     }
 
     public BigDecimal[] getBinomial(long startExperiment, long stopExperiment) {
@@ -78,11 +86,11 @@ public class BinomialDistribution {
     }
 
     public BigDecimal[] getFunction() {
-        BigDecimal[] bigDecimals = new BigDecimal[(int)size];
-        for (long i = 0; i < size; i++) {
+        BigDecimal[] bigDecimals = new BigDecimal[(int)size + 1];
+        for (long i = 0; i <= size; i++) {
             bigDecimals[(int)i] = getBinomial(i);
             if (i > 0) {
-                bigDecimals[(int)i] = bigDecimals[(int)i].add(bigDecimals[(int)i - 1]);
+                bigDecimals[(int)i] = bigDecimals[(int)i].add(bigDecimals[(int)i - 1], mathContext);
             }
         }
         return bigDecimals;

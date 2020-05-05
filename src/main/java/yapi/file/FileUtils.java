@@ -5,9 +5,14 @@
 package yapi.file;
 
 import yapi.internal.exceptions.string.NoStringException;
+import yapi.math.NumberUtils;
+import yapi.os.OSCheck;
+import yapi.os.OSType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -261,10 +266,38 @@ public class FileUtils {
             if (round > 2) {
                 round = 2;
             }
-            int t = (int)Math.pow(10, round);
+            if (l == 0) {
+                return size + "." + "0".repeat(round) + chars[i];
+            }
+            long t = (long)Math.pow(10, round);
             long s = getSize(file) / l - size * 1024;
             s = (s / t);
             return size + "." + s + chars[i];
+        }
+    }
+
+    public static String getSize(long size, boolean convert, boolean floating, int round) {
+        if (!convert) {
+            return size + "";
+        }
+        int i = 0;
+        long oldSize = size;
+        while (size > 1024) {
+            size /= 1024;
+            i++;
+        }
+        char[] chars = new char[]{'b', 'K', 'M', 'G', 'T', 'P', 'Y'};
+        if (!floating) {
+            return size + "" + chars[i];
+        } else {
+            if (round < 0) {
+                round = 0;
+            }
+            if (round > 2) {
+                round = 2;
+            }
+
+            return NumberUtils.round(oldSize / Math.pow(1024, i), round) + "" + chars[i];
         }
     }
 
@@ -278,6 +311,10 @@ public class FileUtils {
     }
 
     public static void dump(File file, String[] strings) throws IOException {
+        dump(file, strings, false);
+    }
+
+    public static void dump(File file, String[] strings, boolean append) throws IOException {
         if (!file.exists()) {
             throw new FileNotFoundException();
         }
@@ -287,7 +324,7 @@ public class FileUtils {
         if (strings == null) {
             throw new NoStringException();
         }
-        try (OutputStream outputStream = new FileOutputStream(file)) {
+        try (OutputStream outputStream = new FileOutputStream(file, append)) {
             for (int i = 0; i < strings.length; i++) {
                 if (i != 0) {
                     outputStream.write(new byte[]{'\n'});
@@ -311,6 +348,10 @@ public class FileUtils {
         dump(file, s.getBytes());
     }
 
+    public static void dump(File file, String s, boolean append) throws IOException {
+        dump(file, s.getBytes(), append);
+    }
+
     /**
      * This Methods dumps a byte array to a file with OutputStream
      *
@@ -320,6 +361,10 @@ public class FileUtils {
      * @throws NoStringException if the byte array is null.
      */
     public static void dump(File file, byte[] bytes) throws IOException {
+        dump(file, bytes, false);
+    }
+
+    public static void dump(File file, byte[] bytes, boolean append) throws IOException {
         if (!file.exists()) {
             throw new FileNotFoundException();
         }
@@ -329,7 +374,7 @@ public class FileUtils {
         if (bytes == null) {
             throw new NoStringException();
         }
-        try (OutputStream outputStream = new FileOutputStream(file)) {
+        try (OutputStream outputStream = new FileOutputStream(file, append)) {
             outputStream.write(bytes);
             outputStream.flush();
         } catch (IOException e) {
@@ -402,6 +447,71 @@ public class FileUtils {
             file.createNewFile();
         } catch (IOException e) {
 
+        }
+    }
+
+    public static String rwx(File file) {
+        return rwx(file, false);
+    }
+
+    public static String rwx(File file, boolean extended) {
+        StringBuilder st = new StringBuilder();
+        if (file.isDirectory()) {
+            st.append("d");
+        } else if (Files.isSymbolicLink(Path.of(file.getPath()))) {
+            st.append("l");
+        } else {
+            st.append("-");
+        }
+        if (file.canRead()) {
+            st.append("r");
+        } else {
+            st.append("-");
+        }
+        if (file.canWrite()) {
+            st.append("w");
+        } else {
+            st.append("-");
+        }
+        if (file.canExecute()) {
+            st.append("x");
+        } else {
+            st.append("-");
+        }
+        if (!extended) {
+            return st.toString();
+        }
+        if (file.isHidden()) {
+            st.append("h");
+        } else {
+            st.append("-");
+        }
+        return st.toString();
+    }
+
+    public static long getDiskSpace() {
+        return getMainMountPoint().getTotalSpace();
+    }
+
+    public static long getTotalSpace() {
+        return getDiskSpace();
+    }
+
+    public static long getFreeSpace() {
+        return getMainMountPoint().getFreeSpace();
+    }
+
+    public static long getUsableSpace() {
+        return getMainMountPoint().getUsableSpace();
+    }
+
+    public static File getMainMountPoint() {
+        if (OSCheck.getType() == OSType.WINDOWS) {
+            return new File("C:");
+        } else if (OSCheck.getType() == OSType.OTHER) {
+            throw new NullPointerException();
+        } else {
+            return new File("/");
         }
     }
 

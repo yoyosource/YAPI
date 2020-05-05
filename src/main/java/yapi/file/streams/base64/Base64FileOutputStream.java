@@ -5,6 +5,7 @@
 package yapi.file.streams.base64;
 
 import yapi.file.streams.FileCloseUtils;
+import yapi.math.base.BaseConversion;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -16,6 +17,9 @@ public class Base64FileOutputStream extends FileOutputStream {
     {
         FileCloseUtils.addShutdownClose(this);
     }
+
+    private StringBuilder st = new StringBuilder();
+    private int i = 0;
 
     public Base64FileOutputStream(String name) throws FileNotFoundException {
         super(name);
@@ -39,17 +43,36 @@ public class Base64FileOutputStream extends FileOutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        super.write(b);
+        String base2 = BaseConversion.toBase2(b);
+        st.append("0".repeat(8 - base2.length()) + base2);
+        writeInternal();
+    }
+
+    private void writeInternal() throws IOException {
+        while (st.length() >= 6) {
+            String s = st.substring(0, 6);
+            st.delete(0, 6);
+
+            super.write(Base64Utils.getChar(s));
+            if (i == 75) {
+                super.write('\n');
+            }
+            i = (i + 1) % 76;
+        }
     }
 
     @Override
     public void write(byte[] b) throws IOException {
-        super.write(b);
+        for (byte d : b) {
+            write(d);
+        }
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        super.write(b, off, len);
+        for (int i = 0; i < len; i++) {
+            write(b[i + off]);
+        }
     }
 
     @Override
@@ -58,6 +81,17 @@ public class Base64FileOutputStream extends FileOutputStream {
             return;
         }
         isClosed = true;
+
+        if (st.length() > 0) {
+            int i = 6 - st.length();
+            st.append("0".repeat(i));
+            writeInternal();
+            while (i > 0) {
+                super.write('=');
+                i -= 2;
+            }
+        }
+
         super.close();
     }
 

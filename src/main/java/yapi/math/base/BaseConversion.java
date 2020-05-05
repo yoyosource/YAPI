@@ -4,14 +4,6 @@
 
 package yapi.math.base;
 
-import yapi.manager.log.Logging;
-import yapi.manager.worker.Task;
-import yapi.manager.worker.WorkerPool;
-import yapi.math.NumberUtils;
-import yapi.runtime.RuntimeUtils;
-import yapi.runtime.ThreadUtils;
-
-import java.math.BigInteger;
 import java.util.Map;
 
 public class BaseConversion {
@@ -231,13 +223,13 @@ public class BaseConversion {
                 @Override
                 public void run() {
                     StringBuilder st = new StringBuilder();
-                    st.append(l).append(":\n");
+                    st._append(l)._append(":\n");
                     for (int base = 2; base <= BaseConversion.base.length; base++) {
                         String s = toBaseN(l, base);
                         if (base != 2) {
-                            st.append("\n");
+                            st._append("\n");
                         }
-                        st.append(" ".repeat(2 - (base + "").length()) + base + " > " + s);
+                        st._append(" ".repeat(2 - (base + "").length()) + base + " > " + s);
                     }
                     logging.add(st.toString());
                 }

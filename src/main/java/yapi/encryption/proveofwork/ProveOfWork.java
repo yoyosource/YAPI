@@ -142,8 +142,9 @@ public class ProveOfWork {
         };
 
         time = System.currentTimeMillis();
+        ThreadGroup threadGroup = new ThreadGroup(ThreadUtils.yapiGroup, "ProveOfWork: " + work);
         for (int i = 0; i < Runtime.getRuntime().availableProcessors() / 2; i++) {
-            Thread t = new Thread(runnable);
+            Thread t = new Thread(threadGroup, runnable);
             t.setName("ProveOfWork Thread - " + i);
             t.start();
         }

@@ -28,7 +28,7 @@ public class StringFormatting {
         specialMap.put("arrow:small:right", "›");
         specialMap.put("arrow:small:left", "‹");
         specialMap.put("arrow:double:right", "»");
-        specialMap.put("arrow:double:left", "»");
+        specialMap.put("arrow:double:left", "«");
         specialMap.put("arrow:up", "↑");
         specialMap.put("arrow:down", "↓");
         specialMap.put("arrow:both:right", "↔");

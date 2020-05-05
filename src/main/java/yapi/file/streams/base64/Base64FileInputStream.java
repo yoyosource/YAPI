@@ -4,10 +4,15 @@
 
 package yapi.file.streams.base64;
 
+import yapi.math.base.BaseConversion;
+
 import java.io.*;
 import java.nio.channels.FileChannel;
 
 public class Base64FileInputStream extends FileInputStream {
+
+    private StringBuilder st = new StringBuilder();
+    private boolean isClosed = false;
 
     public Base64FileInputStream(String name) throws FileNotFoundException {
         super(name);
@@ -23,7 +28,23 @@ public class Base64FileInputStream extends FileInputStream {
 
     @Override
     public int read() throws IOException {
-        return super.read();
+        while (st.length() < 8) {
+            int b = super.read();
+            if (b == -1) {
+                System.out.println("ENDE");
+                close();
+            } else if ((char)b == '=') {
+                System.out.println("PADDING");
+                st.append("00");
+            } else {
+                st.append(Base64Utils.getString((char) b));
+            }
+            System.out.println(st);
+        }
+        String bt = st.substring(0, 8);
+        st.delete(0, 8);
+
+        return BaseConversion.fromBase2toInt(bt);
     }
 
     @Override
@@ -48,7 +69,15 @@ public class Base64FileInputStream extends FileInputStream {
 
     @Override
     public void close() throws IOException {
+        if (isClosed) {
+            return;
+        }
+        isClosed = true;
         super.close();
+    }
+
+    public boolean isClosed() {
+        return isClosed;
     }
 
     @Override
@@ -59,12 +88,14 @@ public class Base64FileInputStream extends FileInputStream {
 
     @Override
     public byte[] readAllBytes() throws IOException {
-        return super.readAllBytes();
+        // TODO: change this
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public byte[] readNBytes(int len) throws IOException {
-        return super.readNBytes(len);
+        // TODO: change this
+        throw new UnsupportedOperationException();
     }
 
     @Override

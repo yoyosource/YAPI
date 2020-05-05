@@ -4,10 +4,10 @@
 
 package yapi.manager.worker;
 
-import yapi.manager.log.LogManager;
-import yapi.manager.log.Logger;
 import yapi.manager.log.Logging;
+import yapi.runtime.ThreadUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -26,6 +26,8 @@ public class WorkerPool implements Runnable {
     private int minWorkers;
     private int maxWorkers;
 
+    private static long wIDGlobal = 0;
+    private long wID = wIDGlobal++;
     private long id = 0;
     private long taskID = 0;
     private long lastTaskAssigned = 0;
@@ -33,6 +35,14 @@ public class WorkerPool implements Runnable {
 
     private Logging log = new Logging("Worker Pool");
     private int lastLogSize = 0;
+
+    private boolean daemon = false;
+
+    private static ThreadGroup threadGroup = new ThreadGroup(ThreadUtils.yapiGroup, "Worker Pools");
+    private ThreadGroup workerGroup = new ThreadGroup(threadGroup, "Worker Pool: " + wID);
+    private ThreadGroup workerPoolGroup = new ThreadGroup(workerGroup, "Workers");
+
+    private String name;
 
     /**
      *
@@ -128,10 +138,21 @@ public class WorkerPool implements Runnable {
         }
     }
 
+    public void setName(String name) {
+        try {
+            Field field = workerGroup.getClass().getDeclaredField("name");
+            field.setAccessible(true);
+            field.set(workerGroup, "WorkerPool[" + wID + "]: " + name);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+
+        }
+    }
+
     private void createWorkers() {
         log.add("Create " + minWorkers + " workers");
         while (all.size() < minWorkers) {
-            Worker t = new Worker(this);
+            Worker t = new Worker(workerPoolGroup, this);
+            t.setDaemon(daemon);
             t.setName("Worker Pool: Worker " + (++id));
             t.start();
             all.add(t);
@@ -147,7 +168,8 @@ public class WorkerPool implements Runnable {
                 log.add("Unfreeze Worker: '" + worker.getName() + "'");
                 return;
             }
-            Worker t = new Worker(this);
+            Worker t = new Worker(workerPoolGroup, this);
+            t.setDaemon(daemon);
             t.setName("Worker Pool: Worker " + (++id));
             t.start();
             all.add(t);
@@ -209,36 +231,42 @@ public class WorkerPool implements Runnable {
                 if (!run) {
                     break;
                 }
-                boolean b = poolManager();
-                if (!b && tasks.isEmpty() && all.size() > minWorkers && System.currentTimeMillis() - lastTaskAssigned > 20000) {
-                    deleteWorker(all.get(0));
-                }
-                if (!cachedWorkers.isEmpty()) {
-                    if (cachedWorkers.get(0).cachedTime() > 20000) {
-                        log.add("Delete Worker: '" + cachedWorkers.get(0).getWorker().getName() + "'");
-                        cachedWorkers.remove(0).getWorker().delete();
-                    }
-                }
+                delegatePool();
                 if (System.currentTimeMillis() - workerPoolInfo > 10000) {
                     workerPoolInfo = System.currentTimeMillis();
                     logWorkerPoolInfo();
                 }
             }
-            synchronized (pool) {
-                if (tasks.isEmpty() || available.isEmpty()) {
-                    continue;
-                }
-                Worker worker = available.remove(0);
-                Task task = tasks.remove(0);
-                if (worker == null) {
-                    tasks.add(task);
-                    continue;
-                }
-                log.add("Tasks: " + tasks.size());
-                lastTaskAssigned = System.currentTimeMillis();
-                worker.setTask(task);
+            delegateTask();
+        }
+    }
+
+    private void delegatePool() {
+        boolean b = poolManager();
+        if (!b && tasks.isEmpty() && all.size() > minWorkers && System.currentTimeMillis() - lastTaskAssigned > 20000) {
+            deleteWorker(all.get(0));
+        }
+        if (!cachedWorkers.isEmpty()) {
+            if (cachedWorkers.get(0).cachedTime() > 20000) {
+                log.add("Delete Worker: '" + cachedWorkers.get(0).getWorker().getName() + "'");
+                cachedWorkers.remove(0).getWorker().delete();
             }
         }
+    }
+
+    private synchronized void delegateTask() {
+        if (tasks.isEmpty() || available.isEmpty()) {
+            return;
+        }
+        Worker worker = available.remove(0);
+        Task task = tasks.remove(0);
+        if (worker == null) {
+            tasks.add(task);
+            return;
+        }
+        log.add("Tasks: " + tasks.size());
+        lastTaskAssigned = System.currentTimeMillis();
+        worker.setTask(task);
     }
 
     private void taskManager() {
@@ -246,7 +274,7 @@ public class WorkerPool implements Runnable {
             return;
         }
         started = true;
-        Thread t = new Thread(this);
+        Thread t = new Thread(workerGroup, this);
         t.setName("Worker Pool: Task Manager");
         t.start();
         log.add("Started Task Manager Thread");
@@ -317,6 +345,11 @@ public class WorkerPool implements Runnable {
             Worker worker = all.remove(0);
             worker.finish();
             log.add("Closing > " + worker.getName());
+        }
+        try {
+            workerGroup.destroy();
+        } catch (IllegalThreadStateException e) {
+
         }
         log.add("Finished to close");
     }

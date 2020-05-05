@@ -5,6 +5,7 @@
 package yapi.manager.resource;
 
 import yapi.manager.log.Logging;
+import yapi.runtime.ThreadUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,6 +21,9 @@ public class ResourceManager {
     private List<String> loading = new ArrayList<>();
 
     private Logging log = new Logging("Resource Manager");
+
+    private static ThreadGroup threadGroup = new ThreadGroup(ThreadUtils.yapiGroup, "Resource Manager");
+    private ThreadGroup threadGroupCurrent = threadGroup;
 
     /**
      *
@@ -99,7 +103,7 @@ public class ResourceManager {
      */
     public void loadAsync(String path, String name) {
         Runnable r = () -> load(path, name);
-        Thread t = new Thread(r);
+        Thread t = new Thread(threadGroupCurrent, r);
         t.setName("ResourceManager: Load > " + name);
         t.start();
     }
@@ -126,7 +130,8 @@ public class ResourceManager {
                 }
             }
         };
-        Thread t = new Thread(r);
+        threadGroupCurrent = new ThreadGroup(threadGroup, "QueueEntry Loader");
+        Thread t = new Thread(threadGroup, r);
         t.setName("ResourceManager: Load Manager");
         t.start();
         return t;

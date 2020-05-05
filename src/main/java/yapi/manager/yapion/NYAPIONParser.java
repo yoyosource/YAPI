@@ -144,10 +144,10 @@ public class NYAPIONParser {
             if (typeStack.isEmpty()) {
                 if (c == '{') {
                     typeStack.push(YAPIONCurrentType.OBJECT, i);
-                    yapionType = new YAPIONObject();
+                    add(new YAPIONObject());
                 } else if (c == '[') {
                     typeStack.push(YAPIONCurrentType.ARRAY, i);
-                    yapionType = new YAPIONArray();
+                    add(new YAPIONArray());
                 } else {
                     yapionType = null;
                     break;
@@ -208,6 +208,10 @@ public class NYAPIONParser {
                 escaped = true;
             }
         } while (typeStack.hasValue());
+    }
+
+    public void add(YAPIONType current) {
+
     }
 
     private void push(YAPIONCurrentType type) {

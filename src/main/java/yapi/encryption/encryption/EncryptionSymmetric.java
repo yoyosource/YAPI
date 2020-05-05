@@ -251,8 +251,8 @@ public class EncryptionSymmetric {
     }
 
     public static String createKey(String password, int security) {
-        if (security < 0) {
-            security = 0;
+        if (security < -1) {
+            security = -1;
         }
         if (security > 16) {
             security = 16;
@@ -265,12 +265,23 @@ public class EncryptionSymmetric {
         }
 
         int hashsum = 0;
-        byte[] hash = StringCrypting.hash(password, HashType.SHA512);
+        byte[] hash;
+        if (security <= 128) {
+            hash = StringCrypting.hash(password, HashType.SHA256);
+        } else {
+            hash = StringCrypting.hash(password, HashType.SHA512);
+        }
         for (byte b : hash) {
             hashsum += b;
         }
 
-        String key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2 - 128) + new NumberRandom(hashsum).getString(security / 2 - 128);
+        String key;
+        if (security <= 128) {
+            key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2 - 64) + new NumberRandom(hashsum).getString(security / 2 - 64);
+        } else {
+            key = toHex(hash).replace(" ", "") + new NumberRandom(checksum).getString(security / 2 - 128) + new NumberRandom(hashsum).getString(security / 2 - 128);
+        }
+
         return mixUP(toHex(hash).replace(" ", "") + key, checksum + hashsum);
     }
 
@@ -292,8 +303,8 @@ public class EncryptionSymmetric {
     }
 
     public static String createKey(int security) {
-        if (security < 0) {
-            security = 0;
+        if (security < -1) {
+            security = -1;
         }
         if (security > 16) {
             security = 16;
@@ -326,7 +337,7 @@ public class EncryptionSymmetric {
     }
 
     private static boolean checkKey(int length) {
-        if (length < 256) {
+        if (length < 128) {
             return false;
         }
         int limit = 1;
@@ -345,7 +356,7 @@ public class EncryptionSymmetric {
 
     public static byte[] encrypt(byte[] text, String key) {
         if (!checkKey(key.length())) {
-            throw new EncryptionException("Key needs to be at least 256 bytes long and a power of 2. Your key was " + key.length() + " bytes long.");
+            throw new EncryptionException("Key needs to be at least 256 bytes long ot 128 bytes long and a power of 2. Your key was " + key.length() + " bytes long.");
         }
 
         String[] keys = keys(key);
@@ -399,7 +410,7 @@ public class EncryptionSymmetric {
 
     public static byte[] decrypt(byte[] bytes, String key) {
         if (!checkKey(key.length())) {
-            throw new EncryptionException("Key needs to be at least 256 bytes long and a power of 2. Your key was " + key.length() + " bytes long.");
+            throw new EncryptionException("Key needs to be at least 256 bytes long ot 128 bytes long and a power of 2. Your key was " + key.length() + " bytes long.");
         }
 
         String[] keys = keys(key);

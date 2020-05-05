@@ -622,7 +622,7 @@ public class NumberUtils {
 
     /**
      * Inputs bigger than   100.000 can need more than 13 seconds
-     * Inputs bigger than   400.000 can need more than 20 minute
+     * Inputs bigger than   400.000 can need more than 20 seconds
      * Inputs bigger than 1.000.000 can need more than 30 seconds
      *
      * @since Version 1.2
@@ -640,7 +640,7 @@ public class NumberUtils {
 
     /**
      * Inputs bigger than   100.000 can need more than 13 seconds
-     * Inputs bigger than   400.000 can need more than 20 minute
+     * Inputs bigger than   400.000 can need more than 20 seconds
      * Inputs bigger than 1.000.000 can need more than 30 seconds
      *
      * @since Version 1.2
@@ -670,6 +670,7 @@ public class NumberUtils {
 
         TaskParallelization<BigInteger> bigIntegerTaskParallelization = new TaskParallelization<>();
         WorkerPool workerPool = new WorkerPool(threads);
+        workerPool.setName("FastFactorial");
 
         BigInteger value = bigInteger.add(BigInteger.ZERO);
         BigInteger t = blocks.add(BigInteger.ZERO);
@@ -691,7 +692,7 @@ public class NumberUtils {
 
         List<BigInteger> bigIntegers = bigIntegerTaskParallelization.merge();
         while (bigIntegers.size() > threads) {
-            List<List<BigInteger>> integers = bigIntegerTaskParallelization.split(bigIntegers, threads);
+            List<List<BigInteger>> integers = bigIntegerTaskParallelization.split(bigIntegers, bigIntegers.size() / 4);
             bigIntegerTaskParallelization.clear();
             for (List<BigInteger> i : integers) {
                 List<BigInteger> bI = new ArrayList<>(i);
@@ -755,8 +756,10 @@ public class NumberUtils {
     }
 
     public static void main(String[] args) throws Exception {
+
         for (int i = 0; i < 2000; i++) {
-            over(BigInteger.valueOf(49), BigInteger.valueOf(6));
+            //over(BigInteger.valueOf(49), BigInteger.valueOf(6));
+            fastFactorial(BigInteger.valueOf(449));
         }
         long time = 0;
         int index = 100;
@@ -766,13 +769,17 @@ public class NumberUtils {
             //over(BigInteger.valueOf(70000), BigInteger.valueOf(1000));
             //System.out.println(over(6, 3));
             for (int i = 0; i < 1000; i++) {
-                over(BigInteger.valueOf(49), BigInteger.valueOf(6));
+                //over(BigInteger.valueOf(49), BigInteger.valueOf(6));
+                fastFactorial(BigInteger.valueOf(449));
             }
             timer.stop();
             time += timer.getTime() / 1000;
             System.out.println(timer.getTime() / 1000 + "µs");
         }
         System.out.println(time / index + "µs");
+
+
+        System.out.println(fastFactorial(BigInteger.valueOf(449)));
 
         // fastOver
         // 6 over 3

@@ -4,6 +4,8 @@
 
 package yapi.encryption.encryption;
 
+import yapi.runtime.ThreadUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -79,7 +81,7 @@ public class EncryptionSymmetricStream {
             }
             done = true;
         };
-        Thread t = new Thread(runnable);
+        Thread t = new Thread(ThreadUtils.yapiGroup, runnable);
         t.setName("EncryptionSymmetricStream - Encrypt");
         t.start();
     }

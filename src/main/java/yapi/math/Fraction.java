@@ -244,7 +244,7 @@ public class Fraction {
         return new Fraction(numerator.remainder(fraction.numerator), denominator.remainder(fraction.denominator));
     }
 
-    private BigDecimal getBigDecimal() {
+    public BigDecimal getBigDecimal() {
         BigDecimal num = new BigDecimal(numerator);
         BigDecimal den = new BigDecimal(denominator);
         return num.divide(den, mathContext);
@@ -254,8 +254,16 @@ public class Fraction {
         return this.multiply(this);
     }
 
+    public Fraction sqrt() {
+        return this.power(Fraction.valueOf(0.5));
+    }
+
     public Fraction cube() {
         return this.multiply(this).multiply(this);
+    }
+
+    public Fraction cbrt() {
+        return this.power(Fraction.ONE.divide(Fraction.valueOf(3)));
     }
 
     public Fraction power(Fraction f) {
@@ -264,6 +272,10 @@ public class Fraction {
             return r;
         }
         return new Fraction(BigDecimalMath.root(getBigDecimal(), new BigDecimal(f.denominator), mathContext));
+    }
+
+    public Fraction root(Fraction fraction) {
+        return power(Fraction.ONE.divide(fraction));
     }
 
     public Fraction power(BigDecimal bigDecimal) {
