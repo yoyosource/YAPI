@@ -24,14 +24,18 @@ public class FastEncryptionSymmetricQueue {
     private int doneBytes = 0;
     private String nPerSecond = "";
 
+    private FastEncryptionSymmetricQueue instance = this;
+
     public FastEncryptionSymmetricQueue() {
         Runnable runnable = () -> {
             while (running) {
                 while (tasks.isEmpty()) {
-                    try {
-                        wait(100);
-                    } catch (InterruptedException e) {
+                    synchronized (instance) {
+                        try {
+                            wait(100);
+                        } catch (InterruptedException e) {
 
+                        }
                     }
                 }
 
