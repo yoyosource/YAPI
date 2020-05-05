@@ -1,4 +1,4 @@
-[![YAPI Release V1.2](https://img.shields.io/badge/YAPI%20Release-1.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
+[![YAPI Release V1.2](https://img.shields.io/badge/YAPI%20Release-1.2-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPI Pre-Release V?.?-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-%3F.%3F--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPI Version V1.3](https://img.shields.io/badge/YAPI%20Version-1.3-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
