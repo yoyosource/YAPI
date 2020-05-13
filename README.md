@@ -4,8 +4,8 @@
 [![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
 
 [![Files 284](https://img.shields.io/badge/Files-284-inactive)](https://github.com/yoyosource/YAPI)
-[![Methods 1593](https://img.shields.io/badge/Methods-1593-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 31177](https://img.shields.io/badge/Code%20Lines-31177-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1594](https://img.shields.io/badge/Methods-1594-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 31170](https://img.shields.io/badge/Code%20Lines-31170-inactive)](https://github.com/yoyosource/YAPI)
 
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)
@@ -163,6 +163,8 @@ I also want to thank everyone who helped me and tested the YAPI. If you want to 
 - `05 May 2020` `1.3-1.1`
 - `05 May 2020` `1.3-1.2`
 - `05 May 2020` `1.3-1.3`
+Changed version Naming to `[VERSION]-[REBUILD]`, eg. `1.3-5` (Version: 1.3, Rebuild: 5)
+- `05 May 2020` `1.3-5`
 
 ## Planned Features
 

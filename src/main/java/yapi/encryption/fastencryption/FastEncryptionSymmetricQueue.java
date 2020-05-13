@@ -24,9 +24,39 @@ public class FastEncryptionSymmetricQueue {
     private long doneBytes = 0;
     private String nPerSecond = "";
 
+    private int threadCount = Runtime.getRuntime().availableProcessors() * 4 - 1;
+
     private FastEncryptionSymmetricQueue instance = this;
 
     public FastEncryptionSymmetricQueue() {
+        Runnable runnable = () -> {
+            while (running) {
+                while (tasks.isEmpty()) {
+                    synchronized (instance) {
+                        try {
+                            wait(100);
+                        } catch (InterruptedException e) {
+
+                        }
+                    }
+                }
+
+                tasks.get(0).run();
+                tasks.remove(0);
+
+                processCancelQueue();
+            }
+        };
+        Thread t = new Thread(ThreadUtils.yapiGroup, runnable);
+        t.setName("FastEncryptionSymmetricQueue");
+        t.start();
+    }
+
+    public FastEncryptionSymmetricQueue(int threadCount) {
+        if (threadCount < 1) {
+            threadCount = 1;
+        }
+        this.threadCount = threadCount;
         Runnable runnable = () -> {
             while (running) {
                 while (tasks.isEmpty()) {
@@ -124,7 +154,7 @@ public class FastEncryptionSymmetricQueue {
 
         private void run() {
             try {
-                FastEncryptionSymmetricAsyncStream fastEncryptionSymmetricAsyncStream = new FastEncryptionSymmetricAsyncStream(new FileInputStream(source));
+                FastEncryptionSymmetricAsyncStream fastEncryptionSymmetricAsyncStream = new FastEncryptionSymmetricAsyncStream(new FileInputStream(source), threadCount);
                 fastEncryptionSymmetricAsyncStream.setEncryptionStreamProcessor(new EncryptionOutputStreamProcessor(new FileOutputStream(destination)));
                 String key = FastEncrytptionSymmetric.createKey(password);
 

@@ -38,16 +38,42 @@ public class FastEncryptionSymmetricAsyncStream {
     private long time = 0;
     private long doneBytes = 0;
 
+    private int threadCount = Runtime.getRuntime().availableProcessors() * 4 - 1;
+
     public FastEncryptionSymmetricAsyncStream(FileInputStream fileInputStream) {
         this.stream = fileInputStream;
+    }
+
+    public FastEncryptionSymmetricAsyncStream(FileInputStream fileInputStream, int threadCount) {
+        this.stream = fileInputStream;
+        if (threadCount < 1) {
+            threadCount = 1;
+        }
+        this.threadCount = threadCount;
     }
 
     public FastEncryptionSymmetricAsyncStream(ByteArrayInputStream byteArrayInputStream) {
         this.stream = byteArrayInputStream;
     }
 
+    public FastEncryptionSymmetricAsyncStream(ByteArrayInputStream byteArrayInputStream, int threadCount) {
+        this.stream = byteArrayInputStream;
+        if (threadCount < 1) {
+            threadCount = 1;
+        }
+        this.threadCount = threadCount;
+    }
+
     public FastEncryptionSymmetricAsyncStream(InputStream inputStream) {
         this.stream = inputStream;
+    }
+
+    public FastEncryptionSymmetricAsyncStream(InputStream inputStream, int threadCount) {
+        this.stream = inputStream;
+        if (threadCount < 1) {
+            threadCount = 1;
+        }
+        this.threadCount = threadCount;
     }
 
     private class AsyncResult {
@@ -84,7 +110,6 @@ public class FastEncryptionSymmetricAsyncStream {
         Runnable runnable = () -> {
             String k = key;
             int id = 0;
-            int threadCount = Runtime.getRuntime().availableProcessors() * 4 - 1;
             Queue<AsyncResult> results = new ArrayDeque<>();
             try {
                 while (stream.available() > 0) {
@@ -144,7 +169,6 @@ public class FastEncryptionSymmetricAsyncStream {
         Runnable runnable = () -> {
             String k = key;
             int id = 0;
-            int threadCount = Runtime.getRuntime().availableProcessors() * 4 - 1;
             Queue<AsyncResult> results = new ArrayDeque<>();
             try {
                 while (stream.available() > 0) {
