@@ -13,6 +13,12 @@ ext {
     uberJarName = "${group}-${version}-all.jar"
     jarName = "${group}-${version}.jar"
     libs = "${buildDir}/libs"
+
+    if (publicationBuild.equals("0")) {
+        publication = publicationVersion
+    } else {
+        publication = publicationVersion + "-" + publicationBuild
+    }
 }
 
 sourceCompatibility = 1.12
@@ -75,12 +81,25 @@ publishing {
         maven(MavenPublication) {
             groupId = 'yoyosource'
             artifactId = 'YAPI'
-            version = '1.3-6'
+            version = publication
 
             from components.java
         }
     }
 }
+
+task publishYAPI {
+    description 'Publish the YAPI to GitHub Maven'
+    group "YAPI"
+    
+    //mustRunAfter publishMavenPublicationToMavenRepository
+    dependsOn publishMavenPublicationToMavenRepository
+    
+    doLast {
+        new File("${new File("${buildDir}").parentFile.toString()}/gradle.properties").text = "publicationVersion=" + publicationVersion + "\n" + "publicationBuild=" + (Integer.parseInt(publicationBuild) + 1) + "\n"
+    }
+}
+//publishMavenPublicationToMavenRepository.dependsOn YAPIPublish
 
 
 

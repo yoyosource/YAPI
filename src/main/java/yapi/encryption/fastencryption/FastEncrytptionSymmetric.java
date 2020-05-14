@@ -8,6 +8,7 @@ import yapi.internal.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
 import yapi.string.HashType;
 import yapi.string.StringCrypting;
+import yapi.string.StringFormatting;
 import yapi.string.UTF8String;
 
 import java.io.ByteArrayInputStream;
@@ -43,7 +44,7 @@ public class FastEncrytptionSymmetric {
     }
 
     private static byte[] pad() {
-        return new NumberRandom().getString(16).getBytes();
+        return new NumberRandom().getString(32).getBytes();
     }
 
     private static void validateKey(String key) {
@@ -67,16 +68,35 @@ public class FastEncrytptionSymmetric {
         return strings;
     }
 
-    private static String createMasterKey(String[] keys) {
-        StringBuilder st = new StringBuilder();
+    private static String[] createMasterKeys(String[] keys) {
+        StringBuilder[] stringBuilders = new StringBuilder[keys[0].length()];
+        for (int i = 0; i < stringBuilders.length; i++) {
+            stringBuilders[i] = new StringBuilder();
+        }
+
         for (String s : keys) {
             long l = 0;
             for (int i = 0; i < s.length(); i++) {
                 l += s.charAt(i) * (i + 1);
             }
-            st.append(s.charAt(new NumberRandom(l).getInt(s.length())));
+
+            NumberRandom numberRandom = new NumberRandom(l);
+            StringBuilder st = new StringBuilder().append(s);
+            for (int i = 0; i < 100; i++) {
+                int index = numberRandom.getInt(st.length());
+                char c = st.charAt(index);
+                st.deleteCharAt(index).append(c);
+            }
+            for (int i = 0; i < stringBuilders.length; i++) {
+                stringBuilders[i].append(st.charAt(i));
+            }
         }
-        return st.toString();
+
+        String[] strings = new String[stringBuilders.length];
+        for (int i = 0; i < stringBuilders.length; i++) {
+            strings[i] = stringBuilders[i].toString();
+        }
+        return strings;
     }
 
     public static byte[] encrypt(String key, UTF8String bytes) {
@@ -86,9 +106,9 @@ public class FastEncrytptionSymmetric {
     public static byte[] encrypt(String key, byte... bytes) {
         validateKey(key);
         String[] keys = keys(key);
-        String masterKey = createMasterKey(keys);
+        String[] masterKeys = createMasterKeys(keys);
 
-        byte[] hash = StringCrypting.hash(bytes, HashType.MD5);
+        byte[] hash = StringCrypting.hash(bytes, HashType.SHA256);
 
         byte[] pad = pad();
         byte[] bytesStream = Arrays.copyOf(pad, pad.length + hash.length + bytes.length);
@@ -110,7 +130,7 @@ public class FastEncrytptionSymmetric {
             index = current;
 
             current = xorPlus(current, currentKey);
-            current = xorPlus(current, masterKey);
+            current = xorPlus(current, masterKeys[i % masterKeys.length]);
             bytesStream[i] = current;
 
             i++;
@@ -126,7 +146,7 @@ public class FastEncrytptionSymmetric {
     public static byte[] decrypt(String key, byte... bytes) {
         validateKey(key);
         String[] keys = keys(key);
-        String masterKey = createMasterKey(keys);
+        String[] masterKeys = createMasterKeys(keys);
 
         byte[] bytesStream = new byte[bytes.length];
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
@@ -138,7 +158,7 @@ public class FastEncrytptionSymmetric {
             int t = (index < 0 ? index + 255 : index) % keys.length;
             String currentKey = keys[t];
 
-            current = xorPlusInverse(current, masterKey);
+            current = xorPlusInverse(current, masterKeys[i % masterKeys.length]);
             current = xorPlusInverse(current, currentKey);
             bytesStream[i] = current;
 
@@ -146,7 +166,7 @@ public class FastEncrytptionSymmetric {
             i++;
         }
 
-        bytes = new byte[bytesStream.length - 16];
+        bytes = new byte[bytesStream.length - 32];
         byte[] pad = pad();
         int length = pad.length;
         i = length;
@@ -163,7 +183,8 @@ public class FastEncrytptionSymmetric {
             i++;
         }
 
-        if (Arrays.equals(StringCrypting.hash(bytesStream, HashType.MD5), hash)) {
+        System.out.println(StringFormatting.toHex(bytesStream));
+        if (Arrays.equals(StringCrypting.hash(bytesStream, HashType.SHA256), hash)) {
             return bytesStream;
         } else {
             return new byte[0];

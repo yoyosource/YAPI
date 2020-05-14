@@ -113,7 +113,7 @@ public class FastEncryptionSymmetricAsyncStream {
             Queue<AsyncResult> results = new ArrayDeque<>();
             try {
                 while (stream.available() > 0) {
-                    byte[] bytes = stream.readNBytes(blockSize - 32);
+                    byte[] bytes = stream.readNBytes(blockSize - 64);
                     AsyncResult asyncResult = new AsyncResult(id++);
                     results.add(asyncResult);
 
