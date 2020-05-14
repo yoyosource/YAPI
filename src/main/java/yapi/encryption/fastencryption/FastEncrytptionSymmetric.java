@@ -8,7 +8,6 @@ import yapi.internal.exceptions.EncryptionException;
 import yapi.math.NumberRandom;
 import yapi.string.HashType;
 import yapi.string.StringCrypting;
-import yapi.string.StringFormatting;
 import yapi.string.UTF8String;
 
 import java.io.ByteArrayInputStream;
@@ -183,7 +182,6 @@ public class FastEncrytptionSymmetric {
             i++;
         }
 
-        System.out.println(StringFormatting.toHex(bytesStream));
         if (Arrays.equals(StringCrypting.hash(bytesStream, HashType.SHA256), hash)) {
             return bytesStream;
         } else {
