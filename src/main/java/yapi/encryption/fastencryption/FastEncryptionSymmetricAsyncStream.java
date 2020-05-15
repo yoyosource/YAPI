@@ -17,7 +17,51 @@ import java.util.Queue;
 
 public class FastEncryptionSymmetricAsyncStream {
 
-    private final int blockSize = 1024*1024;
+    public static final int LOW_BLOCK_SIZE = 1024*32;
+    public static final int DEFAULT_BLOCK_SIZE = 1024*128;
+    public static final int HIGH_BLOCK_SIZE = 1024*1024;
+
+    private int blockSize = 1024*128;
+
+/*
+1024*32
+ø 29.95M
+^ 33.08M
+
+1024*64
+ø 31.1M
+^ 34.75M
+
+1024*128
+ø 32.36M
+^ 34.86M
+
+ø 32.12M
+^ 35.2M
+
+ø 32.61M
+^ 35.55M
+
+ø 24.28M
+^ 28.39M
+
+ø 31.63M
+^ 34.49M
+
+ø 27.06M
+^ 32.92M
+
+
+ø 22.33M
+^ 24.42M
+
+ø 22.29M
+^ 24.66M
+
+1024*256
+ø 30.17M
+^ 32.71M
+*/
 
     private InputStream stream;
     private Queue<byte[]> queue = new ArrayDeque<>();
@@ -361,6 +405,10 @@ public class FastEncryptionSymmetricAsyncStream {
 
     private void processData(byte[] bytes) {
         encryptionStreamProcessor.processData(bytes);
+    }
+
+    public void setBlockSize(int blockSize) {
+        this.blockSize = blockSize;
     }
 
 }

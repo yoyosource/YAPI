@@ -251,7 +251,7 @@ public class FileUtils {
         }
         long size = getSize(file);
         int i = 0;
-        while (size > 1024) {
+        while (size >= 1024) {
             size /= 1024;
             i++;
         }
@@ -282,7 +282,7 @@ public class FileUtils {
         }
         int i = 0;
         long oldSize = size;
-        while (size > 1024) {
+        while (size >= 1024) {
             size /= 1024;
             i++;
         }

@@ -5,6 +5,7 @@
 package yapi.encryption.fastencryption;
 
 import yapi.encryption.encryption.EncryptionOutputStreamProcessor;
+import yapi.file.FileUtils;
 import yapi.runtime.ThreadUtils;
 
 import java.io.File;
@@ -25,6 +26,7 @@ public class FastEncryptionSymmetricQueue {
     private String nPerSecond = "";
 
     private int threadCount = Runtime.getRuntime().availableProcessors() * 4 - 1;
+    private int blockSize = 1024*128;
 
     private FastEncryptionSymmetricQueue instance = this;
 
@@ -155,10 +157,12 @@ public class FastEncryptionSymmetricQueue {
         private void run() {
             try {
                 FastEncryptionSymmetricAsyncStream fastEncryptionSymmetricAsyncStream = new FastEncryptionSymmetricAsyncStream(new FileInputStream(source), threadCount);
+                fastEncryptionSymmetricAsyncStream.setBlockSize(blockSize);
+                FileUtils.emptyFile(destination);
                 fastEncryptionSymmetricAsyncStream.setEncryptionStreamProcessor(new EncryptionOutputStreamProcessor(new FileOutputStream(destination)));
                 String key = FastEncrytptionSymmetric.createKey(password);
 
-                if (mode) {
+                if (!mode) {
                     fastEncryptionSymmetricAsyncStream.encrypt(key);
                 } else {
                     fastEncryptionSymmetricAsyncStream.decrypt(key);
@@ -220,6 +224,10 @@ public class FastEncryptionSymmetricQueue {
 
     public String nPerSecond() {
         return nPerSecond;
+    }
+
+    public void setBlockSize(int blockSize) {
+        this.blockSize = blockSize;
     }
 
     public void close() {
