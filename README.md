@@ -4,8 +4,8 @@
 [![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
 
 [![Files 284](https://img.shields.io/badge/Files-284-inactive)](https://github.com/yoyosource/YAPI)
-[![Methods 1594](https://img.shields.io/badge/Methods-1594-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 31287](https://img.shields.io/badge/Code%20Lines-31287-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1596](https://img.shields.io/badge/Methods-1596-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 31299](https://img.shields.io/badge/Code%20Lines-31299-inactive)](https://github.com/yoyosource/YAPI)
 
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)
