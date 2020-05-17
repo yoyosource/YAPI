@@ -8,10 +8,7 @@ import yapi.encryption.encryption.EncryptionStreamProcessor;
 import yapi.file.FileUtils;
 import yapi.runtime.ThreadUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -163,9 +160,6 @@ public class FastEncryptionSymmetricAsyncStream {
 
                     process(asyncResult, k, bytes, false);
                     process(results);
-                    if (stream.available() == 0) {
-                        break;
-                    }
                     k = FastEncrytptionSymmetric.deriveKey(k);
 
                     synchronized (instance) {
@@ -183,6 +177,9 @@ public class FastEncryptionSymmetricAsyncStream {
                             Thread.currentThread().interrupt();
                         }
                     }
+                    if (stream.available() == 0) {
+                        break;
+                    }
                     while (queue.size() > 7) {
                         try {
                             synchronized (instance) {
@@ -191,6 +188,9 @@ public class FastEncryptionSymmetricAsyncStream {
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
+                    }
+                    if (stream.available() == 0) {
+                        break;
                     }
                 }
             } catch (IOException e) {
@@ -225,9 +225,6 @@ public class FastEncryptionSymmetricAsyncStream {
 
                     process(asyncResult, k, bytes, true);
                     process(results);
-                    if (stream.available() == 0) {
-                        break;
-                    }
                     k = FastEncrytptionSymmetric.deriveKey(k);
 
                     synchronized (instance) {
@@ -245,6 +242,9 @@ public class FastEncryptionSymmetricAsyncStream {
                             Thread.currentThread().interrupt();
                         }
                     }
+                    if (stream.available() == 0) {
+                        break;
+                    }
                     while (queue.size() > 7) {
                         try {
                             synchronized (instance) {
@@ -253,6 +253,9 @@ public class FastEncryptionSymmetricAsyncStream {
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
+                    }
+                    if (stream.available() == 0) {
+                        break;
                     }
                 }
             } catch (IOException e) {
