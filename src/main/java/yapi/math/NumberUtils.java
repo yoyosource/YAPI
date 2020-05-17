@@ -817,6 +817,10 @@ public class NumberUtils {
             return BigInteger.valueOf(-1);
         }
 
+        if (r.compareTo(BigInteger.ZERO) == 0) {
+            return BigInteger.ONE;
+        }
+
         BigInteger a = BigInteger.ONE;
         BigInteger b = BigInteger.ONE;
         BigInteger c = n.subtract(r);

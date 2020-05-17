@@ -17,11 +17,11 @@ import java.util.Queue;
 
 public class FastEncryptionSymmetricAsyncStream {
 
-    public static final int LOW_BLOCK_SIZE = 1024*32;
-    public static final int DEFAULT_BLOCK_SIZE = 1024*128;
-    public static final int HIGH_BLOCK_SIZE = 1024*1024;
+    public static final int LOW_BLOCK_SIZE = 1024*32-64;
+    public static final int DEFAULT_BLOCK_SIZE = 1024*128-64;
+    public static final int HIGH_BLOCK_SIZE = 1024*1024-64;
 
-    private int blockSize = 1024*128;
+    private int blockSize = 1024*128-64;
 
 /*
 1024*32
@@ -157,12 +157,15 @@ public class FastEncryptionSymmetricAsyncStream {
             Queue<AsyncResult> results = new ArrayDeque<>();
             try {
                 while (stream.available() > 0) {
-                    byte[] bytes = stream.readNBytes(blockSize - 64);
+                    byte[] bytes = stream.readNBytes(blockSize);
                     AsyncResult asyncResult = new AsyncResult(id++);
                     results.add(asyncResult);
 
                     process(asyncResult, k, bytes, false);
                     process(results);
+                    if (stream.available() == 0) {
+                        break;
+                    }
                     k = FastEncrytptionSymmetric.deriveKey(k);
 
                     synchronized (instance) {
@@ -216,12 +219,15 @@ public class FastEncryptionSymmetricAsyncStream {
             Queue<AsyncResult> results = new ArrayDeque<>();
             try {
                 while (stream.available() > 0) {
-                    byte[] bytes = stream.readNBytes(blockSize);
+                    byte[] bytes = stream.readNBytes(blockSize + 64);
                     AsyncResult asyncResult = new AsyncResult(id++);
                     results.add(asyncResult);
 
                     process(asyncResult, k, bytes, true);
                     process(results);
+                    if (stream.available() == 0) {
+                        break;
+                    }
                     k = FastEncrytptionSymmetric.deriveKey(k);
 
                     synchronized (instance) {
