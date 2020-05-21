@@ -164,7 +164,13 @@ I also want to thank everyone who helped me and tested the YAPI. If you want to 
 - `05 May 2020` `1.3-1.2`
 - `05 May 2020` `1.3-1.3`
 Changed version Naming to `[VERSION]-[REBUILD]`, eg. `1.3-5` (Version: 1.3, Rebuild: 5)
-- `05 May 2020` `1.3-5`
+- `13 May 2020` `1.3-5`
+- `14 May 2020` `1.3-6`
+- `14 May 2020` `1.3-7`
+- `15 May 2020` `1.3-8`
+- `15 May 2020` `1.3-9`
+- `17 May 2020` `1.3-10`
+- `17 May 2020` `1.3-11`
 
 ## Planned Features
 
