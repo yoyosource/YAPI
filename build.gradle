@@ -14,11 +14,13 @@ ext {
     jarName = "${group}-${version}.jar"
     libs = "${buildDir}/libs"
 
-    if (publicationBuild.equals("0")) {
+    publication = mayor + "." + minor + "." + patch
+
+    /*if (publicationBuild.equals("0")) {
         publication = publicationVersion
     } else {
         publication = publicationVersion + "-" + publicationBuild
-    }
+    }*/
 }
 
 sourceCompatibility = 1.12
@@ -88,19 +90,60 @@ publishing {
     }
 }
 
+task incrementMayor {
+    description 'Increment Mayor'
+    group "YAPI Release"
+    
+    doLast {
+        mayor = Integer.parseInt(mayor) + 1
+        minor = 0
+        patch = 0
+        save()
+    }
+}
+
+task incrementMinor {
+    description 'Increment Minor'
+    group "YAPI Release"
+
+    doLast {
+        minor = Integer.parseInt(minor) + 1
+        patch = 0
+        save()
+    }
+}
+
+task incrementPatch {
+    description 'Increment Patch'
+    group "YAPI Release"
+
+    doLast {
+        patch = Integer.parseInt(patch) + 1
+        save()
+    }
+}
+
+private void save() {
+    File f = new File("${new File("${buildDir}").parentFile.toString()}/gradle.properties")
+    String[] strings = f.getText().split("\n")
+    for (int i = 0; i < strings.length; i++) {
+        if (strings[i].startsWith("mayor = ")) {
+            strings[i] = "mayor = " + mayor
+        } else if (strings[i].startsWith("minor = ")) {
+            strings[i] = "minor = " + minor
+        } else if (strings[i].startsWith("patch = ")) {
+            strings[i] = "patch = " + patch
+        }
+    }
+    f.text = String.join("\n", strings)
+}
+
 task publishYAPI {
     description 'Publish the YAPI to GitHub Maven'
     group "YAPI"
-    
-    //mustRunAfter publishMavenPublicationToMavenRepository
-    dependsOn publishMavenPublicationToMavenRepository
-    
-    doLast {
-        new File("${new File("${buildDir}").parentFile.toString()}/gradle.properties").text = "publicationVersion=" + publicationVersion + "\n" + "publicationBuild=" + (Integer.parseInt(publicationBuild) + 1) + "\n"
-    }
-}
-//publishMavenPublicationToMavenRepository.dependsOn YAPIPublish
 
+    dependsOn publishMavenPublicationToMavenRepository
+}
 
 
 task YAPILicense {

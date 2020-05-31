@@ -58,7 +58,7 @@ public class LicenseSystem {
                     }
                     directories.addAll(Arrays.stream(fs).collect(Collectors.toList()));
                 } else {
-                    if (f.getName().endsWith(".MD")) {
+                    if (!f.getAbsolutePath().endsWith(".java")) {
                         continue;
                     }
                     fileCount++;
@@ -101,6 +101,9 @@ public class LicenseSystem {
             "// Copyright (C) 2019,2020 yoyosource";
 
     private static String[] addLicense(String[] strings, File f) {
+        if (!f.getAbsolutePath().endsWith(".java")) {
+            return strings;
+        }
         StringBuilder st = new StringBuilder();
         int max = Math.min(12, strings.length);
         for (int i = 0; i < max; i++) {
