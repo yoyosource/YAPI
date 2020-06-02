@@ -4,7 +4,7 @@
 
 package yapi.internal.exceptions;
 
-public class YAPIException extends RuntimeException {
+public class YAPIException extends Exception {
 
     public YAPIException() {
         super();
@@ -25,4 +25,5 @@ public class YAPIException extends RuntimeException {
     protected YAPIException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
 }

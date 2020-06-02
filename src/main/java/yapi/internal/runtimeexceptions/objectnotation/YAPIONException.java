@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.internal.exceptions.objectnotation;
+package yapi.internal.runtimeexceptions.objectnotation;
 
-import yapi.internal.exceptions.ObjectNotationException;
+import yapi.internal.runtimeexceptions.ObjectNotationException;
 
 public class YAPIONException extends ObjectNotationException {
 

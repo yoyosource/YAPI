@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.internal.exceptions.math;
+package yapi.internal.runtimeexceptions.math;
 
-import yapi.internal.exceptions.MathException;
+import yapi.internal.runtimeexceptions.MathException;
 
 public class CalculatorException extends MathException {
 

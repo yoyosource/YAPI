@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.internal.exceptions;
+package yapi.internal.runtimeexceptions;
 
-public class ConfigException extends YAPIException {
+public class ConfigException extends YAPIRuntimeException {
 
     public ConfigException() {
         super();
@@ -25,4 +25,5 @@ public class ConfigException extends YAPIException {
     protected ConfigException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
 }

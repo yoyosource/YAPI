@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.internal.exceptions;
+package yapi.internal.runtimeexceptions;
 
-public class WindowCreatorException extends YAPIException {
+public class WindowCreatorException extends YAPIRuntimeException {
 
     public WindowCreatorException() {
         super();

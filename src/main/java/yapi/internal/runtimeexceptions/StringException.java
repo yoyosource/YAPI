@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.internal.exceptions;
+package yapi.internal.runtimeexceptions;
 
-public class StringException extends YAPIException {
+public class StringException extends YAPIRuntimeException {
 
     public StringException() {
         super();

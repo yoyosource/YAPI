@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.internal.exceptions;
+package yapi.internal.runtimeexceptions;
 
-public class MathException extends YAPIException {
+public class MathException extends YAPIRuntimeException {
 
     public MathException() {
         super();

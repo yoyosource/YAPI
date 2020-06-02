@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.internal.exceptions.config;
+package yapi.internal.runtimeexceptions.config;
 
-import yapi.internal.exceptions.ConfigException;
+import yapi.internal.runtimeexceptions.ConfigException;
 
 public class ConfigFileExistsException extends ConfigException {
 

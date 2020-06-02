@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.internal.exceptions.string;
+package yapi.internal.runtimeexceptions.string;
 
-import yapi.internal.exceptions.StringException;
+import yapi.internal.runtimeexceptions.StringException;
 
 public class NoStringException extends StringException {
 
