@@ -12,12 +12,17 @@ import java.io.InputStream;
 public class AudioClip {
 
     private Clip clip;
+    private FloatControl volume;
+
+    private boolean running = false;
 
     public AudioClip(File f) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f);
         clip = AudioSystem.getClip();
         clip.open(audioInputStream);
         clip.setLoopPoints(0, -1);
+
+        this.volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
     }
 
     public AudioClip(InputStream inputStream) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
@@ -25,14 +30,26 @@ public class AudioClip {
         clip = AudioSystem.getClip();
         clip.open(audioInputStream);
         clip.setLoopPoints(0, -1);
+
+        this.volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
     }
 
     public void play() {
         clip.start();
+        running = true;
     }
 
     public void stop() {
         clip.stop();
+        running = false;
+    }
+
+    public void setVolume(float volume) {
+        this.volume.setValue(volume);
+    }
+
+    public float getVolume() {
+        return this.volume.getValue();
     }
 
     public int getPlaybackPosition() {
@@ -68,7 +85,11 @@ public class AudioClip {
     }
 
     public boolean isRunning() {
-        return clip.isRunning();
+        if (clip.isRunning()) {
+            running = false;
+            return true;
+        }
+        return running;
     }
 
     public boolean isActive() {
