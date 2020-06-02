@@ -4,11 +4,24 @@
 
 package yapi.os;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class OSCheck {
 
     private static OSType type = initType();
+    private static String otherType = "";
+
+    private static List<OSChecker> checkers = new ArrayList<>();
+
+    public static void addOSType(OSChecker checker) {
+        checkers.add(checker);
+    }
+
+    public static void reCheck() {
+        type = initType();
+    }
 
     private static OSType initType() {
         String os = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
@@ -20,6 +33,15 @@ public class OSCheck {
             return OSType.LINUX;
         }
 
+        for (OSChecker osChecker : checkers) {
+            String s = osChecker.check(os);
+            if (s == null || s.trim().isEmpty()) {
+                continue;
+            }
+            otherType = s.trim().toLowerCase();
+            return OSType.OTHER;
+        }
+        otherType = "";
         return OSType.OTHER;
     }
 
@@ -27,4 +49,7 @@ public class OSCheck {
         return type;
     }
 
+    public static String getOtherType() {
+        return otherType;
+    }
 }
