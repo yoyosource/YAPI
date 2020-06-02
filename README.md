@@ -1,11 +1,11 @@
-[![YAPI Release V1.2](https://img.shields.io/badge/YAPI%20Release-1.2-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
+[![YAPI Release V2.0.0](https://img.shields.io/badge/YAPI%20Release-2.0.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPI Pre-Release V?.?-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-%3F.%3F--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
-[![YAPI Version V1.3](https://img.shields.io/badge/YAPI%20Version-1.3-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
+[![YAPI Version V2.0.0](https://img.shields.io/badge/YAPI%20Version-2.0.0-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
 
-[![Files 303](https://img.shields.io/badge/Files-303-inactive)](https://github.com/yoyosource/YAPI)
-[![Methods 1546](https://img.shields.io/badge/Methods-1546-inactive)](https://github.com/yoyosource/YAPI)
-[![Code Lines 30694](https://img.shields.io/badge/Code%20Lines-30694-inactive)](https://github.com/yoyosource/YAPI)
+[![Files 305](https://img.shields.io/badge/Files-305-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1642](https://img.shields.io/badge/Methods-1642-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 31533](https://img.shields.io/badge/Code%20Lines-31533-inactive)](https://github.com/yoyosource/YAPI)
 
 [![Java Version V12.0.1](https://img.shields.io/badge/Java%20Version-12.0.1-blue.svg)](https://github.com/yoyosource/YAPI/releases/tag/v1.0)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)
@@ -37,7 +37,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'yoyosource:YAPI:1.2'
+    implementation 'yoyosource:YAPI:2.0.0'
 }
 ```
 Alternative you can download the jar directly from [releases](https://github.com/yoyosource/YAPI/releases). 
@@ -55,55 +55,6 @@ Alternative you can download the jar directly from [releases](https://github.com
 
 * [V] Version
 * [L] Licence
-
-## Code Tags
-- Math
-  - Calculator
-    - Fraction
-    - Normal
-    - `Mathscript` (Unfinished)
-  - Coordinates
-  - Distributions
-  - Random
-  - Utility
-  - `NeuralNet` (Unfinished)
-- String
-  - Compression (Unfinished)
-  - Encryption
-  - Hashing
-  - Formatting
-  - `TemplateEngine` (Unfinished)
-- Regex
-- State-Machine
-- FileUtils
-- ResourceManager
-- Worker
-- YAPION
-- JSON
-- Config (Unfinished)
-- Sockets (Unfinished)
-- UI/GUI (Unfinished)
-- Color
-- Data-structures
-
-
-- Mathscript (Unfinished)
-  - Math functions
-  - Vectors
-  - Numbers
-
-
-- NeuralNet (Unfinished)
-  - Teaching
-  - Learning
-  - Saving
-  - Loading 
-
-
-- TemplateEngine (Unfinished)
-  - Variable System
-  - Variable Replace
-  - Method calls
   
 ## Goals
 | Goal    | Type       | Reach Date  |
@@ -123,8 +74,7 @@ Alternative you can download the jar directly from [releases](https://github.com
 - `1.0` [R] `06 Nov 2019` > Focus on Math, Encryption, and Password cracking
 - `1.1` [A] `21 Jan 2020` > Pre-Release of **1.2**. Focus on String Manipulation and Compression
 - `1.2` [R] `05 May 2020` > Focus on Console (ANSI) and log system.
-- `1.3` [C] `?? ??? 2020` > 
-- `1.4` [P] `?? ??? 2020` > 
+- `2.0.0` [C] `02 Jun 2020` > Mayor changes throughout the YAPI.  
 
 * [R] Release
 * [A] Alpha
@@ -142,8 +92,8 @@ I also want to thank everyone, who participated in helping me with this project.
 ### Version 1.2
 Version 1.2 is the third mayor release of the [YAPI](https://github.com/yoyosource/YAPI) with many new features and utilities. The focus of this release was on a Console system with ANSI support, a log system. As well as FileUtils, such as HexFileInputStream and HexFileOutputStream.
 I also want to thank everyone who helped me and tested the YAPI. If you want to help me create a [pull request](https://github.com/yoyosource/YAPI/pulls) or report a bug with an [issue](https://github.com/yoyosource/YAPI/issues) on GitHub.
-### Version 1.3
-### Version 1.4
+### Version 2.0.0
+Version 2.0.0 is a mayor release and refit of the previous versions. Many Utilities got added as well as new Math stuff, String stuff and more.
 
 ## Maven Version Log
 ### Version 1.0
@@ -171,15 +121,6 @@ Changed version Naming to `[VERSION]-[REBUILD]`, eg. `1.3-5` (Version: 1.3, Rebu
 - `15 May 2020` `1.3-9`
 - `17 May 2020` `1.3-10`
 - `17 May 2020` `1.3-11`
-
-## Planned Features
-
-- **config** System
-- **log** System
-- **Sets**
-- **Flow Chart** System
-- **Color Utils** more methods.
-- **Matrix**
-
-* **Regex** System
-* **State Machine**
+### Version 2.0.0
+Changed version Naming to `[MAYOR].[MINOR].[PATCH]`, eg. `2.0.0` (Mayor: 2, Minor: 0, Patch: 0)
+- `02 Jun 2020` `2.0.0`

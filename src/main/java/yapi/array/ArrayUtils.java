@@ -364,9 +364,73 @@ public class ArrayUtils {
         return copyInto;
     }
 
-    public static int size(Object[]... objects) {
+    public static int size(Short[]... input) {
         int size = 0;
-        for (Object[] array : objects) {
+        for (Short[] array : input) {
+            size += array.length;
+        }
+        return size;
+    }
+
+    public static int size(Boolean[]... input) {
+        int size = 0;
+        for (Boolean[] array : input) {
+            size += array.length;
+        }
+        return size;
+    }
+
+    public static int size(Byte[]... input) {
+        int size = 0;
+        for (Byte[] array : input) {
+            size += array.length;
+        }
+        return size;
+    }
+
+    public static int size(Integer[]... input) {
+        int size = 0;
+        for (Integer[] array : input) {
+            size += array.length;
+        }
+        return size;
+    }
+
+    public static int size(Character[]... input) {
+        int size = 0;
+        for (Character[] array : input) {
+            size += array.length;
+        }
+        return size;
+    }
+
+    public static int size(Long[]... input) {
+        int size = 0;
+        for (Long[] array : input) {
+            size += array.length;
+        }
+        return size;
+    }
+
+    public static int size(Double[]... input) {
+        int size = 0;
+        for (Double[] array : input) {
+            size += array.length;
+        }
+        return size;
+    }
+
+    public static int size(Float[]... input) {
+        int size = 0;
+        for (Float[] array : input) {
+            size += array.length;
+        }
+        return size;
+    }
+
+    public static <T> int size(T[]... input) {
+        int size = 0;
+        for (T[] array : input) {
             size += array.length;
         }
         return size;
