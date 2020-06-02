@@ -5,7 +5,7 @@
 package yapi.manager.json;
 
 import yapi.file.FileUtils;
-import yapi.internal.exceptions.objectnotation.JSONException;
+import yapi.internal.runtimeexceptions.objectnotation.JSONException;
 import yapi.manager.json.value.JSONArray;
 import yapi.manager.json.value.JSONObject;
 import yapi.manager.json.value.JSONValue;

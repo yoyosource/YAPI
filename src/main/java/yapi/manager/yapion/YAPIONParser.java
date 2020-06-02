@@ -4,8 +4,8 @@
 
 package yapi.manager.yapion;
 
-import yapi.internal.exceptions.YAPIException;
-import yapi.internal.exceptions.objectnotation.YAPIONException;
+import yapi.internal.runtimeexceptions.YAPIRuntimeException;
+import yapi.internal.runtimeexceptions.objectnotation.YAPIONException;
 import yapi.manager.json.JSONVariable;
 import yapi.manager.json.value.JSONArray;
 import yapi.manager.json.value.JSONObject;
@@ -92,7 +92,7 @@ public class YAPIONParser {
         try {
             return parseObject(yapion.substring(1, yapion.length() - 1).toCharArray());
         } catch (YAPIONException e) {
-            throw new YAPIException(e.getMessage());
+            throw new YAPIRuntimeException(e.getMessage());
         }
     }
 
@@ -104,7 +104,7 @@ public class YAPIONParser {
         try {
             return parseArray(yapion.substring(1, yapion.length() - 1).toCharArray(), 0, yapion.length() - 1);
         } catch (YAPIONException e) {
-            throw new YAPIException(e.getMessage());
+            throw new YAPIRuntimeException(e.getMessage());
         }
     }
 

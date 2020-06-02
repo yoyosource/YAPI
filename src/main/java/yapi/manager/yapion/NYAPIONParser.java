@@ -4,7 +4,7 @@
 
 package yapi.manager.yapion;
 
-import yapi.internal.exceptions.objectnotation.YAPIONException;
+import yapi.internal.runtimeexceptions.objectnotation.YAPIONException;
 import yapi.manager.yapion.internal.parser.YAPIONCurrentType;
 import yapi.manager.yapion.internal.parser.YAPIONReader;
 import yapi.manager.yapion.internal.parser.YAPIONTypeStack;

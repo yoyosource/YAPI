@@ -4,7 +4,7 @@
 
 package yapi.manager.yapion.internal.serializable;
 
-import yapi.internal.exceptions.objectnotation.YAPIONException;
+import yapi.internal.runtimeexceptions.objectnotation.YAPIONException;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONPointer;
 

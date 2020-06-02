@@ -4,17 +4,20 @@
 
 package yapi.manager.config;
 
-import yapi.internal.exceptions.config.ConfigFileExistsException;
+import yapi.file.FileUtils;
+import yapi.internal.annotations.yapi.WorkInProgress;
+import yapi.internal.annotations.yapi.WorkInProgressType;
+import yapi.internal.runtimeexceptions.config.ConfigFileExistsException;
 import yapi.manager.config.type.ConfigFileType;
 import yapi.manager.config.type.ConfigLoadType;
 import yapi.manager.config.type.ConfigSaveType;
 import yapi.manager.config.type.ConfigSecurityType;
 import yapi.manager.yapion.value.YAPIONObject;
-import yapi.file.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 
+@WorkInProgress(context = WorkInProgressType.ALPHA)
 public class Config {
 
     String name;

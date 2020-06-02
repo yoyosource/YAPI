@@ -4,7 +4,7 @@
 
 package yapi.manager.yapion.value;
 
-import yapi.internal.exceptions.NotNullPointerException;
+import yapi.internal.runtimeexceptions.NotNullPointerException;
 import yapi.manager.yapion.YAPIONType;
 
 import java.math.BigDecimal;

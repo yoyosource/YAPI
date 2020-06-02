@@ -4,7 +4,7 @@
 
 package yapi.manager.yapion.value;
 
-import yapi.internal.exceptions.objectnotation.YAPIONException;
+import yapi.internal.runtimeexceptions.objectnotation.YAPIONException;
 import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.YAPIONType;
 import yapi.math.NumberRandom;

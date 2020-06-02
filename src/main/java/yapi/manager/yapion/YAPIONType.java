@@ -4,8 +4,6 @@
 
 package yapi.manager.yapion;
 
-import yapi.internal.exceptions.objectnotation.YAPIONException;
-
 public class YAPIONType {
 
     public String getType() {
