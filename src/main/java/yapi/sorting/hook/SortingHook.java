@@ -4,6 +4,8 @@
 
 package yapi.sorting.hook;
 
+import yapi.runtime.ThreadUtils;
+
 public class SortingHook<T> {
 
     public void hook(T... ts) {
@@ -11,22 +13,11 @@ public class SortingHook<T> {
     }
 
     private final void sleep(int sleepTime) {
-        sleep((double)sleepTime);
+        ThreadUtils.sleep((double)sleepTime);
     }
 
     private final void sleep(long sleepTime) {
-        sleep((double)sleepTime);
-    }
-
-    private final void sleep(double d) {
-        long millis = (long)d;
-        int nanos = (int) ((d - millis) * 1000000);
-
-        try {
-            Thread.sleep(millis, nanos);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        ThreadUtils.sleep((double)sleepTime);
     }
 
 }

@@ -4,12 +4,15 @@
 
 package yapi.regex;
 
-import yapi.internal.exceptions.YAPIException;
+import yapi.internal.annotations.yapi.WorkInProgress;
+import yapi.internal.annotations.yapi.WorkInProgressType;
+import yapi.internal.runtimeexceptions.YAPIRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@WorkInProgress(context = WorkInProgressType.ALPHA)
 public class YAPIRegexBuilder {
 
     private static char[] characters = "()+*?{}|[].^$".toCharArray();
@@ -26,7 +29,7 @@ public class YAPIRegexBuilder {
     public YAPIRegexBuilder(String regexString) {
         char[] regex = regexString.toCharArray();
         if (regex.length > 0 && (regex[0] == '+' || regex[0] == '*' || regex[0] == '?')) {
-            throw new YAPIException("Regex Exception");
+            throw new YAPIRuntimeException("Regex Exception");
         }
         System.out.println(Arrays.toString(regex));
     }

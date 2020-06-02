@@ -28,4 +28,15 @@ public class ThreadUtils {
         }
     }
 
+    public static void sleep(double d) {
+        sleep((long)d, (int)((d - (long)d) * 1000000));
+    }
+
+    public static void exactSleep(long millis) {
+        long time = System.currentTimeMillis();
+        while (System.currentTimeMillis() - time < millis) {
+            sleep(millis / 100);
+        }
+    }
+
 }
