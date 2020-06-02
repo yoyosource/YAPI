@@ -2,10 +2,8 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.graphics;
+package yapi.statemachine.regex;
 
-public class YInputField extends YGraphicObject {
-
-
+public interface Regex {
 
 }
