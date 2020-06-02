@@ -2,10 +2,7 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.file.streams.hex;
-
-import yapi.math.base.BaseConversion;
-import yapi.string.StringFormatting;
+package yapi.file.streams.base.hex;
 
 import java.io.*;
 import java.nio.channels.FileChannel;

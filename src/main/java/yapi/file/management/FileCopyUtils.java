@@ -5,6 +5,8 @@
 package yapi.file.management;
 
 import yapi.file.FileUtils;
+import yapi.internal.annotations.yapi.WorkInProgress;
+import yapi.internal.annotations.yapi.WorkInProgressType;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,47 +15,51 @@ import java.io.IOException;
 
 public class FileCopyUtils {
 
-    public static void copyFile(File source, File destination) {
+    public static boolean copyFile(File source, File destination) {
         if (source.getAbsolutePath().equals(destination.getAbsolutePath())) {
-            return;
+            return false;
         }
 
         if (!source.isFile() || !source.exists()) {
-            return;
+            return false;
         }
         if (!destination.exists()) {
             try {
                 FileUtils.create(destination);
             } catch (IOException e) {
-                return;
+                return false;
             }
         }
         if (!destination.isFile()) {
-            return;
+            return false;
         }
 
         try (FileInputStream fileInputStream = new FileInputStream(source)) {
             fileInputStream.transferTo(new FileOutputStream(destination));
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             destination.delete();
         }
+        return false;
     }
 
-    public static void copyDir(File source, File destination) {
+    @WorkInProgress(context = WorkInProgressType.ALPHA)
+    public static boolean copyDir(File source, File destination) {
         if (source.getAbsolutePath().equals(destination.getAbsolutePath())) {
-            return;
+            return false;
         }
 
         if (!source.isDirectory() || !source.exists()) {
-            return;
+            return false;
         }
         if (!destination.exists()) {
             destination.mkdirs();
         }
         if (!destination.isDirectory()) {
-            return;
+            return false;
         }
+        return false;
     }
 
 }

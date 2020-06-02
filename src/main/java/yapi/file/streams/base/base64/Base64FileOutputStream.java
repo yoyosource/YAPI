@@ -2,15 +2,19 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.file.streams.base64;
+package yapi.file.streams.base.base64;
 
-import yapi.file.streams.FileCloseUtils;
+import yapi.file.management.FileCloseUtils;
+import yapi.file.streammanagement.OutputAutoClose;
 import yapi.math.base.BaseConversion;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-public class Base64FileOutputStream extends FileOutputStream {
+public class Base64FileOutputStream extends OutputAutoClose {
 
     private boolean isClosed = false;
 
@@ -44,7 +48,7 @@ public class Base64FileOutputStream extends FileOutputStream {
     @Override
     public void write(int b) throws IOException {
         String base2 = BaseConversion.toBase2(b);
-        st.append("0".repeat(8 - base2.length()) + base2);
+        st.append("0".repeat(8 - base2.length())).append(base2);
         writeInternal();
     }
 
@@ -76,12 +80,7 @@ public class Base64FileOutputStream extends FileOutputStream {
     }
 
     @Override
-    public void close() throws IOException {
-        if (isClosed) {
-            return;
-        }
-        isClosed = true;
-
+    public void closeStream() throws IOException {
         if (st.length() > 0) {
             int i = 6 - st.length();
             st.append("0".repeat(i));
@@ -91,8 +90,6 @@ public class Base64FileOutputStream extends FileOutputStream {
                 i -= 2;
             }
         }
-
-        super.close();
     }
 
     @Override

@@ -2,7 +2,7 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.file.streams.base64;
+package yapi.file.streams.base.base64;
 
 import yapi.math.base.BaseConversion;
 

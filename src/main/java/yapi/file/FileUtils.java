@@ -4,7 +4,7 @@
 
 package yapi.file;
 
-import yapi.internal.exceptions.string.NoStringException;
+import yapi.internal.runtimeexceptions.string.NoStringException;
 import yapi.math.NumberUtils;
 import yapi.os.OSCheck;
 import yapi.os.OSType;

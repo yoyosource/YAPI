@@ -2,7 +2,7 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.file.streams.hex;
+package yapi.file.streams.base.hex;
 
 import yapi.string.StringFormatting;
 

@@ -2,7 +2,7 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.file.streams;
+package yapi.file.management;
 
 import yapi.runtime.Hook;
 import yapi.runtime.RuntimeUtils;

@@ -2,49 +2,28 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.file.streams.base64;
-
-import yapi.math.base.BaseConversion;
+package yapi.file.streammanagement;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
 
-public class Base64FileInputStream extends FileInputStream {
+public class Input extends FileInputStream {
 
-    private StringBuilder st = new StringBuilder();
-    private boolean isClosed = false;
-
-    public Base64FileInputStream(String name) throws FileNotFoundException {
+    public Input(String name) throws FileNotFoundException {
         super(name);
     }
 
-    public Base64FileInputStream(File file) throws FileNotFoundException {
+    public Input(File file) throws FileNotFoundException {
         super(file);
     }
 
-    public Base64FileInputStream(FileDescriptor fdObj) {
+    public Input(FileDescriptor fdObj) {
         super(fdObj);
     }
 
     @Override
     public int read() throws IOException {
-        while (st.length() < 8) {
-            int b = super.read();
-            if (b == -1) {
-                System.out.println("ENDE");
-                close();
-            } else if ((char)b == '=') {
-                System.out.println("PADDING");
-                st.append("00");
-            } else {
-                st.append(Base64Utils.getString((char) b));
-            }
-            System.out.println(st);
-        }
-        String bt = st.substring(0, 8);
-        st.delete(0, 8);
-
-        return BaseConversion.fromBase2toInt(bt);
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -69,15 +48,7 @@ public class Base64FileInputStream extends FileInputStream {
 
     @Override
     public void close() throws IOException {
-        if (isClosed) {
-            return;
-        }
-        isClosed = true;
         super.close();
-    }
-
-    public boolean isClosed() {
-        return isClosed;
     }
 
     @Override
@@ -88,13 +59,11 @@ public class Base64FileInputStream extends FileInputStream {
 
     @Override
     public byte[] readAllBytes() throws IOException {
-        // TODO: change this
         throw new UnsupportedOperationException();
     }
 
     @Override
     public byte[] readNBytes(int len) throws IOException {
-        // TODO: change this
         throw new UnsupportedOperationException();
     }
 
