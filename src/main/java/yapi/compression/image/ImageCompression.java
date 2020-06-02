@@ -105,8 +105,6 @@ public class ImageCompression {
             lossyCompress(maxDistance);
             return;
         }
-
-
     }
 
     public void blockCompress(double maxDistance) {
@@ -125,7 +123,7 @@ public class ImageCompression {
         bytes.addAll(getBytes(width));
         bytes.addAll(getBytes(height));
 
-        System.out.println(type + " " + width + " " + height);
+        // System.out.println(type + " " + width + " " + height);
         byte repetitionLength = 0;
         int[] lastInts = new int[0];
         for (int i = 0; i < colors.length / depth; i++) {

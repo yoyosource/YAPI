@@ -5,7 +5,10 @@
 package yapi.compression.string;
 
 import yapi.datastructures.circular.CircularBuffer;
+import yapi.internal.annotations.yapi.WorkInProgress;
+import yapi.internal.annotations.yapi.WorkInProgressType;
 
+@WorkInProgress(context = WorkInProgressType.ALPHA)
 public class StringCompression {
 
     public static void main(String[] args) {

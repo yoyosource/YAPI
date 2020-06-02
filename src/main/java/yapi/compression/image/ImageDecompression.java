@@ -31,7 +31,7 @@ public class ImageDecompression {
         index = parseDim(bytes, index);
         index = parseDim(bytes, index);
 
-        System.out.println(type + " " + width + " " + height);
+        // System.out.println(type + " " + width + " " + height);
 
         return index;
     }
@@ -65,7 +65,7 @@ public class ImageDecompression {
             }
         }
 
-        System.out.println(bts.size());
+        // System.out.println(bts.size());
         image = new BufferedImage(width, height, type);
         WritableRaster raster = image.getRaster();
         raster.setPixels(0, 0, width, height, toByteArray(bts));
