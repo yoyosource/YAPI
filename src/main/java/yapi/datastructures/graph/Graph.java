@@ -5,7 +5,7 @@
 package yapi.datastructures.graph;
 
 import yapi.math.NumberUtils;
-import yapi.math.Vector;
+import yapi.math.vector.Vector;
 
 import java.util.*;
 

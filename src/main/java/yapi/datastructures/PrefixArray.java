@@ -4,8 +4,8 @@
 
 package yapi.datastructures;
 
-import yapi.internal.exceptions.ArrayMutationException;
-import yapi.math.RangeSimple;
+import yapi.internal.runtimeexceptions.ArrayMutationException;
+import yapi.math.range.RangeSimple;
 
 import java.util.ArrayList;
 import java.util.Comparator;

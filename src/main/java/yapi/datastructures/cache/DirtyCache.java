@@ -2,27 +2,12 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.datastructures;
-
-import yapi.math.NumberRandom;
+package yapi.datastructures.cache;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Cache<K, V> {
-
-    public static void main(String[] args) {
-        Cache<String, Integer> integerCache = new Cache<>(10);
-        NumberRandom numberRandom = new NumberRandom();
-        for (int i = 0; i < 1000; i++) {
-            if (i % 100 == 0) {
-                System.out.println(i);
-            }
-            int k = numberRandom.getInt(150);
-            integerCache.cache(k + "", k * 2);
-        }
-        System.out.println(integerCache);
-    }
+public class DirtyCache<K, V> {
 
     private int size = 100;
 
@@ -31,9 +16,12 @@ public class Cache<K, V> {
 
     private Map<K, Node<V>> nodeCache = new HashMap<>();
 
+    private Cleaner cleaner;
+
     private class Node<V> {
         private V data;
         private K key;
+        private boolean dirty;
         private Node<V> prev, next;
 
         public Node(V data, K key, Node<V> prev, Node<V> next) {
@@ -49,10 +37,19 @@ public class Cache<K, V> {
         }
     }
 
-    public Cache() {}
+    public abstract class Cleaner<K, V> {
 
-    public Cache(int size) {
+        public abstract void clean(boolean dirty, K key, V currentValue);
+
+    }
+
+    public DirtyCache(Cleaner<K, V> cleaner) {
+        this.cleaner = cleaner;
+    }
+
+    public DirtyCache(int size, Cleaner<K, V> cleaner) {
         this.size = size;
+        this.cleaner = cleaner;
     }
 
     public boolean hasValue(K key) {
@@ -61,7 +58,7 @@ public class Cache<K, V> {
 
     public V getValue(K key) {
         if (nodeCache.containsKey(key)) {
-            touch(nodeCache.get(key));
+            touch(nodeCache.get(key), null);
         }
         return nodeCache.get(key).data;
     }
@@ -72,7 +69,7 @@ public class Cache<K, V> {
 
     public void add(K key, V value) {
         if (nodeCache.containsKey(key)) {
-            touch(nodeCache.get(key));
+            touch(nodeCache.get(key), value);
             return;
         }
         while (nodeCache.size() >= size) {
@@ -102,7 +99,7 @@ public class Cache<K, V> {
         }
     }
 
-    private void touch(Node<V> node) {
+    private void touch(Node<V> node, V newValue) {
         if (node.prev == null) {
             if (node.next != null) {
                 node.next.prev = null;
@@ -120,6 +117,10 @@ public class Cache<K, V> {
         node.prev = node.next = null;
 
         addLast(node);
+        if (newValue != null) {
+            node.data = newValue;
+            node.dirty = true;
+        }
     }
 
     private void remove() {
@@ -127,6 +128,8 @@ public class Cache<K, V> {
             return;
         }
 
+        Node<V> node = nodeCache.get(head.key);
+        cleaner.clean(node.dirty, node.key, node.data);
         nodeCache.remove(head.key);
         head = head.next;
         head.prev = null;
