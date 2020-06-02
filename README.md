@@ -1,6 +1,6 @@
-[![YAPI Release V2.0.0](https://img.shields.io/badge/YAPI%20Release-2.0.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
+[![YAPI Release V2.0.1](https://img.shields.io/badge/YAPI%20Release-2.0.1-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPI Pre-Release V?.?-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-%3F.%3F--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
-[![YAPI Version V2.0.0](https://img.shields.io/badge/YAPI%20Version-2.0.0-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
+[![YAPI Version V2.0.1](https://img.shields.io/badge/YAPI%20Version-2.0.1-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
 
 [![Files 305](https://img.shields.io/badge/Files-305-inactive)](https://github.com/yoyosource/YAPI)
@@ -37,7 +37,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'yoyosource:YAPI:2.0.0'
+    implementation 'yoyosource:YAPI:2.0.1'
 }
 ```
 Alternative you can download the jar directly from [releases](https://github.com/yoyosource/YAPI/releases). 
@@ -121,6 +121,7 @@ Changed version Naming to `[VERSION]-[REBUILD]`, eg. `1.3-5` (Version: 1.3, Rebu
 - `15 May 2020` `1.3-9`
 - `17 May 2020` `1.3-10`
 - `17 May 2020` `1.3-11`
-### Version 2.0.0
+### Version 2
 Changed version Naming to `[MAYOR].[MINOR].[PATCH]`, eg. `2.0.0` (Mayor: 2, Minor: 0, Patch: 0)
 - `02 Jun 2020` `2.0.0`
+- `02 Jun 2020` `2.0.1`
