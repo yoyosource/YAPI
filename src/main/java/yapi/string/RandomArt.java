@@ -4,20 +4,9 @@
 
 package yapi.string;
 
-import yapi.internal.exceptions.StringException;
-import yapi.math.NumberRandom;
+import yapi.internal.runtimeexceptions.StringException;
 
 public class RandomArt {
-
-    public static void main(String[] args) {
-        // 26  -> ::0"&§FE0$"80$&B0$"60$20%)
-        // 103 -> ::0$=10$10§(10$10$10§$10$10$10$10§"1010$10$10%F§0"(20(10&10"=1010$10$1010$10"/FE010&10$1020"=10""1010")
-
-        RandomArt r1 = new RandomArt(" Token ", NumberRandom.getInstance().getString(8).getBytes());
-        RandomArt r2 = new RandomArt(" Key ", NumberRandom.getInstance().getString(8).getBytes());
-        System.out.println(r1 + r1.toCompactString());
-        System.out.println(r2 + r2.toCompactString());
-    }
 
     private int xDim = 17;
     private int yDim = 9;
@@ -203,7 +192,6 @@ public class RandomArt {
         s = s.replace("++ ", "→").replace("-- ", "←");
         s = s.replace("+- ", "↑").replace("-+ ", "↓");
         s = s.replace("←→", "↔").replace("↑↓", "↕").replace("←←", "«").replace("→→", "»");
-        //System.out.println(s);
 
         if (board[yDim / 2][xDim / 2] == 0) {
             board[yDim / 2][xDim / 2] = start;
@@ -295,19 +283,6 @@ public class RandomArt {
         }
         return st.toString();
     }
-
-    public String _toCompactString() {
-        byte[] bytes = new byte[xDim * yDim];
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                bytes[i * board[i].length + j] = board[i][j];
-            }
-        }
-        return StringFormatting.toHex(bytes);
-    }
-
-    // 0123456789
-    // GHIJKLMNOP
 
     private String replaceNumber(String s) {
         String s1 = "0123456789";

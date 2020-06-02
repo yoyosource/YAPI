@@ -4,7 +4,7 @@
 
 package yapi.string;
 
-import yapi.internal.exceptions.string.NoStringException;
+import yapi.internal.runtimeexceptions.string.NoStringException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -181,6 +181,10 @@ public class StringSplitting {
     }
 
     public static String merge(String[] strings, String s) {
+        return String.join(s, strings);
+    }
+
+    public static String merge(String s, String... strings) {
         return String.join(s, strings);
     }
 

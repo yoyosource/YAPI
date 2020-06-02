@@ -4,7 +4,9 @@
 
 package yapi.string;
 
-import yapi.internal.exceptions.StringException;
+import yapi.internal.annotations.yapi.WorkInProgress;
+import yapi.internal.annotations.yapi.WorkInProgressType;
+import yapi.internal.runtimeexceptions.StringException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@WorkInProgress(context = WorkInProgressType.ALPHA)
 public class UTF8String {
 
     public static void main(String[] args) {

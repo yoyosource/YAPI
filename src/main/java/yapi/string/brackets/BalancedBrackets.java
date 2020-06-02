@@ -33,7 +33,9 @@ public class BalancedBrackets {
         Deque<Character> bracketsStack = new ArrayDeque<>();
         List<BalancedBracketsEntry> entries = new ArrayList<>();
         boolean balanced = true;
-        for (char bracket : brackets.toCharArray()) {
+
+        for (int i = 0; i < brackets.length(); i++) {
+            char bracket = brackets.charAt(i);
             switch (bracket) {
                 case '(':
                 case '[':

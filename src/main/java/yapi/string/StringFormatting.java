@@ -4,7 +4,7 @@
 
 package yapi.string;
 
-import yapi.internal.exceptions.string.NoStringException;
+import yapi.internal.runtimeexceptions.string.NoStringException;
 import yapi.math.NumberRandom;
 
 import java.util.ArrayList;
