@@ -4,7 +4,7 @@
 
 package yapi.math.distributions;
 
-import yapi.internal.exceptions.MathException;
+import yapi.internal.runtimeexceptions.MathException;
 import yapi.math.Fraction;
 import yapi.math.NumberUtils;
 

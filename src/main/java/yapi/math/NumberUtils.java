@@ -5,11 +5,11 @@
 package yapi.math;
 
 import ch.obermuhlner.math.big.BigDecimalMath;
-import yapi.internal.exceptions.MathException;
-import yapi.internal.exceptions.math.RangeException;
-import yapi.manager.worker.Task;
+import yapi.internal.runtimeexceptions.MathException;
+import yapi.internal.runtimeexceptions.math.RangeException;
 import yapi.manager.worker.TaskParallelization;
 import yapi.manager.worker.WorkerPool;
+import yapi.math.range.RangeSimple;
 import yapi.quick.Timer;
 
 import java.math.BigDecimal;
@@ -677,12 +677,7 @@ public class NumberUtils {
 
         while (value.compareTo(t) > 0) {
             BigInteger v = value.add(BigInteger.ZERO);
-            workerPool.work(new Task(){
-                @Override
-                public void run() {
-                    bigIntegerTaskParallelization.addResult(factorial(v, v.subtract(t)));
-                }
-            });
+            workerPool.work(() -> bigIntegerTaskParallelization.addResult(factorial(v, v.subtract(t))));
             value = value.subtract(t);
         }
         if (value.compareTo(BigInteger.ONE) >= 0) {
@@ -696,15 +691,12 @@ public class NumberUtils {
             bigIntegerTaskParallelization.clear();
             for (List<BigInteger> i : integers) {
                 List<BigInteger> bI = new ArrayList<>(i);
-                workerPool.work(new Task() {
-                    @Override
-                    public void run() {
-                        BigInteger result = BigInteger.ONE;
-                        for (BigInteger b : bI) {
-                            result = result.multiply(b);
-                        }
-                        bigIntegerTaskParallelization.addResult(result);
+                workerPool.work(() -> {
+                    BigInteger result = BigInteger.ONE;
+                    for (BigInteger b : bI) {
+                        result = result.multiply(b);
                     }
+                    bigIntegerTaskParallelization.addResult(result);
                 });
             }
             workerPool.await();

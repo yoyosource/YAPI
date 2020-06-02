@@ -4,7 +4,7 @@
 
 package yapi.math.mathscript.tree.functions;
 
-import yapi.internal.exceptions.math.MathScriptException;
+import yapi.internal.runtimeexceptions.math.MathScriptException;
 import yapi.math.NumberUtils;
 import yapi.math.mathscript.state.VariableState;
 import yapi.math.mathscript.tree.Knot;

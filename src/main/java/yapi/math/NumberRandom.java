@@ -4,9 +4,6 @@
 
 package yapi.math;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class NumberRandom {
 
     private static long currentSeed = 0;
@@ -16,8 +13,6 @@ public class NumberRandom {
         currentSeed += numberRandom.getInt();
         return new NumberRandom(currentSeed);
     }
-
-    private List<Long> lastSeeds = new ArrayList<>();
 
     private long seed = System.currentTimeMillis();
     private long cSeed = seed;
@@ -33,7 +28,6 @@ public class NumberRandom {
     }
 
     public NumberRandom(NumberRandom numberRandom) {
-        this.lastSeeds = numberRandom.lastSeeds;
         this.seed = numberRandom.seed;
         this.cSeed = numberRandom.cSeed;
     }
@@ -47,43 +41,6 @@ public class NumberRandom {
      */
     public NumberRandom copy() {
         return new NumberRandom(this);
-    }
-
-    /**
-     * Use this if you want to copy a NumberRandom and create a second one with the same internal State.
-     *
-     * @since Version 1.2
-     *
-     * @return the copied NumberRandom
-     */
-    public NumberRandom fullCopy() {
-        return copy();
-    }
-
-    /**
-     * Use this if you want to copy a NumberRandom and create a second one with the same internal State.
-     * This method will not copy any logging part with it. And also discard any caches currently initialised.
-     *
-     * @since Version 1.2
-     *
-     * @return the copied NumberRandom
-     */
-    public NumberRandom shallowCopy() {
-        NumberRandom n = new NumberRandom(this);
-        n.lastSeeds = new ArrayList<>();
-        return n;
-    }
-
-    /**
-     * Use this if you want to copy a NumberRandom and create a second one with the same internal State.
-     * This method will not copy any logging part with it. And also discard any caches currently initialised.
-     *
-     * @since Version 1.2
-     *
-     * @return the copied NumberRandom
-     */
-    public NumberRandom lazyCopy() {
-        return shallowCopy();
     }
 
     /**
@@ -101,41 +58,10 @@ public class NumberRandom {
     }
 
     public NumberRandom setSeed(long newSeed) {
-        lastSeeds.add(seed);
         seed = newSeed;
         cSeed = newSeed;
         multiplier = 8723465262572736L;
         return this;
-    }
-
-    /**
-     *
-     * @since Version 1.2
-     *
-     * @return all previous seeds used
-     */
-    public String lastSeeds() {
-        return lastSeeds(lastSeeds.size());
-    }
-
-    /**
-     * @since Version 1.2
-     *
-     * @param size
-     * @return 'size' previous seeds used
-     */
-    public String lastSeeds(int size) {
-        if (size > lastSeeds.size()) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        StringBuilder st = new StringBuilder();
-        st.append("[");
-        for (int i = lastSeeds.size() - 1; i >= lastSeeds.size() - size; i--) {
-            if (i != lastSeeds.size() - 1) st.append(", ");
-            st.append(lastSeeds.get(i));
-        }
-        st.append("]");
-        return st.toString();
     }
 
     /**

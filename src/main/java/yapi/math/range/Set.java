@@ -2,9 +2,9 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.math;
+package yapi.math.range;
 
-import yapi.internal.exceptions.math.SetException;
+import yapi.internal.runtimeexceptions.math.SetException;
 
 public class Set {
 

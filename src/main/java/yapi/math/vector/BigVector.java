@@ -2,36 +2,56 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.math;
+package yapi.math.vector;
 
+import ch.obermuhlner.math.big.BigDecimalMath;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Arrays;
 
-public class Vector {
+public class BigVector {
 
-    private double[] vec;
+    private MathContext mathContext = new MathContext(200);
+    private BigDecimal[] vec;
 
-    public Vector(int dimensions) {
-        vec = new double[dimensions];
-        Arrays.fill(vec, 0);
+    public BigVector(int dimensions) {
+        vec = new BigDecimal[dimensions];
+        Arrays.fill(vec, BigDecimal.ZERO);
     }
 
-    public Vector(double... values) {
+    public BigVector(BigDecimal... values) {
         vec = values;
     }
 
 
-    private double[] getVec() {
+    public void setMathContext(MathContext mathContext) {
+        this.mathContext = mathContext;
+    }
+
+    private BigDecimal[] getVec() {
         return vec;
     }
 
-    private double[] invertVector() {
-        double[] vector = this.vec;
+    /**
+     *
+     * @since Version 1
+     *
+     * @param vec
+     */
+    public void setVec(BigDecimal[] vec) {
+        if (this.vec.length == vec.length) {
+            this.vec = vec;
+        }
+    }
+
+    private BigDecimal[] invertVector() {
+        BigDecimal[] vector = this.vec;
         for (int i = 0; i < vector.length; i++) {
-            vector[i] = vector[i] * -1;
+            vector[i] = vector[i].multiply(BigDecimal.valueOf(-1), mathContext);
         }
         return vector;
     }
-
 
     /**
      *
@@ -40,7 +60,7 @@ public class Vector {
      * @param dimension
      * @param value
      */
-    public void setVector(int dimension, double value) {
+    public void setVector(int dimension, BigDecimal value) {
         if (!(dimension < 0 || dimension > vec.length)) {
             vec[dimension] = value;
         }
@@ -50,33 +70,20 @@ public class Vector {
      *
      * @since Version 1
      *
-     * @param vec
-     */
-    public void setVec(double[] vec) {
-        if (this.vec.length == vec.length) {
-            this.vec = vec;
-        }
-    }
-
-
-    /**
-     *
-     * @since Version 1
-     *
      * @param vector
      */
-    public void addVector(Vector vector) {
+    public void addVector(BigVector vector) {
         if (this.vec.length == vector.vec.length) {
             int i = 0;
-            for (double j : vector.getVec()) {
-                this.vec[i] += j;
+            for (BigDecimal j : vector.getVec()) {
+                this.vec[i] = this.vec[i].add(j, mathContext);
                 i++;
             }
         } else if (this.vec.length > vector.vec.length) {
             try {
                 int i = 0;
-                for (double j : vector.getVec()) {
-                    this.vec[i] += j;
+                for (BigDecimal j : vector.getVec()) {
+                    this.vec[i] = this.vec[i].add(j, mathContext);
                     i++;
                 }
             } catch (IndexOutOfBoundsException e) {
@@ -91,18 +98,18 @@ public class Vector {
      *
      * @param vector
      */
-    public void subtractVector(Vector vector) {
+    public void subtractVector(BigVector vector) {
         if (this.vec.length == vector.vec.length) {
             int i = 0;
-            for (double j : vector.invertVector()) {
-                this.vec[i] += j;
+            for (BigDecimal j : vector.invertVector()) {
+                this.vec[i] = this.vec[i].add(j, mathContext);
                 i++;
             }
         } else if (this.vec.length > vector.vec.length) {
             try {
                 int i = 0;
-                for (double j : vector.invertVector()) {
-                    this.vec[i] += j;
+                for (BigDecimal j : vector.invertVector()) {
+                    this.vec[i] = this.vec[i].add(j, mathContext);
                     i++;
                 }
             } catch (IndexOutOfBoundsException e) {
@@ -117,9 +124,9 @@ public class Vector {
      *
      * @param r
      */
-    public void multiplyVector(double r) {
+    public void multiplyVector(BigDecimal r) {
         for (int i = 0; i < vec.length; i++) {
-            vec[i] *= r;
+            vec[i] = vec[i].multiply(r, mathContext);
         }
     }
 
@@ -129,9 +136,9 @@ public class Vector {
      *
      * @param r
      */
-    public void divideVector(double r) {
+    public void divideVector(BigDecimal r) {
         for (int i = 0; i < vec.length; i++) {
-            vec[i] /= r;
+            vec[i] = vec[i].divide(r, mathContext);
         }
     }
 
@@ -142,16 +149,16 @@ public class Vector {
      * @param vector
      * @return
      */
-    public double multiplyVectorScalar(Vector vector) {
-        double value = 0;
+    public BigDecimal multiplyVectorScalar(BigVector vector) {
+        BigDecimal value = BigDecimal.ZERO;
         try {
             for (int i = 0; i < this.vec.length; i++) {
-                value += this.vec[i] * vector.getVec()[i];
+                value = value.add(this.vec[i].multiply(vector.getVec()[i], mathContext), mathContext);
             }
         } catch (IndexOutOfBoundsException e) {
             // Ignore the IndexOutOfBoundsException
         }
-        return Math.acos(value / (length() * vector.length()));
+        return BigDecimalMath.acos(value.divide(length().multiply(vector.length(), mathContext), mathContext), mathContext);
     }
 
     /**
@@ -160,15 +167,15 @@ public class Vector {
      *
      * @param vector
      */
-    public void crossProduct(Vector vector) {
+    public BigVector crossProduct(BigVector vector) {
         if (this.vec.length != 3 || vector.vec.length != 3) {
-            return;
+            return null;
         }
-        double[] doubles = new double[3];
-        doubles[0] = this.vec[1] * vector.vec[2] - this.vec[2] * vector.vec[1];
-        doubles[1] = this.vec[2] * vector.vec[0] - this.vec[0] * vector.vec[2];
-        doubles[2] = this.vec[0] * vector.vec[1] - this.vec[1] * vector.vec[0];
-        vec = doubles;
+        BigDecimal[] doubles = new BigDecimal[3];
+        doubles[0] = this.vec[1].multiply(vector.vec[2], mathContext).subtract(this.vec[2].multiply(vector.vec[1], mathContext), mathContext);
+        doubles[1] = this.vec[2].multiply(vector.vec[0], mathContext).subtract(this.vec[0].multiply(vector.vec[2], mathContext), mathContext);
+        doubles[2] = this.vec[0].multiply(vector.vec[1], mathContext).subtract(this.vec[1].multiply(vector.vec[0], mathContext), mathContext);
+        return new BigVector(doubles);
     }
 
     /**
@@ -177,16 +184,12 @@ public class Vector {
      *
      * @return
      */
-    public double length() {
-        double value = 0;
+    public BigDecimal length() {
+        BigDecimal value = BigDecimal.ZERO;
         for (int i = 0; i < vec.length; i++) {
-            value += vec[i] * vec[i];
+            value = value.add(vec[i].multiply(vec[i], mathContext), mathContext);
         }
-        return Math.sqrt(value);
-    }
-
-    public int size() {
-        return vec.length;
+        return BigDecimalMath.sqrt(value, mathContext);
     }
 
     /**
@@ -196,7 +199,7 @@ public class Vector {
      * @param i
      * @return
      */
-    public double get(int i) {
+    public BigDecimal get(int i) {
         return vec[i];
     }
 
@@ -206,8 +209,8 @@ public class Vector {
      *
      * @return
      */
-    public Vector copy() {
-        return new Vector(Arrays.copyOf(vec, vec.length));
+    public BigVector copy() {
+        return new BigVector(Arrays.copyOf(vec, vec.length));
     }
 
 
@@ -235,22 +238,11 @@ public class Vector {
         return st.toString();
     }
 
-    String toMatrixString() {
-        StringBuilder st = new StringBuilder();
-        for (int i = 0; i < vec.length; i++) {
-            if (i != 0) {
-                st.append(", ");
-            }
-            st.append(vec[i]);
-        }
-        return st.toString();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Vector)) return false;
-        Vector vector = (Vector) o;
+        BigVector vector = (BigVector) o;
         return Arrays.equals(vec, vector.vec);
     }
 

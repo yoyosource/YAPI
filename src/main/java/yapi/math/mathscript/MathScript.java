@@ -4,7 +4,9 @@
 
 package yapi.math.mathscript;
 
-import yapi.internal.exceptions.math.MathScriptException;
+import yapi.internal.annotations.yapi.WorkInProgress;
+import yapi.internal.annotations.yapi.WorkInProgressType;
+import yapi.internal.runtimeexceptions.math.MathScriptException;
 import yapi.file.FileUtils;
 import yapi.math.mathscript.state.Variable;
 import yapi.math.mathscript.state.VariableState;
@@ -26,15 +28,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@WorkInProgress(context = WorkInProgressType.ALPHA)
 public class MathScript {
 
     private VariableState variableState = new VariableState();
     private List<Token> tokens = new ArrayList<>();
-
-    public static void main(String[] args) {
-        MathScript mathScript = new MathScript("/Users/jojo/IdeaProjects/YAPI/src/main/resources/Test.mathscript");
-        mathScript.run();
-    }
 
     public MathScript(String s) {
         if (s.endsWith(".mathscript") && s.split("\n").length == 1) {

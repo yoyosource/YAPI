@@ -2,7 +2,7 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.math;
+package yapi.math.vector;
 
 import yapi.manager.yapion.YAPIONVariable;
 import yapi.manager.yapion.value.YAPIONObject;

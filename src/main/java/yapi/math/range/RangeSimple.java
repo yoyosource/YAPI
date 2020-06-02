@@ -2,10 +2,11 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.math;
+package yapi.math.range;
 
-import yapi.internal.exceptions.string.NoStringException;
-import yapi.internal.exceptions.math.RangeException;
+import yapi.internal.runtimeexceptions.math.RangeException;
+import yapi.internal.runtimeexceptions.string.NoStringException;
+import yapi.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

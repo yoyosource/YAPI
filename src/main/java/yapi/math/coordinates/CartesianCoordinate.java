@@ -7,7 +7,7 @@ package yapi.math.coordinates;
 import yapi.manager.yapion.YAPIONVariable;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.manager.yapion.value.YAPIONValue;
-import yapi.math.Vector;
+import yapi.math.vector.Vector;
 
 public class CartesianCoordinate extends Coordinate {
 

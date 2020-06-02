@@ -4,7 +4,7 @@
 
 package yapi.math.mathscript.state;
 
-import yapi.internal.exceptions.math.MathScriptException;
+import yapi.internal.runtimeexceptions.math.MathScriptException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
