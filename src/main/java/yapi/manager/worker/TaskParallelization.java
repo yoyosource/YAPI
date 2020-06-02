@@ -4,7 +4,7 @@
 
 package yapi.manager.worker;
 
-import yapi.internal.exceptions.YAPIException;
+import yapi.internal.runtimeexceptions.YAPIRuntimeException;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ public class TaskParallelization<T> {
 
     public List<List<T>> split(List<T> ts, int poolSize) {
         if (poolSize > ts.size()) {
-            throw new YAPIException("poolSize needs to be smaller than your input list");
+            throw new YAPIRuntimeException("poolSize needs to be smaller than your input list");
         }
 
         int ad = (int)Math.round(ts.size() / (double)poolSize);

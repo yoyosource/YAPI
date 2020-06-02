@@ -311,6 +311,16 @@ public class WorkerPool implements Runnable {
         notifyAll();
     }
 
+    public synchronized void work(TaskRunnable runnable) {
+        if (!run) {
+            return;
+        }
+        Task task = new Task(runnable);
+        task.setTaskID(++taskID);
+        tasks.add(task);
+        notifyAll();
+    }
+
     /**
      * @since Version 1.1
      */

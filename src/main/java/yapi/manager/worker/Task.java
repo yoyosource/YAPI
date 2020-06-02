@@ -4,7 +4,17 @@
 
 package yapi.manager.worker;
 
-public class Task {
+public class Task implements TaskRunnable {
+
+    private TaskRunnable target = null;
+
+    public Task() {
+
+    }
+
+    public Task(TaskRunnable runnable) {
+        this.target = runnable;
+    }
 
     private long taskID = 0;
 
@@ -34,7 +44,9 @@ public class Task {
      * @since Version 1.1
      */
     public void run() {
-        // Should be overwritten by implementation
+        if (target != null) {
+            target.run();
+        }
     }
 
 }
