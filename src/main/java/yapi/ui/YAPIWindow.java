@@ -4,8 +4,8 @@
 
 package yapi.ui;
 
-import yapi.internal.exceptions.WindowCreatorException;
-import yapi.internal.exceptions.YAPIException;
+import yapi.internal.runtimeexceptions.WindowCreatorException;
+import yapi.internal.runtimeexceptions.YAPIRuntimeException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,16 +44,16 @@ public class YAPIWindow extends JComponent {
      */
     public YAPIWindow(File configuration) {
         if (!configuration.exists()) {
-            throw new YAPIException();
+            throw new YAPIRuntimeException();
         }
         if (!configuration.isFile()) {
-            throw new YAPIException();
+            throw new YAPIRuntimeException();
         }
         if (Files.isSymbolicLink(Path.of(configuration.getPath()))) {
-            throw new YAPIException();
+            throw new YAPIRuntimeException();
         }
         if (!configuration.getName().endsWith(".uiconfig")) {
-            throw new YAPIException();
+            throw new YAPIRuntimeException();
         }
 
         addCommand();
