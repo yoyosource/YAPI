@@ -4,7 +4,7 @@
 
 package yapi.neuralnet.backend;
 
-import yapi.math.Vector;
+import yapi.math.vector.Vector;
 
 import java.util.ArrayList;
 import java.util.List;

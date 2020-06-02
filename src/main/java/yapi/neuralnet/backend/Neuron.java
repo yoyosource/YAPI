@@ -4,7 +4,7 @@
 
 package yapi.neuralnet.backend;
 
-import yapi.math.Vector;
+import yapi.math.vector.Vector;
 
 public class Neuron {
 
