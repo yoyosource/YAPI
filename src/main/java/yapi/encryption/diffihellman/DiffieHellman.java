@@ -1,7 +1,8 @@
-package yapi.encryption.diffihellman;
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
 
-import yapi.encryption.fastencryption.FastEncrytptionSymmetric;
-import yapi.math.base.BaseConversion;
+package yapi.encryption.diffihellman;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -20,8 +21,6 @@ public class DiffieHellman {
 
         System.out.println(diffieHellman1.getDiffieHellmanResult().getSharedSecret());
         System.out.println(diffieHellman2.getDiffieHellmanResult().getSharedSecret());
-
-        System.out.println(createKey(diffieHellman1.getDiffieHellmanResult().getSharedSecret()));
     }
 
     private static int bitLength = 1024;
@@ -153,27 +152,6 @@ public class DiffieHellman {
             throw new IllegalStateException();
         }
         return diffieHellmanResult;
-    }
-
-    public static String createKey(BigInteger sharedSecret) {
-        String s = sharedSecret.toString();
-        StringBuilder binary = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            String b2 = BaseConversion.toBase2(s.charAt(i) - 0x30);
-            binary.append("0".repeat(4 - b2.length())).append(b2);
-        }
-
-        String base64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/";
-        binary.append("0".repeat(6 - binary.length() % 6));
-
-        StringBuilder password = new StringBuilder();
-        while (binary.length() >= 6) {
-            String b = binary.substring(0, 6);
-            password.append(base64.charAt(BaseConversion.fromBase2toInt(b)));
-            binary.delete(0, 6);
-        }
-
-        return FastEncrytptionSymmetric.createKey(password.toString());
     }
 
 }
