@@ -12,11 +12,12 @@ import yapi.math.NumberRandom;
 import yapi.string.HashType;
 import yapi.string.StringCrypting;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
 @WorkInProgress(context = WorkInProgressType.TESTING)
-public class YAPICipherModeDerivation implements YAPICipherImpl {
+class YAPICipherModeDerivation implements YAPICipherImpl {
 
     @Override
     public List<Block> partitionSource(byte[] bytes, NumberRandom numberRandom) {
@@ -90,6 +91,11 @@ public class YAPICipherModeDerivation implements YAPICipherImpl {
         // System.out.println(bytes.size());
 
         return LinkedListUtils.toByteArray(bytes);
+    }
+
+    @Override
+    public void cryptParallel(byte[] key, File source, File destination, int threads) throws CipherException {
+        throw new CipherException("Unsupported Operation, use 'crypt()' instead");
     }
 
     public static void main(String[] args) throws Exception {

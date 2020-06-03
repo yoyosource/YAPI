@@ -7,6 +7,8 @@ package yapi.encryption.encryption;
 import yapi.internal.exceptions.CipherException;
 import yapi.math.NumberRandom;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface YAPICipherImpl {
@@ -25,22 +27,36 @@ public interface YAPICipherImpl {
         return ((int)b) & 0xFF;
     }
 
-    List<Block> partitionSource(byte[] bytes, NumberRandom numberRandom);
+    default List<Block> partitionSource(byte[] bytes, NumberRandom numberRandom) {
+        return new ArrayList<>();
+    }
 
-    Block getPaddingBlock(NumberRandom numberRandom);
+    default Block getPaddingBlock(NumberRandom numberRandom) {
+        return null;
+    }
 
-    Block getLengthBlock(byte length, NumberRandom numberRandom);
+    default Block getLengthBlock(byte length, NumberRandom numberRandom) {
+        return null;
+    }
 
-    void permuteBlocks(List<Block> blocks, NumberRandom numberFalseRandom);
+    default void permuteBlocks(List<Block> blocks, NumberRandom numberFalseRandom) {
 
-    void permuteBlocksInternal(List<Block> blocks, boolean nextKeyAfterPermute, NumberRandom numberFalseRandom);
+    }
 
-    void xor(List<Block> blocks, NumberRandom numberTrueRandom);
+    default void permuteBlocksInternal(List<Block> blocks, boolean nextKeyAfterPermute, NumberRandom numberFalseRandom) {
+
+    }
+
+    default void xor(List<Block> blocks, NumberRandom numberTrueRandom) {
+
+    }
 
     byte[] assembleOutput(List<Block> blocks) throws CipherException;
 
     byte[] crypt(byte[] key, byte[] bytes) throws CipherException;
 
     byte[] derive(byte[] salt, byte[] key, int size) throws CipherException;
+
+    void cryptParallel(byte[] key, File source, File destination, int threads) throws CipherException;
 
 }

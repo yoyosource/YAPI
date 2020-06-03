@@ -9,6 +9,7 @@ import yapi.math.NumberRandom;
 import yapi.string.HashType;
 import yapi.string.StringCrypting;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -138,4 +139,10 @@ class YAPICipherModeDecryption implements YAPICipherImpl {
     public byte[] derive(byte[] salt, byte[] key, int size) throws CipherException {
         throw new CipherException("Unsupported Operation, use 'crypt()' instead");
     }
+
+    @Override
+    public void cryptParallel(byte[] key, File source, File destination, int threads) throws CipherException {
+        throw new CipherException("Unsupported Operation, use 'crypt()' instead");
+    }
+
 }
