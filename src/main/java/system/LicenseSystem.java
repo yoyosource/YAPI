@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-package main;
+package system;
 
 import yapi.file.FileUtils;
 
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class LicenseSystem {
 
-    private static List<String> changedFilesName = new ArrayList<>();
+    private static final List<String> changedFilesName = new ArrayList<>();
 
     public static void main(String[] args) {
         if (args.length < 1) {

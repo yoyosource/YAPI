@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-package main;
+package system;
 
 import yapi.manager.yapion.YAPIONVariable;
 import yapi.manager.yapion.value.YAPIONObject;
@@ -39,7 +39,7 @@ public class CreateInteractiveMain {
     private static BigInteger methodCount = BigInteger.ZERO;
     private static BigInteger initCount = BigInteger.ZERO;
 
-    private static int[] ints = new int[256];
+    private static final int[] ints = new int[256];
 
     private static long fileCount = 0;
 

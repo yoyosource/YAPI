@@ -11,15 +11,21 @@
  * limitations under the License.
  */
 
-package main;
+package system;
 
 import yapi.file.FileUtils;
 import yapi.manager.yapion.YAPIONParser;
 import yapi.manager.yapion.value.YAPIONObject;
 import yapi.math.NumberUtils;
+import yapi.runtime.Hook;
+import yapi.runtime.TerminalUtils;
 import yapi.string.StringSplitting;
 import yapi.ui.console.Console;
+import yapi.ui.console.ConsoleMessageBuilder;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +33,7 @@ import java.util.stream.Collectors;
 
 public class InteractiveMain {
 
-    private static List<String> messages = new ArrayList<>();
+    private static final List<String> messages = new ArrayList<>();
 
     private static void send() {
         if (messages.isEmpty()) {
@@ -50,15 +56,62 @@ public class InteractiveMain {
     }
 
     public static void main(String[] args) {
-        if (true) {
+        if (false) {
             System.out.println(NumberUtils.factorial(BigInteger.valueOf(1000)));
             return;
         }
-        if (true) {
+        if (false) {
             Console.main(args);
             //ProveOfWork.main(args);
             return;
         }
+        if (true) {
+            Console console = new Console();
+            TerminalUtils.addResizeHook(new Hook() {
+                @Override
+                public void run() {
+                    System.out.println();
+                }
+            });
+            console.send(ConsoleMessageBuilder.build( "" +
+                    "<BLACK:bg>    <RED:bg>    <GREEN:bg>    <YELLOW:bg>    <BLUE:bg>    <MAGENTA:bg>    <CYAN:bg>    <WHITE:bg>    <DEFAULT>\n" +
+                    "<BLACK:bg>    <RED:bg>    <GREEN:bg>    <YELLOW:bg>    <BLUE:bg>    <MAGENTA:bg>    <CYAN:bg>    <WHITE:bg>    <DEFAULT>\n" +
+                    "<BLACK:bright:bg>    <RED:bright:bg>    <GREEN:bright:bg>    <YELLOW:bright:bg>    <BLUE:bright:bg>    <MAGENTA:bright:bg>    <CYAN:bright:bg>    <WHITE:bright:bg>    <DEFAULT>\n" +
+                    "<BLACK:bright:bg>    <RED:bright:bg>    <GREEN:bright:bg>    <YELLOW:bright:bg>    <BLUE:bright:bg>    <MAGENTA:bright:bg>    <CYAN:bright:bg>    <WHITE:bright:bg>    <DEFAULT>\n" +
+                    "<FAINT><BLACK>████<RED>████<GREEN>████<YELLOW>████<BLUE>████<MAGENTA>████<CYAN>████<WHITE>████<DEFAULT>\n" +
+                    "<FAINT><BLACK:bright>████<RED:bright>████<GREEN:bright>████<YELLOW:bright>████<BLUE:bright>████<MAGENTA:bright>████<CYAN:bright>████<WHITE:bright>████<DEFAULT>\n" +
+                    "<LEFT>LEFT <CENTER>CENTER <RIGHT> RIGHT<DEFAULT:alignment>" +
+                    "<BOLD>BOLD<DEFAULT:attribute> <FAINT>FAINT<DEFAULT:attribute> <ITALIC>ITALIC<DEFAULT:attribute> <UNDERLINE>UNDERLINE<DEFAULT:attribute> <UNDERLINE:double>UNDERLINE:double<DEFAULT:attribute> <NEGATIVE>NEGATIVE<DEFAULT:attribute> <CONCEAL>CONCEAL<DEFAULT:attribute> <STRIKETHROUGH>STRIKETHROUGH<DEFAULT:attribute>"));
+            console.send(ConsoleMessageBuilder.build("<BOLD>" +
+                    "      .:'\n" +
+                    "   _ :'_\n" +
+                    ".'\\`_\\`-'_\\`\\`.\n" +
+                    ":________.-'\n" +
+                    ":_______:\n" +
+                    " :_______\\`-;\n" +
+                    "  \\`._.-._.'"));
+            console.send(ConsoleMessageBuilder.build("<FAINT><BLUE>redfaint"));
+
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+                String s;
+                while ((s = bufferedReader.readLine()) != null) {
+                    System.out.println("Message:");
+                    console.send(ConsoleMessageBuilder.build(s));
+                }
+            } catch (IOException e) {
+
+            }
+            return;
+        }
+
+        //      .:'
+        //   _ :'_
+        //.'\`_\`-'_\`\`.
+        //:________.-'
+        //:_______:
+        // :_______\`-;
+        //  \`._.-._.'
 
         /*
         try {
