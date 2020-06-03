@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'YAPI'
-version '1.3-SNAPSHOT'
+version 'SNAPSHOT'
 
 ext {
     uberJarName = "${group}-${version}-all.jar"
@@ -15,18 +15,12 @@ ext {
     libs = "${buildDir}/libs"
 
     publication = mayor + "." + minor + "." + patch
-
-    /*if (publicationBuild.equals("0")) {
-        publication = publicationVersion
-    } else {
-        publication = publicationVersion + "-" + publicationBuild
-    }*/
 }
 
 sourceCompatibility = 1.12
 targetCompatibility = 1.12
 
-mainClassName = 'main.InteractiveMain'
+mainClassName = 'system.InteractiveMain'
 
 repositories {
     jcenter()
@@ -153,7 +147,7 @@ task YAPILicense {
     mustRunAfter classes
 
     doLast {
-        def command = "java -classpath ${buildDir}/classes/java/main main.LicenseSystem ${buildDir}"
+        def command = "java -classpath ${buildDir}/classes/java/main system.LicenseSystem ${buildDir}"
         def retval = command.execute().text
         print(retval)
     }
@@ -167,7 +161,7 @@ task YAPIInfo {
     mustRunAfter YAPILicense
 
     doLast {
-        def command = "java -classpath ${buildDir}/classes/java/main main.CreateInteractiveMain ${buildDir}"
+        def command = "java -classpath ${buildDir}/classes/java/main system.CreateInteractiveMain ${buildDir}"
         def retval = command.execute().text
         print(retval)
     }

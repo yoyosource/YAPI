@@ -60,6 +60,15 @@ enum ConsoleBuildAttribute {
     COLOR_MAGENTA_BG_BRIGHT("magenta:bg:bright", new TaskBGColorBright(Ansi.Color.MAGENTA), new TaskBGColor(Ansi.Color.DEFAULT)),
     COLOR_CYAN_BG_BRIGHT("cyan:bg:bright", new TaskBGColorBright(Ansi.Color.CYAN), new TaskBGColor(Ansi.Color.DEFAULT)),
 
+    COLOR_BACK_BRIGHT_BG("black:bright:bg", new TaskBGColorBright(Ansi.Color.BLACK), new TaskBGColor(Ansi.Color.DEFAULT)),
+    COLOR_WHITE_BRIGHT_BG("white:bright:bg", new TaskBGColorBright(Ansi.Color.WHITE), new TaskBGColor(Ansi.Color.DEFAULT)),
+    COLOR_RED_BRIGHT_BG("red:bright:bg", new TaskBGColorBright(Ansi.Color.RED), new TaskBGColor(Ansi.Color.DEFAULT)),
+    COLOR_GREEN_BRIGHT_BG("green:bright:bg", new TaskBGColorBright(Ansi.Color.GREEN), new TaskBGColor(Ansi.Color.DEFAULT)),
+    COLOR_BLUE_BRIGHT_BG("blue:bright:bg", new TaskBGColorBright(Ansi.Color.BLUE), new TaskBGColor(Ansi.Color.DEFAULT)),
+    COLOR_YELLOW_BRIGHT_BG("yellow:bright:bg", new TaskBGColorBright(Ansi.Color.YELLOW), new TaskBGColor(Ansi.Color.DEFAULT)),
+    COLOR_MAGENTA_BRIGHT_BG("magenta:bright:bg", new TaskBGColorBright(Ansi.Color.MAGENTA), new TaskBGColor(Ansi.Color.DEFAULT)),
+    COLOR_CYAN_BRIGHT_BG("cyan:bright:bg", new TaskBGColorBright(Ansi.Color.CYAN), new TaskBGColor(Ansi.Color.DEFAULT)),
+
     ALIGNMENT_LEFT("left", new TaskAlignment(ConsoleAlignment.LEFT), new TaskAlignment(ConsoleAlignment.LEFT)),
     ALIGNMENT_CENTER("center", new TaskAlignment(ConsoleAlignment.CENTER), new TaskAlignment(ConsoleAlignment.LEFT)),
     ALIGNMENT_RIGHT("right", new TaskAlignment(ConsoleAlignment.RIGHT), new TaskAlignment(ConsoleAlignment.LEFT)),
@@ -73,7 +82,7 @@ enum ConsoleBuildAttribute {
     ATTRIBUTE_CONCEAL("conceal", new TaskAttribute(Ansi.Attribute.CONCEAL_ON), new TaskAttribute(Ansi.Attribute.CONCEAL_OFF)),
     ATTRIBUTE_STRIKETHROUGH("strikethrough", new TaskAttribute(Ansi.Attribute.STRIKETHROUGH_ON), new TaskAttribute(Ansi.Attribute.STRIKETHROUGH_OFF));
 
-    private static ConsoleBuildAttribute[] consoleBuildAttributes = new ConsoleBuildAttribute[]{
+    private static final ConsoleBuildAttribute[] consoleBuildAttributes = new ConsoleBuildAttribute[]{
             DEFAULT, DEFAULT_COLOR, DEFAULT_ATTRIBUTE, DEFAULT_ALIGNMENT,
             ERASE_LINE_ALL, ERASE_LINE_FORWARD, ERASE_LINE_BACKWARD,
             ERASE_SCREEN_ALL, ERASE_SCREEN_FORWARD, ERASE_SCREEN_BACKWARD,
@@ -81,11 +90,12 @@ enum ConsoleBuildAttribute {
             COLOR_BLACK_BRIGHT, COLOR_WHITE_BRIGHT, COLOR_RED_BRIGHT, COLOR_GREEN_BRIGHT, COLOR_BLUE_BRIGHT, COLOR_YELLOW_BRIGHT, COLOR_MAGENTA_BRIGHT, COLOR_CYAN_BRIGHT,
             COLOR_BACK_BG, COLOR_WHITE_BG, COLOR_RED_BG, COLOR_GREEN_BG, COLOR_BLUE_BG, COLOR_YELLOW_BG, COLOR_MAGENTA_BG, COLOR_CYAN_BG,
             COLOR_BACK_BG_BRIGHT, COLOR_WHITE_BG_BRIGHT, COLOR_RED_BG_BRIGHT, COLOR_GREEN_BG_BRIGHT, COLOR_BLUE_BG_BRIGHT, COLOR_YELLOW_BG_BRIGHT, COLOR_MAGENTA_BG_BRIGHT, COLOR_CYAN_BG_BRIGHT,
+            COLOR_BACK_BRIGHT_BG, COLOR_WHITE_BRIGHT_BG, COLOR_RED_BRIGHT_BG, COLOR_GREEN_BRIGHT_BG, COLOR_BLUE_BRIGHT_BG, COLOR_YELLOW_BRIGHT_BG, COLOR_MAGENTA_BRIGHT_BG, COLOR_CYAN_BRIGHT_BG,
             ALIGNMENT_LEFT, ALIGNMENT_CENTER, ALIGNMENT_RIGHT,
             ATTRIBUTE_INTENSITY_BOLD, ATTRIBUTE_INTENSITY_FAINT, ATTRIBUTE_ITALIC, ATTRIBUTE_UNDERLINE, ATTRIBUTE_UNDERLINE_DOUBLE, ATTRIBUTE_NEGATIVE, ATTRIBUTE_CONCEAL, ATTRIBUTE_STRIKETHROUGH
     };
 
-    private String name;
+    private final String name;
 
     private ConsoleMessageTask taskOn = null;
     private ConsoleMessageTask taskOff = null;
