@@ -125,3 +125,5 @@ Changed version Naming to `[VERSION]-[REBUILD]`, eg. `1.3-5` (Version: 1.3, Rebu
 Changed version Naming to `[MAYOR].[MINOR].[PATCH]`, eg. `2.0.0` (Mayor: 2, Minor: 0, Patch: 0)
 - `02 Jun 2020` `2.0.0`
 - `02 Jun 2020` `2.0.1`
+- `03 Jun 2020` `2.0.2`
+- `03 Jun 2020` `2.1.0`
