@@ -49,6 +49,12 @@ public class FileCopyUtils {
         if (source.getAbsolutePath().equals(destination.getAbsolutePath())) {
             return false;
         }
+        if (destination.getAbsolutePath().startsWith(source.getAbsolutePath())) {
+            return false;
+        }
+        if (source.getAbsolutePath().startsWith(destination.getAbsolutePath())) {
+            return false;
+        }
 
         if (!source.isDirectory() || !source.exists()) {
             return false;
@@ -59,7 +65,17 @@ public class FileCopyUtils {
         if (!destination.isDirectory()) {
             return false;
         }
-        return false;
+
+        File[] files = source.listFiles();
+        boolean b = true;
+        for (File f : files) {
+            if (f.isFile()) {
+                b &= copyFile(f, new File(destination.getAbsolutePath() + "/" + f.getName()));
+            } else {
+                b &= copyDir(f, new File(destination.getAbsolutePath() + "/" + f.getName()));
+            }
+        }
+        return b;
     }
 
 }

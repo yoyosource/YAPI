@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class FileMoveUtils {
 
-    public static boolean copyFile(File source, File destination) {
+    public static boolean moveFile(File source, File destination) {
         if (source.getAbsolutePath().equals(destination.getAbsolutePath())) {
             return false;
         }
@@ -45,8 +45,14 @@ public class FileMoveUtils {
     }
 
     @WorkInProgress(context = WorkInProgressType.ALPHA)
-    public static boolean copyDir(File source, File destination) {
+    public static boolean moveDir(File source, File destination) {
         if (source.getAbsolutePath().equals(destination.getAbsolutePath())) {
+            return false;
+        }
+        if (destination.getAbsolutePath().startsWith(source.getAbsolutePath())) {
+            return false;
+        }
+        if (source.getAbsolutePath().startsWith(destination.getAbsolutePath())) {
             return false;
         }
 
@@ -59,7 +65,17 @@ public class FileMoveUtils {
         if (!destination.isDirectory()) {
             return false;
         }
-        return false;
+
+        File[] files = source.listFiles();
+        boolean b = true;
+        for (File f : files) {
+            if (f.isFile()) {
+                b &= moveFile(f, new File(destination.getAbsolutePath() + "/" + f.getName()));
+            } else {
+                b &= moveDir(f, new File(destination.getAbsolutePath() + "/" + f.getName()));
+            }
+        }
+        return b;
     }
 
 }
