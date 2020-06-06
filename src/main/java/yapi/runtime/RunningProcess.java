@@ -73,7 +73,7 @@ public class RunningProcess {
     }
 
     public boolean isCurrentProcess() {
-        return getPID() == ProcessUtils.getPID();
+        return getPID() == CurrentProcessUtils.getPID();
     }
 
 }

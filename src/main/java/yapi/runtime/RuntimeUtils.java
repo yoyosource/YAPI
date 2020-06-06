@@ -65,7 +65,7 @@ public class RuntimeUtils {
     }
 
     public static long getPID() {
-        return ProcessUtils.getPID();
+        return CurrentProcessUtils.getPID();
     }
 
     public static boolean isHeadless() {
