@@ -14,8 +14,8 @@ import yapi.string.StringCrypting;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 @WorkInProgress(context = WorkInProgressType.ALPHA)
 class YAPICipherModeEncryptionParallel implements YAPICipherImpl {
@@ -30,42 +30,49 @@ class YAPICipherModeEncryptionParallel implements YAPICipherImpl {
         baseFileYAPI.mkdirs();
     }
 
-    private static final int BLOCK_SIZE = 16 * 64 * 128;
+    private static final int BLOCK_SIZE = 1024 * 1024;
+    // 1024*1024*2
+    //   2.097.152
+    // 255* 8192
+    // 255*   32
+    // 255*    1
+    // 255*8192 + 255*32 + 255*1
+    //   2.097.375
 
-    public long partitionSource(File source) throws CipherException {
+    public long partitionSource(FileInputStream fileInputStream) throws IOException {
         long fileID = 0;
-        try {
-            FileInputStream fileInputStream = new FileInputStream(source);
-            while (fileInputStream.available() > 0) {
-                byte[] bytes = fileInputStream.readNBytes(BLOCK_SIZE);
-                if (bytes.length < BLOCK_SIZE) {
-
-                }
-                fileID++;
-                File f = new File(baseFileCipher.getAbsolutePath() + fileID);
-                f.createNewFile();
-                f.deleteOnExit();
-                FileUtils.dump(f, bytes);
+        byte[] bytes;
+        long lengthToRemove = 0;
+        while (fileInputStream.available() > 0) {
+            bytes = fileInputStream.readNBytes(BLOCK_SIZE);
+            if (bytes.length < BLOCK_SIZE) {
+                lengthToRemove += BLOCK_SIZE - bytes.length;
             }
-            File file = new File(baseFileCipher.getAbsolutePath() + 0);
-            file.createNewFile();
-            file.deleteOnExit();
-
-            if (fileID % 2 == 0) {
-                fileID++;
-                file = new File(baseFileCipher.getAbsolutePath() + fileID);
-                file.createNewFile();
-                file.deleteOnExit();
-            }
-        } catch (IOException e) {
-            throw new CipherException(e.getMessage(), e.getCause());
+            File f = new File(baseFileCipher.getAbsolutePath() + ++fileID);
+            f.createNewFile();
+            f.deleteOnExit();
+            FileUtils.dump(f, bytes);
         }
+
+        if (fileID % 2 == 0) {
+            lengthToRemove += BLOCK_SIZE;
+            createPadding(++fileID);
+        }
+        createHeader(lengthToRemove);
         return fileID;
     }
 
-    @Override
-    public byte[] assembleOutput(List<Block> blocks) throws CipherException {
-        return new byte[0];
+    public void createHeader(long lengthToRemove) throws IOException {
+        System.out.println(lengthToRemove);
+        File file = new File(baseFileCipher.getAbsolutePath() + 0);
+        file.createNewFile();
+        file.deleteOnExit();
+    }
+
+    public void createPadding(long fileID) throws IOException {
+        File file = new File(baseFileCipher.getAbsolutePath() + fileID);
+        file.createNewFile();
+        file.deleteOnExit();
     }
 
     @Override
@@ -79,30 +86,21 @@ class YAPICipherModeEncryptionParallel implements YAPICipherImpl {
     }
 
     @Override
-    public void cryptParallel(byte[] key, File source, File destination, int threads) throws CipherException {
-        if (!source.isFile()) {
-            throw new CipherException("Source is not a File");
+    public void cryptParallel(byte[] key, FileInputStream source, FileOutputStream destination, int threads) throws CipherException {
+        if (threads < 0) {
+            threads = 1;
         }
-        if (!source.exists()) {
-            throw new CipherException("Source not found");
+        try {
+            partitionSource(source);
+        } catch (IOException e) {
+            throw new CipherException(e.getMessage(), e.getCause());
         }
-        if (!destination.isFile()) {
-            throw new CipherException("Destination is not a File");
-        }
-        if (!destination.exists()) {
-            try {
-                destination.createNewFile();
-            } catch (IOException e) {
-                throw new CipherException(e.getMessage(), e.getCause());
-            }
-        }
-
-        partitionSource(source);
     }
 
     public static void main(String[] args) throws Exception {
         YAPICipherModeEncryptionParallel yapiCipherModeEncryptionParallel = new YAPICipherModeEncryptionParallel();
-
+        yapiCipherModeEncryptionParallel.cryptParallel(new byte[]{0}, new FileInputStream(new File("/Users/jojo/Resilio Sync/Transfer/Fuchsbau165-Wlan-2.pings")), new FileOutputStream(new File("/Users/jojo/Resilio Sync/Transfer/Test.txt")), 1);
+        //yapiCipherModeEncryptionParallel.cryptParallel(new byte[]{0}, new FileInputStream(new File("/Users/jojo/IdeaProjects/YACryptor/src/main/resources/entest.txt")), new FileOutputStream(new File("/Users/jojo/Resilio Sync/Transfer/Test.txt")), 1);
         ThreadUtils.sleep(100000);
     }
 

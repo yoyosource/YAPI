@@ -7,11 +7,12 @@ package yapi.encryption.encryption;
 import yapi.internal.exceptions.CipherException;
 import yapi.math.NumberRandom;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface YAPICipherImpl {
+interface YAPICipherImpl {
 
     default long getLong(byte[] bytes, int index) {
         long l = 1;
@@ -51,12 +52,14 @@ public interface YAPICipherImpl {
 
     }
 
-    byte[] assembleOutput(List<Block> blocks) throws CipherException;
+    default byte[] assembleOutput(List<Block> blocks) throws CipherException {
+        return null;
+    }
 
     byte[] crypt(byte[] key, byte[] bytes) throws CipherException;
 
     byte[] derive(byte[] salt, byte[] key, int size) throws CipherException;
 
-    void cryptParallel(byte[] key, File source, File destination, int threads) throws CipherException;
+    void cryptParallel(byte[] key, FileInputStream source, FileOutputStream destination, int threads) throws CipherException;
 
 }

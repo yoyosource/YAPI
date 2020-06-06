@@ -74,7 +74,7 @@ Alternative you can download the jar directly from [releases](https://github.com
 - `1.0` [R] `06 Nov 2019` > Focus on Math, Encryption, and Password cracking
 - `1.1` [A] `21 Jan 2020` > Pre-Release of **1.2**. Focus on String Manipulation and Compression
 - `1.2` [R] `05 May 2020` > Focus on Console (ANSI) and log system.
-- `2.0.0` [C] `02 Jun 2020` > Mayor changes throughout the YAPI.  
+- `2.0.0` [R] `02 Jun 2020` > Mayor changes throughout the YAPI.  
 
 * [R] Release
 * [A] Alpha

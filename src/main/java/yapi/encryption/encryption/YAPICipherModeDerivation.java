@@ -12,7 +12,8 @@ import yapi.math.NumberRandom;
 import yapi.string.HashType;
 import yapi.string.StringCrypting;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -94,7 +95,7 @@ class YAPICipherModeDerivation implements YAPICipherImpl {
     }
 
     @Override
-    public void cryptParallel(byte[] key, File source, File destination, int threads) throws CipherException {
+    public void cryptParallel(byte[] key, FileInputStream source, FileOutputStream destination, int threads) throws CipherException {
         throw new CipherException("Unsupported Operation, use 'crypt()' instead");
     }
 

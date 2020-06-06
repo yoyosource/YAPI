@@ -6,9 +6,11 @@ package yapi.encryption.encryption;
 
 import yapi.internal.exceptions.CipherException;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
 
-public class YAPICipher {
+public final class YAPICipher {
 
     public static final String ENCRYPTION = "encryption";
     public static final String DECRYPTION = "decryption";
@@ -30,6 +32,7 @@ public class YAPICipher {
     }
 
     private YAPICipherImpl yapiCipher;
+    private boolean used = false;
 
     private YAPICipher(YAPICipherImpl yapiCipher) {
         this.yapiCipher = yapiCipher;
@@ -46,7 +49,29 @@ public class YAPICipher {
      * @throws CipherException
      */
     public byte[] crypt(byte[] key, byte[] bytes) throws CipherException {
-        return yapiCipher.crypt(key, bytes);
+        if (used) {
+            throw new IllegalStateException();
+        }
+        used = true;
+        try {
+            return yapiCipher.crypt(key, bytes);
+        } catch (CipherException e) {
+            used = false;
+            throw e;
+        }
+    }
+
+    public void cryptParallel(byte[] key, FileInputStream source, FileOutputStream destination, int threads) throws CipherException {
+        if (used) {
+            throw new IllegalStateException();
+        }
+        used = true;
+        try {
+            yapiCipher.cryptParallel(key, source, destination, threads);
+        } catch (CipherException e) {
+            used = false;
+            throw e;
+        }
     }
 
     /**
@@ -60,7 +85,30 @@ public class YAPICipher {
      * @throws CipherException
      */
     public byte[] derive(byte[] salt, byte[] key, int size) throws CipherException {
-        return yapiCipher.derive(salt, key, size);
+        if (used) {
+            throw new IllegalStateException();
+        }
+        used = true;
+        try {
+            return yapiCipher.derive(salt, key, size);
+        } catch (CipherException e) {
+            used = false;
+            throw e;
+        }
+    }
+
+    public byte[] execute(YAPICipherDescription description) throws CipherException {
+        switch (description.type) {
+            case CRYPT:
+                return crypt(description.key, description.bytes);
+            case CRYPT_PARALLEL:
+                cryptParallel(description.key, description.source, description.destination, description.threads);
+                return new byte[0];
+            case DERIVE:
+                return derive(description.salt, description.key, description.size);
+            default:
+                return new byte[0];
+        }
     }
 
 }
