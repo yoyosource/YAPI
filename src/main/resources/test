@@ -1,0 +1,85 @@
+[![Files 284](https://img.shields.io/badge/Files-284-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1596](https://img.shields.io/badge/Methods-1596-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 31299](https://img.shields.io/badge/Code%20Lines-31299-inactive)](https://github.com/yoyosource/YAPI)
+
+[![Files 332](https://img.shields.io/badge/Files-332-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1743](https://img.shields.io/badge/Methods-1743-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 34127](https://img.shields.io/badge/Code%20Lines-34127-inactive)](https://github.com/yoyosource/YAPI)
+
+[![Files 336](https://img.shields.io/badge/Files-336-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1766](https://img.shields.io/badge/Methods-1766-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 34529](https://img.shields.io/badge/Code%20Lines-34529-inactive)](https://github.com/yoyosource/YAPI)
+
+[![Files 303](https://img.shields.io/badge/Files-303-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1546](https://img.shields.io/badge/Methods-1546-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 30694](https://img.shields.io/badge/Code%20Lines-30694-inactive)](https://github.com/yoyosource/YAPI)
+
+[![Files 305](https://img.shields.io/badge/Files-305-inactive)](https://github.com/yoyosource/YAPI)
+[![Methods 1642](https://img.shields.io/badge/Methods-1642-inactive)](https://github.com/yoyosource/YAPI)
+[![Code Lines 31533](https://img.shields.io/badge/Code%20Lines-31533-inactive)](https://github.com/yoyosource/YAPI)
+
+> Stats: License
+  > File Count:    331
+  > Changed Files: 53
+  - Database.java
+  - Data.java
+  - StringComparators.java
+  - StreamUtils.java
+  - StreamAction.java
+  - AES.java
+  - DiffieHellman.java
+  - BASE64Comparator.java
+  - HEXComparator.java
+  - InputAutoClose.java
+  - Output.java
+  - Input.java
+  - OutputAutoClose.java
+  - ZIPInflater.java
+  - ZIPDeflater.java
+  - DirtyCache.java
+  - YAPIStream.java
+  - YAPIException.java
+  - ChunkedIOException.java
+  - FunctionList.java
+  - OperatorList.java
+  - Context.java
+  - UnaryOperatorList.java
+  - Body.java
+  - Trail.java
+  - TestBody.java
+  - BinaryUtils.java
+  - BinaryFileInputStream.java
+  - BinaryFileOutputStream.java
+  - MorseUtils.java
+  - MorseFileOutputStream.java
+  - MorseFileInputStream.java
+  - ChunkedFileOutputStream.java
+  - ChunkedFileInputStream.java
+  - TokenType.java
+  - Tokenizer.java
+  - Token.java
+  - SuffixFunction.java
+  - AbstractFunction.java
+  - InfixFunction.java
+  - Function.java
+  - Root.java
+  - Sqrt.java
+  - Cbrt.java
+  - Factorial.java
+  - Power.java
+  - AbstractOperator.java
+  - Operator.java
+  - AbstractUnaryOperator.java
+  - UnaryOperator.java
+
+- OSSystemUtils
+- Regex
+- Statemachine
+- Config
+- YUI
+- YSort
+- ZIP
+- OwnZIP?
+- Datastructures?
+- apache common?
+- Parallel YAPICipher
