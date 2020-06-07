@@ -21,7 +21,7 @@ public class ProcessUtils {
         List<YProcess> yProcessList = new LinkedList<>();
         List<ProcessInfo> processInfos = getProcesses();
         for (ProcessInfo processInfo : processInfos) {
-            yProcessList.add(new YProcess(processInfo));
+            yProcessList.add(YProcess.getInstance(processInfo));
         }
         return yProcessList;
     }
@@ -34,7 +34,7 @@ public class ProcessUtils {
         List<YProcess> yProcessList = new LinkedList<>();
         List<ProcessInfo> processInfos = getProcesses(name);
         for (ProcessInfo processInfo : processInfos) {
-            yProcessList.add(new YProcess(processInfo));
+            yProcessList.add(YProcess.getInstance(processInfo));
         }
         return yProcessList;
     }

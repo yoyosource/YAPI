@@ -3,6 +3,7 @@ package yapi.runtime.taskmanager;
 import org.jutils.jprocesses.JProcesses;
 import org.jutils.jprocesses.model.JProcessesResponse;
 import org.jutils.jprocesses.model.ProcessInfo;
+import yapi.runtime.RunningProcess;
 import yapi.runtime.ThreadUtils;
 
 import java.util.LinkedList;
@@ -22,10 +23,7 @@ public class YProcess {
         updater = new Thread(() -> {
             while (true) {
                 List<ProcessInfo> processInfos = ProcessUtils.getProcesses();
-                List<Integer> pids = new LinkedList<>();
-                for (ProcessInfo info : processInfos) {
-                    pids.add(Integer.parseInt(info.getPid()));
-                }
+                List<Integer> pids = createPIDList(processInfos);
 
                 for (int i = allProcesses.size() - 1; i >= 0; i--) {
                     YProcess process = allProcesses.get(i);
@@ -33,9 +31,7 @@ public class YProcess {
                         allProcesses.remove(i);
                         continue;
                     }
-                    if (process.isAutoUpdate()) {
-                        process.assemble(processInfos.get(pids.indexOf(process.getPid())));
-                    }
+                    process.assemble(processInfos.get(pids.indexOf(process.getPid())));
                 }
                 ThreadUtils.sleep(50);
             }
@@ -45,7 +41,13 @@ public class YProcess {
         updater.start();
     }
 
-    private boolean autoUpdate = false;
+    private static List<Integer> createPIDList(List<ProcessInfo> processInfos) {
+        List<Integer> pids = new LinkedList<>();
+        for (ProcessInfo info : processInfos) {
+            pids.add(Integer.parseInt(info.getPid()));
+        }
+        return pids;
+    }
 
     private String name;
     private String command;
@@ -61,17 +63,34 @@ public class YProcess {
     private String time;
     private String startTime;
 
-    public YProcess(ProcessInfo processInfo) {
+    public static YProcess getInstance(ProcessInfo processInfo) {
+        for (YProcess process : allProcesses) {
+            if (process.getPid() == Integer.parseInt(processInfo.getPid())) return process;
+        }
+        return new YProcess(processInfo);
+    }
+
+    public static YProcess getInstance(RunningProcess runningProcess) {
+        for (YProcess process : allProcesses) {
+            if (process.getPid() == (int)runningProcess.getPID()) return process;
+        }
+        return new YProcess(runningProcess);
+    }
+
+    private YProcess(ProcessInfo processInfo) {
         assemble(processInfo);
         allProcesses.add(this);
         createUpdater();
     }
 
-    public YProcess(ProcessInfo processInfo, boolean autoUpdate) {
-        assemble(processInfo);
+    private YProcess(RunningProcess runningProcess) {
+        assemble(runningProcess);
         allProcesses.add(this);
         createUpdater();
-        this.autoUpdate = autoUpdate;
+    }
+
+    private void assemble(RunningProcess runningProcess) {
+        assemble(ProcessUtils.getProcess((int)runningProcess.getPID()));
     }
 
     private synchronized void assemble(ProcessInfo processInfo) {
@@ -88,10 +107,6 @@ public class YProcess {
 
         this.time = processInfo.getTime();
         this.startTime = processInfo.getStartTime();
-    }
-
-    public synchronized boolean isAutoUpdate() {
-        return autoUpdate;
     }
 
     public synchronized String getName() {
