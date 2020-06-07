@@ -1,16 +1,37 @@
+// SPDX-License-Identifier: Apache-2.0
+// YAPI
+// Copyright (C) 2019,2020 yoyosource
+
 package yapi.runtime.taskmanager;
 
 import org.jutils.jprocesses.JProcesses;
 import org.jutils.jprocesses.model.JProcessesResponse;
 import org.jutils.jprocesses.model.ProcessInfo;
+import yapi.file.FileUtils;
+import yapi.math.NumberUtils;
 import yapi.runtime.RunningProcess;
 import yapi.runtime.ThreadUtils;
+import yapi.string.StringFormatting;
+import yapi.ui.console.*;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class YProcess {
+
+    public static void main(String[] args) {
+        Console console = new Console();
+        //console.setClipping(ConsoleClipping.WIDTH_CLIP);
+
+        ConsoleMessageAppendable consoleMessageAppendable = ConsoleMessageAppendable.getInstance();
+        ProcessUtils.getYProcesses().stream().map(YProcess::toCompactColorString).forEach(message -> {
+            consoleMessageAppendable.appendMessage(message);
+            consoleMessageAppendable.appendMessage(ConsoleMessageBuilder.build("\n"));
+        });
+        console.send(consoleMessageAppendable);
+        //System.out.println(ProcessUtils.getYProcesses().stream().filter(o -> o.getUser().equals("jojo")).map(YProcess::toCompactString).collect(Collectors.joining("\n")));
+    }
 
     private static Thread updater;
     private static List<YProcess> allProcesses = new LinkedList<>();
@@ -58,8 +79,8 @@ public class YProcess {
     private String user;
 
     private double cpuUsage;
-    private double physicalMemory;
-    private double virtualMemory;
+    private long physicalMemory;
+    private long virtualMemory;
 
     private int pid;
     private int priority;
@@ -102,9 +123,9 @@ public class YProcess {
         this.command = processInfo.getCommand();
         this.user = processInfo.getUser();
 
-        this.cpuUsage = Double.parseDouble(processInfo.getCpuUsage());
-        this.physicalMemory = Double.parseDouble(processInfo.getPhysicalMemory());
-        this.virtualMemory = Double.parseDouble(processInfo.getVirtualMemory());
+        this.cpuUsage = Double.parseDouble(processInfo.getCpuUsage().replace(",", "."));
+        this.physicalMemory = Long.parseLong(processInfo.getPhysicalMemory());
+        this.virtualMemory = Long.parseLong(processInfo.getVirtualMemory());
 
         this.pid = Integer.parseInt(processInfo.getPid());
         this.priority = Integer.parseInt(processInfo.getPriority());
@@ -129,11 +150,11 @@ public class YProcess {
         return cpuUsage;
     }
 
-    public synchronized double getPhysicalMemory() {
+    public synchronized long getPhysicalMemory() {
         return physicalMemory;
     }
 
-    public synchronized double getVirtualMemory() {
+    public synchronized long getVirtualMemory() {
         return virtualMemory;
     }
 
@@ -163,6 +184,92 @@ public class YProcess {
 
     public synchronized JProcessesResponse changePriority(int priority) {
         return JProcesses.changePriority(pid, priority);
+    }
+
+    @Override
+    public String toString() {
+        return StringFormatting.pad(getPID() + "", 5, StringFormatting.Padding.LEFT, false) +
+                " " + StringFormatting.pad(getUser(), 10, StringFormatting.Padding.RIGHT, true) +
+                " " + StringFormatting.pad(getVirtualMemory() + "", 19, StringFormatting.Padding.LEFT, false) +
+                " " + StringFormatting.pad(getPhysicalMemory() + "", 19, StringFormatting.Padding.RIGHT, false) +
+                " " + StringFormatting.pad(NumberUtils.round(getCpuUsage(), 1) + "", 5, StringFormatting.Padding.LEFT, false) +
+                " " + StringFormatting.pad(getTime(), 10, StringFormatting.Padding.LEFT, false) +
+                " " + StringFormatting.pad(getStartTime(), 10, StringFormatting.Padding.RIGHT, false) +
+                " " + getCommand();
+    }
+
+    public ConsoleMessage toColorString() {
+        String DEFAULT = "<DEFAULT:COLOR>";
+        String[] COLORS = new String[]{"<GREEN:BRIGHT>", "<YELLOW:BRIGHT>", "<RED:BRIGHT>"};
+
+        StringBuilder st = new StringBuilder();
+        st.append(DEFAULT).append(StringFormatting.pad(getPID() + "", 5, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(DEFAULT).append(StringFormatting.pad(getUser(), 10, StringFormatting.Padding.RIGHT, true)).append(" ");
+        st.append(colorMapper(getVirtualMemory(), COLORS, new long[]{100*1024*1024L, 1024*1024*1024L, 10*1024*1024L*1024})).append(StringFormatting.pad(getVirtualMemory() + "", 19, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(colorMapper(getPhysicalMemory(), COLORS, new long[]{100*1024L, 1024*1024L, 10*1024*1024L})).append(StringFormatting.pad(getPhysicalMemory() + "", 19, StringFormatting.Padding.RIGHT, false)).append(" ");
+        st.append(colorMapper(getCpuUsage(), COLORS, new double[]{50.0, 100.0, 150.0})).append(StringFormatting.pad(NumberUtils.round(getCpuUsage(), 1) + "", 5, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(DEFAULT).append(StringFormatting.pad(getTime(), 10, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(DEFAULT).append(StringFormatting.pad(getStartTime(), 10, StringFormatting.Padding.RIGHT, false)).append(" ");
+        st.append(DEFAULT).append(getCommand());
+        return ConsoleMessageBuilder.build(st.toString());
+    }
+
+    private String colorMapper(long l, String[] colors, long[] mapper) {
+        if (colors.length != mapper.length) {
+            return "<DEFAULT>";
+        }
+        int i = 0;
+        while (i < colors.length) {
+            if (mapper[i] > l) {
+                break;
+            }
+            i++;
+        }
+        if (i >= colors.length) {
+            return colors[i - 1];
+        }
+        return colors[i];
+    }
+
+    private String colorMapper(double l, String[] colors, double[] mapper) {
+        if (colors.length != mapper.length) {
+            return "<DEFAULT>";
+        }
+        int i = 0;
+        while (i < colors.length) {
+            if (mapper[i] > l) {
+                break;
+            }
+            i++;
+        }
+        return colors[i];
+    }
+
+    public String toCompactString() {
+        return StringFormatting.pad(getPID() + "", 5, StringFormatting.Padding.LEFT, false) +
+                " " + StringFormatting.pad(getUser(), 10, StringFormatting.Padding.RIGHT, true) +
+                " " + StringFormatting.pad(FileUtils.getSize(getVirtualMemory(), true, true, 1), 7, StringFormatting.Padding.LEFT, false) +
+                " " + StringFormatting.pad(FileUtils.getSize(getPhysicalMemory(), true, true, 1), 7, StringFormatting.Padding.RIGHT, false) +
+                " " + StringFormatting.pad(NumberUtils.round(getCpuUsage(), 1) + "", 5, StringFormatting.Padding.LEFT, false) +
+                " " + StringFormatting.pad(getTime(), 10, StringFormatting.Padding.LEFT, false) +
+                " " + StringFormatting.pad(getStartTime(), 10, StringFormatting.Padding.RIGHT, false) +
+                " " + getCommand();
+    }
+
+    public ConsoleMessage toCompactColorString() {
+        String DEFAULT = "<DEFAULT:COLOR>";
+        String[] COLORS = new String[]{"<GREEN:BRIGHT>", "<YELLOW:BRIGHT>", "<RED:BRIGHT>"};
+
+        StringBuilder st = new StringBuilder();
+        st.append(DEFAULT).append(StringFormatting.pad(getPID() + "", 5, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(DEFAULT).append(StringFormatting.pad(getUser(), 10, StringFormatting.Padding.RIGHT, true)).append(" ");
+        st.append(colorMapper(getVirtualMemory(), COLORS, new long[]{100*1024*1024L, 1024*1024*1024L, 10*1024*1024L*1024})).append(StringFormatting.pad(FileUtils.getSize(getVirtualMemory(), true, true, 1), 7, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(colorMapper(getPhysicalMemory(), COLORS, new long[]{100*1024L, 1024*1024L, 10*1024*1024L})).append(StringFormatting.pad(FileUtils.getSize(getPhysicalMemory(), true, true, 1), 7, StringFormatting.Padding.RIGHT, false)).append(" ");
+        st.append(colorMapper(getCpuUsage(), COLORS, new double[]{50.0, 100.0, 150.0})).append(StringFormatting.pad(NumberUtils.round(getCpuUsage(), 1) + "", 5, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(DEFAULT).append(StringFormatting.pad(getTime(), 10, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(DEFAULT).append(StringFormatting.pad(getStartTime(), 10, StringFormatting.Padding.RIGHT, false)).append(" ");
+        st.append(DEFAULT).append(getCommand());
+        return ConsoleMessageBuilder.build(st.toString());
     }
 
     @Override
