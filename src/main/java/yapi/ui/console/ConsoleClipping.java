@@ -6,8 +6,10 @@ package yapi.ui.console;
 
 public enum ConsoleClipping {
 
-    NO_CLIP(),
-    WIDTH_CLIP(),
-    WRAP()
+    WRAP_SOFT(),
+    WRAP_HARD(),
+    WRAP_OFF(),
+
+    CLIP_WIDTH()
 
 }

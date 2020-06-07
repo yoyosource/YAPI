@@ -7,9 +7,9 @@ package yapi.runtime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProcessUtils {
+public class CurrentProcessUtils {
 
-    private ProcessUtils() {
+    private CurrentProcessUtils() {
         throw new IllegalStateException("Utility class");
     }
 

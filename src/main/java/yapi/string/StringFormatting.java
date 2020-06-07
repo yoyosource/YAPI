@@ -612,4 +612,31 @@ public class StringFormatting {
         return occurrences;
     }
 
+    public enum Padding {
+        LEFT,
+        EQUAL,
+        RIGHT
+    }
+
+    public static String pad(String s, int paddingLength, Padding paddingType, boolean clip) {
+        if (clip && s.length() > paddingLength) {
+            return s.substring(0, paddingLength);
+        }
+        if (s.length() > paddingLength) {
+            return s;
+        }
+        paddingLength = paddingLength - s.length();
+        if (paddingType == Padding.LEFT) {
+            return " ".repeat(paddingLength) + s;
+        }
+        if (paddingType == Padding.RIGHT) {
+            return s + " ".repeat(paddingLength);
+        }
+        if (paddingLength % 2 == 0) {
+            return " ".repeat(paddingLength / 2) + s + " ".repeat(paddingLength / 2);
+        }
+        paddingLength -= 1;
+        return " ".repeat(paddingLength / 2) + s + " ".repeat(paddingLength / 2 + 1);
+    }
+
 }
