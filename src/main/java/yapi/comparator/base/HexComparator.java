@@ -8,7 +8,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HEXComparator {
+public class HexComparator {
+
+    private HexComparator() {
+        throw new IllegalStateException("Utility class");
+    }
 
     private static char validHex(char c) {
         if (c >= '0' && c <= '9') return c;

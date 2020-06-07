@@ -197,8 +197,6 @@ public class ArrayUtils {
         return Stream.of(asArray(input));
     }
 
-    // System.arraycopy(toCopy,0, copyInto, index, toCopy.length);
-
     public static short[] copyInto(short[] toCopy, short[] copyInto, int index) {
         for (int i = 0; i < toCopy.length; i++) copyInto[i + index] = toCopy[i];
         return copyInto;
