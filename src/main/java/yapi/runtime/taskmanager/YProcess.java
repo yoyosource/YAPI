@@ -20,7 +20,7 @@ public class YProcess {
             return;
         }
 
-        updater = new Thread(() -> {
+        updater = new Thread(ThreadUtils.yapiGroup, () -> {
             while (true) {
                 List<ProcessInfo> processInfos = ProcessUtils.getProcesses();
                 List<Integer> pids = createPIDList(processInfos);
@@ -28,6 +28,10 @@ public class YProcess {
                 for (int i = allProcesses.size() - 1; i >= 0; i--) {
                     YProcess process = allProcesses.get(i);
                     if (!pids.contains(process.getPid())) {
+                        allProcesses.remove(i);
+                        continue;
+                    }
+                    if (!processInfos.get(pids.indexOf(process.getPid())).getCommand().equals(allProcesses.get(i).getCommand())) {
                         allProcesses.remove(i);
                         continue;
                     }
