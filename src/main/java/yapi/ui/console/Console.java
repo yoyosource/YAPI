@@ -15,7 +15,6 @@ public class Console {
 
     public static void main(String[] args) {
         Console console = new Console();
-
         console.send(ConsoleMessageBuilder.build("<RED>\\\\\\\\  <RED:BRIGHT,BOLD>\\\\¸/<WHITE> /¯\\\\ |¯) ˙|˙</BOLD>  <RED>//"));
         console.send(ConsoleMessageBuilder.build("<RED>//  <RED:BRIGHT,BOLD> |<WHITE>  |¯| |¯  ¸|¸</BOLD>  <RED>\\\\\\\\"));
         console.send(ConsoleMessageBuilder.build(""));
@@ -23,7 +22,7 @@ public class Console {
     }
 
     private ConsoleAlignment alignment = ConsoleAlignment.LEFT;
-    private ConsoleClipping clipping = ConsoleClipping.NO_CLIP;
+    private ConsoleClipping clipping = ConsoleClipping.WRAP_OFF;
 
     public Console() {
         AnsiConsole.systemInstall();
@@ -34,7 +33,27 @@ public class Console {
         AnsiConsole.systemInstall();
     }
 
-    public synchronized void send(ConsoleMessage message) {
+    public synchronized Console wrapSoft() {
+        clipping = ConsoleClipping.WRAP_SOFT;
+        return this;
+    }
+
+    public synchronized Console wrapHard() {
+        clipping = ConsoleClipping.WRAP_HARD;
+        return this;
+    }
+
+    public synchronized Console wrapOff() {
+        clipping = ConsoleClipping.WRAP_OFF;
+        return this;
+    }
+
+    public synchronized Console clipWidth() {
+        clipping = ConsoleClipping.CLIP_WIDTH;
+        return this;
+    }
+
+    public synchronized Console send(ConsoleMessage message) {
         List<ConsoleMessageTask> tasks = render(message.getTasks());
         Ansi ansi = Ansi.ansi();
 
@@ -45,6 +64,7 @@ public class Console {
         ansi.reset();
         alignment = ConsoleAlignment.LEFT;
         System.out.println(ansi.toString());
+        return this;
     }
 
     private ConsoleMessageAll split(List<ConsoleMessageTask> tasks) {
@@ -82,12 +102,9 @@ public class Console {
 
             if (previousIndention > currentIndention) {
                 consoleMessageTasks.add(new TaskNewLine());
-                consoleMessageTasks.add(new InternalTaskIndention(currentIndention));
-                consoleMessageTasks.addAll(snippet.getTasks());
-            } else {
-                consoleMessageTasks.add(new InternalTaskIndention(currentIndention - previousIndention));
-                consoleMessageTasks.addAll(snippet.getTasks());
             }
+            consoleMessageTasks.add(new InternalTaskIndention(currentIndention - previousIndention));
+            consoleMessageTasks.addAll(snippet.getTasks());
         }
 
         return consoleMessageTasks;
@@ -128,6 +145,7 @@ public class Console {
         private ConsoleAlignment lastAlignment = alignment;
 
         private int width = getWidth();
+        private int currentWidth = 0;
 
         public ConsoleMessageAll() {
             lines.add(new ConsoleMessageLine());
@@ -137,11 +155,13 @@ public class Console {
             if (task instanceof TaskAlignment) {
                 ConsoleAlignment algn = ((TaskAlignment) task).getConsoleAlignment();
                 if (!lastAlignment.equals(algn) && illegalAlignmentChange(algn)) {
+                    currentWidth = 0;
                     lines.add(new ConsoleMessageLine());
                 }
                 lastAlignment = algn;
             }
             if (task instanceof TaskNewLine) {
+                currentWidth = 0;
                 lines.add(new ConsoleMessageLine());
                 lines.get(lines.size() - 1).add(new TaskAlignment(lastAlignment));
                 return;
@@ -150,65 +170,83 @@ public class Console {
             if (task instanceof TaskText) {
                 String text = ((TaskText) task).getText();
 
-                if (text.length() <= width) {
+                if (currentWidth + text.length() <= width) {
                     addText(text, false);
                     return;
                 }
 
-                if (clipping.equals(ConsoleClipping.WRAP)) {
-                    String[] words = ((TaskText) task).getText().split(" ");
-                    StringBuilder st = new StringBuilder();
-
-                    for (int i = 0; i < words.length; i++) {
-                        if (st.length() + words[i].length() > width) {
-                            addText(st.toString(), true);
-                            st = new StringBuilder();
-
-                            if (words[i].length() > width) {
-                                String s = words[i];
-                                while (s.length() > width) {
-                                    addText(s.substring(0, width), true);
-                                    s = s.substring(width);
-                                }
-                                if (s.length() > 0) {
-                                    st.append(s);
-                                }
-                            }
-                        } else {
-                            if (i != 0) {
-                                st.append(" ");
-                            }
-                            st.append(words[i]);
-                        }
-                    }
-
-                    if (st.length() > 0) {
-                        addText(st.toString(), true);
-                    }
-                } else if (clipping.equals(ConsoleClipping.NO_CLIP)) {
-                    while (text.length() > width) {
-                        String s = text.substring(0, width);
-                        text = text.substring(width);
-                        addText(s, true);
-                    }
-
-                    if (text.length() > 0) {
-                        addText(text, true);
-                    }
+                if (clipping.equals(ConsoleClipping.WRAP_HARD)) {
+                    wrapHard(text);
+                } else if (clipping.equals(ConsoleClipping.WRAP_SOFT)) {
+                    wrapSoft(text);
+                } else if (clipping.equals(ConsoleClipping.WRAP_OFF)) {
+                    wrapOff(text);
+                } else if (clipping.equals(ConsoleClipping.CLIP_WIDTH)) {
+                    clipWidth(text);
                 }
             } else {
                 lines.get(lines.size() - 1).add(task);
             }
         }
 
+        private void wrapHard(String text) {
+            while (text.length() > width) {
+                String s = text.substring(0, width);
+                text = text.substring(width);
+                addText(s, true);
+            }
+
+            addText(text, true);
+        }
+
+        private void wrapSoft(String text) {
+            String[] words = text.split(" ");
+            StringBuilder st = new StringBuilder();
+
+            for (int i = 0; i < words.length; i++) {
+                if (st.length() + words[i].length() > width) {
+                    addText(st.toString(), true);
+                    st = new StringBuilder();
+
+                    if (words[i].length() > width) {
+                        String s = words[i];
+                        while (s.length() > width) {
+                            addText(s.substring(0, width), true);
+                            s = s.substring(width);
+                        }
+                        if (s.length() > 0) {
+                            st.append(s);
+                        }
+                    }
+                } else {
+                    if (i != 0) {
+                        st.append(" ");
+                    }
+                    st.append(words[i]);
+                }
+            }
+
+            if (st.length() > 0) {
+                addText(st.toString(), true);
+            }
+        }
+
+        private void wrapOff(String text) {
+            addText(text, false);
+        }
+
+        private void clipWidth(String text) {
+            addText(text.substring(0, width - currentWidth), false);
+        }
+
         private void addText(String text, boolean nLine) {
+            currentWidth += text.length();
             if (nLine) {
+                currentWidth = 0;
                 lines.add(new ConsoleMessageLine());
                 lines.get(lines.size() - 1).add(new TaskAlignment(lastAlignment));
-                lines.get(lines.size() - 1).add(new TaskText(text));
-            } else {
-                lines.get(lines.size() - 1).add(new TaskText(text));
             }
+            lines.get(lines.size() - 1).add(new TaskText(text));
         }
 
         public List<ConsoleMessageSnippet> getSnippets() {
