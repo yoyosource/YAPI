@@ -27,15 +27,15 @@ public class YProcess {
 
                 for (int i = allProcesses.size() - 1; i >= 0; i--) {
                     YProcess process = allProcesses.get(i);
-                    if (!pids.contains(process.getPid())) {
+                    if (!pids.contains(process.getPID())) {
                         allProcesses.remove(i);
                         continue;
                     }
-                    if (!processInfos.get(pids.indexOf(process.getPid())).getCommand().equals(allProcesses.get(i).getCommand())) {
+                    if (!processInfos.get(pids.indexOf(process.getPID())).getCommand().equals(allProcesses.get(i).getCommand())) {
                         allProcesses.remove(i);
                         continue;
                     }
-                    process.assemble(processInfos.get(pids.indexOf(process.getPid())));
+                    process.assemble(processInfos.get(pids.indexOf(process.getPID())));
                 }
                 ThreadUtils.sleep(50);
             }
@@ -69,14 +69,14 @@ public class YProcess {
 
     public static YProcess getInstance(ProcessInfo processInfo) {
         for (YProcess process : allProcesses) {
-            if (process.getPid() == Integer.parseInt(processInfo.getPid())) return process;
+            if (process.getPID() == Integer.parseInt(processInfo.getPid())) return process;
         }
         return new YProcess(processInfo);
     }
 
     public static YProcess getInstance(RunningProcess runningProcess) {
         for (YProcess process : allProcesses) {
-            if (process.getPid() == (int)runningProcess.getPID()) return process;
+            if (process.getPID() == (int)runningProcess.getPID()) return process;
         }
         return new YProcess(runningProcess);
     }
@@ -137,7 +137,7 @@ public class YProcess {
         return virtualMemory;
     }
 
-    public synchronized int getPid() {
+    public synchronized int getPID() {
         return pid;
     }
 
