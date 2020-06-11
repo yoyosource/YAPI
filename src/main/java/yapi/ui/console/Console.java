@@ -8,7 +8,6 @@ import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 import yapi.runtime.TerminalUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Console {
@@ -21,8 +20,10 @@ public class Console {
         console.send(ConsoleMessageBuilder.build("<WHITE:BRIGHT>(C)<WHITE> 2019,2020 <RED:BRIGHT>y<WHITE>oyosource Apache-2.0"));
     }
 
-    private ConsoleAlignment alignment = ConsoleAlignment.LEFT;
     private ConsoleClipping clipping = ConsoleClipping.WRAP_OFF;
+    private ConsoleRenderer renderer = new RendererDefault();
+
+    private ConsoleMessageSendStats stats = null;
 
     public Console() {
         AnsiConsole.systemInstall();
@@ -31,6 +32,27 @@ public class Console {
     public Console(ConsoleClipping clipping) {
         this.clipping = clipping;
         AnsiConsole.systemInstall();
+    }
+
+    public synchronized Console setRenderer(boolean alignment, boolean clipping) {
+        if (alignment && clipping) {
+            renderer = new RendererDefault();
+        }
+        if (!alignment && clipping) {
+            renderer = new RendererWithoutAlignment();
+        }
+        if (alignment && !clipping) {
+            renderer = new RendererWithoutClipping();
+        }
+        if (!alignment && !clipping) {
+            renderer = new RendererWithoutAlignmentAndClipping();
+        }
+        return this;
+    }
+
+    public synchronized Console setClipping(ConsoleClipping clipping) {
+        this.clipping = clipping;
+        return this;
     }
 
     public synchronized Console wrapSoft() {
@@ -54,7 +76,14 @@ public class Console {
     }
 
     public synchronized Console send(ConsoleMessage message) {
-        List<ConsoleMessageTask> tasks = render(message.getTasks());
+        ConsoleMessageSendStats stats = new ConsoleMessageSendStats();
+        stats.previousTasks = message.getTasks().size();
+        long time = System.currentTimeMillis();
+        List<ConsoleMessageTask> tasks = renderer.render(message.getTasks(), clipping, getWidth());
+        time = System.currentTimeMillis() - time;
+        stats.optimizedTasks = tasks.size();
+        stats.renderTime = time;
+        this.stats = stats;
         Ansi ansi = Ansi.ansi();
 
         for (ConsoleMessageTask task : tasks) {
@@ -62,64 +91,8 @@ public class Console {
         }
 
         ansi.reset();
-        alignment = ConsoleAlignment.LEFT;
         System.out.println(ansi.toString());
         return this;
-    }
-
-    private ConsoleMessageAll split(List<ConsoleMessageTask> tasks) {
-        ConsoleMessageAll consoleMessageAll = new ConsoleMessageAll();
-
-        for (ConsoleMessageTask task : tasks) {
-            consoleMessageAll.add(task);
-        }
-
-        return consoleMessageAll;
-    }
-
-    private List<ConsoleMessageTask> render(List<ConsoleMessageTask> tasks) {
-        List<ConsoleMessageSnippet> snippets = split(tasks).getSnippets();
-        int width = getWidth();
-
-        if (snippets.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<ConsoleMessageTask> consoleMessageTasks = new ArrayList<>();
-        if (snippets.get(0).getEraseTask() != null) {
-            consoleMessageTasks.add(snippets.get(0).getEraseTask());
-        }
-
-        consoleMessageTasks.add(new InternalTaskIndention(indent(snippets.get(0).getAlgn(), snippets.get(0).getLength(), width)));
-        consoleMessageTasks.addAll(snippets.get(0).getTasks());
-
-        for (int i = 1; i < snippets.size(); i++) {
-            ConsoleMessageSnippet snippetPrevious = snippets.get(i - 1);
-            int previousIndention = indent(snippetPrevious.getAlgn(), snippetPrevious.getLength(), width) + snippetPrevious.getLength();
-
-            ConsoleMessageSnippet snippet = snippets.get(i);
-            int currentIndention = indent(snippet.getAlgn(), snippet.getLength(), width);
-
-            if (previousIndention > currentIndention) {
-                consoleMessageTasks.add(new TaskNewLine());
-            }
-            consoleMessageTasks.add(new InternalTaskIndention(currentIndention - previousIndention));
-            consoleMessageTasks.addAll(snippet.getTasks());
-        }
-
-        return consoleMessageTasks;
-    }
-
-    private int indent(ConsoleAlignment alignment, int length, int width) {
-        switch (alignment) {
-            case LEFT:
-                return 0;
-            case CENTER:
-                return width / 2 - length / 2;
-            case RIGHT:
-                return width - length;
-        }
-        return 0;
     }
 
     public int getWidth() {
@@ -130,257 +103,8 @@ public class Console {
         return TerminalUtils.getHeight();
     }
 
-    void setAlignment(ConsoleAlignment alignment) {
-        this.alignment = alignment;
-    }
-
-    public void setClipping(ConsoleClipping clipping) {
-        this.clipping = clipping;
-    }
-
-    private class ConsoleMessageAll {
-
-        private List<ConsoleMessageLine> lines = new ArrayList<>();
-
-        private ConsoleAlignment lastAlignment = alignment;
-
-        private int width = getWidth();
-        private int currentWidth = 0;
-
-        public ConsoleMessageAll() {
-            lines.add(new ConsoleMessageLine());
-        }
-
-        public void add(ConsoleMessageTask task) {
-            if (task instanceof TaskAlignment) {
-                ConsoleAlignment algn = ((TaskAlignment) task).getConsoleAlignment();
-                if (!lastAlignment.equals(algn) && illegalAlignmentChange(algn)) {
-                    currentWidth = 0;
-                    lines.add(new ConsoleMessageLine());
-                }
-                lastAlignment = algn;
-            }
-            if (task instanceof TaskNewLine) {
-                currentWidth = 0;
-                lines.add(new ConsoleMessageLine());
-                lines.get(lines.size() - 1).add(new TaskAlignment(lastAlignment));
-                return;
-            }
-
-            if (task instanceof TaskText) {
-                String text = ((TaskText) task).getText();
-
-                if (currentWidth + text.length() <= width) {
-                    addText(text, false);
-                    return;
-                }
-
-                if (clipping.equals(ConsoleClipping.WRAP_HARD)) {
-                    wrapHard(text);
-                } else if (clipping.equals(ConsoleClipping.WRAP_SOFT)) {
-                    wrapSoft(text);
-                } else if (clipping.equals(ConsoleClipping.WRAP_OFF)) {
-                    wrapOff(text);
-                } else if (clipping.equals(ConsoleClipping.CLIP_WIDTH)) {
-                    clipWidth(text);
-                }
-            } else {
-                lines.get(lines.size() - 1).add(task);
-            }
-        }
-
-        private void wrapHard(String text) {
-            while (text.length() > width) {
-                String s = text.substring(0, width);
-                text = text.substring(width);
-                addText(s, true);
-            }
-
-            addText(text, true);
-        }
-
-        private void wrapSoft(String text) {
-            String[] words = text.split(" ");
-            StringBuilder st = new StringBuilder();
-
-            for (int i = 0; i < words.length; i++) {
-                if (st.length() + words[i].length() > width) {
-                    addText(st.toString(), true);
-                    st = new StringBuilder();
-
-                    if (words[i].length() > width) {
-                        String s = words[i];
-                        while (s.length() > width) {
-                            addText(s.substring(0, width), true);
-                            s = s.substring(width);
-                        }
-                        if (s.length() > 0) {
-                            st.append(s);
-                        }
-                    }
-                } else {
-                    if (i != 0) {
-                        st.append(" ");
-                    }
-                    st.append(words[i]);
-                }
-            }
-
-            if (st.length() > 0) {
-                addText(st.toString(), true);
-            }
-        }
-
-        private void wrapOff(String text) {
-            addText(text, false);
-        }
-
-        private void clipWidth(String text) {
-            addText(text.substring(0, width - currentWidth), false);
-        }
-
-        private void addText(String text, boolean nLine) {
-            currentWidth += text.length();
-            if (nLine) {
-                currentWidth = 0;
-                lines.add(new ConsoleMessageLine());
-                lines.get(lines.size() - 1).add(new TaskAlignment(lastAlignment));
-            }
-            lines.get(lines.size() - 1).add(new TaskText(text));
-        }
-
-        public List<ConsoleMessageSnippet> getSnippets() {
-            List<ConsoleMessageSnippet> snippets = new ArrayList<>();
-            for (int i = 0; i < lines.size(); i++) {
-                if (i != 0) {
-                    snippets.add(new ConsoleMessageSnippet(true));
-                }
-                ConsoleMessageLine consoleMessageLine = lines.get(i);
-                snippets.addAll(consoleMessageLine.getSnippets());
-            }
-            return snippets;
-        }
-
-        @Override
-        public String toString() {
-            return "ConsoleMessageAll{" +
-                    "lines=" + lines +
-                    '}';
-        }
-
-        private boolean illegalAlignmentChange(ConsoleAlignment alignment) {
-            if (alignment.equals(ConsoleAlignment.LEFT) && (lastAlignment.equals(ConsoleAlignment.CENTER) || lastAlignment.equals(ConsoleAlignment.RIGHT))) {
-                return true;
-            }
-            return alignment.equals(ConsoleAlignment.CENTER) && (lastAlignment.equals(ConsoleAlignment.RIGHT));
-        }
-
-    }
-
-    private class ConsoleMessageLine {
-
-        private List<ConsoleMessageSnippet> snippets = new ArrayList<>();
-
-        public ConsoleMessageLine() {
-            snippets.add(new ConsoleMessageSnippet());
-        }
-
-        public void add(ConsoleMessageTask task) {
-            if (task instanceof TaskAlignment) {
-                if (!snippets.get(snippets.size() - 1).isEmpty()) {
-                    snippets.add(new ConsoleMessageSnippet());
-                }
-            }
-            snippets.get(snippets.size() - 1).add(task);
-        }
-
-        public boolean isEmpty() {
-            return snippets.isEmpty();
-        }
-
-        public List<ConsoleMessageSnippet> getSnippets() {
-            return snippets;
-        }
-
-        @Override
-        public String toString() {
-            return "ConsoleMessageLine{" +
-                    "snippets=" + snippets +
-                    '}';
-        }
-
-    }
-
-    private class ConsoleMessageSnippet {
-
-        private List<ConsoleMessageTask> tasks = new ArrayList<>();
-        private ConsoleAlignment algn = alignment;
-        private ConsoleMessageTask eraseTask = null;
-        private boolean newLine = false;
-
-        private int length = 0;
-
-        public ConsoleMessageSnippet() {
-
-        }
-
-        public ConsoleMessageSnippet(boolean newLine) {
-            this.newLine = newLine;
-        }
-
-        public void add(ConsoleMessageTask task) {
-            if (newLine) {
-                throw new IllegalStateException();
-            }
-            if (task instanceof TaskAlignment) {
-                algn = ((TaskAlignment) task).getConsoleAlignment();
-            }
-            if (task instanceof TaskEraseScreen || task instanceof TaskEraseLine) {
-                eraseTask = task;
-                return;
-            }
-            if (task instanceof TaskText) {
-                length += ((TaskText) task).getText().length();
-            }
-            tasks.add(task);
-        }
-
-        public boolean isEmpty() {
-            return tasks.isEmpty();
-        }
-
-        public List<ConsoleMessageTask> getTasks() {
-            return tasks;
-        }
-
-        public ConsoleAlignment getAlgn() {
-            return algn;
-        }
-
-        public ConsoleMessageTask getEraseTask() {
-            return eraseTask;
-        }
-
-        public int getLength() {
-            return length;
-        }
-
-        public boolean isNewLine() {
-            return newLine;
-        }
-
-        @Override
-        public String toString() {
-            if (newLine) {
-                return "ConsoleMessageSnippet{newLine=" + newLine + "}";
-            }
-            return "ConsoleMessageSnippet{" +
-                    "alignment=" + algn +
-                    ", size=" + length +
-                    ", tasks=" + tasks +
-                    '}';
-        }
-
+    public ConsoleMessageSendStats getStats() {
+        return stats;
     }
 
 }

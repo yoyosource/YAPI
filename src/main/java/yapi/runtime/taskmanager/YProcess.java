@@ -22,7 +22,12 @@ public class YProcess {
 
     public static void main(String[] args) {
         Console console = new Console();
-        //console.setClipping(ConsoleClipping.WIDTH_CLIP);
+        // false, false -> ConsoleMessageSendStats{previousTasks=6390, optimizedTasks=7456, renderTime=127}
+        // false, true  -> ConsoleMessageSendStats{previousTasks=6354, optimizedTasks=7414, renderTime=171}
+        // true, false  -> ConsoleMessageSendStats{previousTasks=6390, optimizedTasks=7456, renderTime=138}
+        // true, true   -> ConsoleMessageSendStats{previousTasks=6372, optimizedTasks=7435, renderTime=110}
+        console.setRenderer(true, true);
+        console.setClipping(ConsoleClipping.CLIP_WIDTH);
 
         ConsoleMessageAppendable consoleMessageAppendable = ConsoleMessageAppendable.getInstance();
         ProcessUtils.getYProcesses().stream().map(YProcess::toCompactColorString).forEach(message -> {
@@ -30,6 +35,7 @@ public class YProcess {
             consoleMessageAppendable.appendMessage(ConsoleMessageBuilder.build("\n"));
         });
         console.send(consoleMessageAppendable);
+        System.out.println(console.getStats());
         //System.out.println(ProcessUtils.getYProcesses().stream().filter(o -> o.getUser().equals("jojo")).map(YProcess::toCompactString).collect(Collectors.joining("\n")));
     }
 
@@ -241,6 +247,9 @@ public class YProcess {
                 break;
             }
             i++;
+        }
+        if (i >= colors.length) {
+            return colors[i - 1];
         }
         return colors[i];
     }

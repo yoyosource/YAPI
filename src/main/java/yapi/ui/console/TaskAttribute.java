@@ -17,8 +17,7 @@ public class TaskAttribute extends ConsoleMessageTask {
     @Override
     public void runTask(Ansi ansi, Console console) {
         if (attribute.equals(Ansi.Attribute.RESET)) {
-            console.setAlignment(ConsoleAlignment.LEFT);
-            console.setClipping(ConsoleClipping.WRAP_SOFT);
+            console.setClipping(ConsoleClipping.WRAP_OFF);
         }
         ansi.a(attribute);
     }
