@@ -6,11 +6,11 @@ package yapi.ui.console;
 
 import org.fusesource.jansi.Ansi;
 
-class InternalTaskIndention extends ConsoleMessageTask {
+class TaskIndention extends ConsoleMessageTask {
 
     private int indention;
 
-    InternalTaskIndention(int indention) {
+    TaskIndention(int indention) {
         this.indention = indention;
     }
 

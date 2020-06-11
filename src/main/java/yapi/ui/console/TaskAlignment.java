@@ -16,7 +16,7 @@ public class TaskAlignment extends ConsoleMessageTask {
 
     @Override
     public void runTask(Ansi ansi, Console console) {
-        console.setAlignment(consoleAlignment);
+
     }
 
     public ConsoleAlignment getConsoleAlignment() {
