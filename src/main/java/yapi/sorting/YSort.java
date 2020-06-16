@@ -6,254 +6,270 @@ package yapi.sorting;
 
 import yapi.internal.annotations.yapi.WorkInProgress;
 import yapi.internal.annotations.yapi.WorkInProgressType;
-import yapi.math.NumberRandom;
-import yapi.sorting.hook.SortingHook;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 @WorkInProgress(context = WorkInProgressType.ALPHA)
-public class YSort<T> {
+public class YSort<T> implements Sort<T> {
 
     private T[] ts = null;
-    private Comparator<T> comparator = null;
+    private Comparator<T> comparator;
 
-    private SortingHook<T> sortingHook = null;
+    private static boolean print = false;
 
     public YSort(T... ts) {
         this.ts = ts;
     }
 
-    public YSort() {
-
+    public static <T> T[] sort(Comparator<T> comparator, T... ts) {
+        YSort<T> ySort = new YSort<>(ts);
+        ySort.sort(comparator);
+        return ySort.getArray();
     }
 
-    public void setHook(SortingHook<T> sortingHook) {
-        this.sortingHook = sortingHook;
-    }
-
-    private void swap(int i, int j) {
-        T tmp = ts[i];
-        ts[i] = ts[j];
-        ts[j] = tmp;
-    }
-
+    @Override
     public void sort(Comparator<T> comparator) {
         if (ts == null) {
             return;
         }
 
         this.comparator = comparator;
-        ySort(ts, ts.length - 1);
+        sort();
     }
 
-    public void sortReversed(Comparator<T> comparator) {
-        sort(comparator);
-        reverse();
-    }
-
-    public void reverse() {
-        if (ts.length <= 1) {
-            return;
-        }
-
-        for (int i = 0; i < ts.length / 2; i++) {
-            swap(i, ts.length - i - 1);
-        }
-    }
-
-    public T[] getSortedArray() {
+    @Override
+    public T[] getArray() {
         return ts;
-    }
-
-    public void setArray(T... ts) {
-        if (this.ts == null) {
-            this.ts = ts;
-        }
     }
 
     private class Batch {
 
-        private int start;
-        private int end;
+        private int head;
+        private int tail;
+        private int index = 0;
 
-        private boolean ascending = false;
+        private boolean reverse = false;
 
-        public Batch(int start, int end) {
-            this.start = start;
-            this.end = end;
-            if (start < end) {
-                ascending = true;
+        public Batch(int head, int tail) {
+            this.head = head;
+            this.tail = tail;
+            if (head > tail) {
+                reverse = true;
             }
         }
 
-        public int getStart() {
-            return start;
-        }
-
-        public int getEnd() {
-            return end;
-        }
-
-        public int get() {
-            if (ascending && start == end) {
-                return -1;
-            } else {
-                if (start < end) {
-                    return -1;
+        public int getIndex() {
+            if (!reverse) {
+                if (print) {
+                    System.out.println("NON REVERSE");
+                    System.out.println("Index:" + index + " Head:" + head + " Tail:" + tail);
+                    System.out.println("Head+Index:" + (head + index) + " Head+Index>Tail-1:" + (head + index > tail - 1));
                 }
+                if (head + index > tail) return -1;
+                return head + index;
+            } else {
+                if (print) {
+                    System.out.println("REVERSE");
+                    System.out.println("Index:" + index + " Head:" + head + " Tail:" + tail);
+                    System.out.println("Tail-Index:" + (tail - index) + " Tail-Index<Head:" + (tail - index < head));
+                }
+                if (head - index < tail) return -1;
+                return head - index;
             }
-            return start;
         }
 
         public void update() {
-            if (start > end) {
-                start--;
-            } else {
-                start++;
-            }
+            index++;
         }
 
         public int length() {
-            return start > end ? start - end + 1 : end - start;
+            if (reverse) {
+                return head - tail + 1;
+            } else {
+                return tail - head + 1;
+            }
+        }
+
+        public int getTail() {
+            return this.tail;
+        }
+
+        public int getHead() {
+            return this.head;
+        }
+
+        public int getStart() {
+            if (reverse) {
+                return tail;
+            }
+            return head;
+        }
+
+        public int getEnd() {
+            if (reverse) {
+                return head;
+            }
+            return tail;
+        }
+
+        public Batch reset(int head, int tail) {
+            this.head = head;
+            this.tail = tail;
+            reverse = false;
+            if (head > tail) {
+                reverse = true;
+            }
+            this.index = 0;
+            return this;
         }
 
         @Override
         public String toString() {
-            return "Batch{" +
-                    "start=" + start +
-                    ", end=" + end +
-                    '}';
+            return "{" + head + "->" + tail + "[" + index + "]}";
+        }
+
+        public String toString(T[] ts) {
+            StringBuilder st = new StringBuilder();
+            st.append("[");
+            int length = length();
+            int cIndex = reverse ? tail : head;
+            for (int i = 0; i < length; i++) {
+                if (i != 0) {
+                    st.append(", ");
+                }
+                st.append(ts[cIndex + i]);
+            }
+            st.append("]");
+            return st.toString();
         }
 
     }
 
-    private void ySort(T[] ts, int length) {
-        int current = 0;
+    private void sort() {
+        LinkedList<Batch> batches = new LinkedList<>();
+
+        int lastSort = -2;
         int index = 0;
-        int indexLength = 0;
+        int batchLength = 0;
+        int length = ts.length;
 
-        List<Batch> batches = new ArrayList<>();
+        if (length < 2) {
+            return;
+        }
 
-        for (int i = 0; i < length; i++) {
-            int compare = comparator.compare(ts[i], ts[i + 1]);
-            if (compare > 0) {
-                if (current != 1) {
-                    if (indexLength != 0) {
-                        batches.add(new Batch(index, index + indexLength));
-                    }
-                    index = i;
-                    indexLength = 1;
-                    current = 1;
-                } else {
-                    indexLength++;
-                }
-            } else if (compare < 0) {
-                if (current != 2) {
-                    if (indexLength != 0) {
-                        batches.add(new Batch(index + indexLength, index));
-                    }
-                    index = i;
-                    indexLength = 1;
-                    current = 2;
-                } else {
-                    indexLength++;
-                }
+        for (int i = 1; i < length; i++) {
+            int compare = comparator.compare(ts[i - 1], ts[i]);
+            if (lastSort == -2) {
+                lastSort = compare;
+            }
+            if (compare != lastSort) {
+                addBatch(index, batchLength, lastSort, batches);
+                index = i;
+                batchLength = 0;
+                lastSort = -2;
             } else {
-                indexLength++;
+                batchLength++;
             }
         }
-        if (current == 2) {
-            batches.add(new Batch(index + indexLength, index));
+
+        addBatch(index, batchLength, lastSort, batches);
+
+        while (batches.size() > 1) {
+            output(batches);
+            Batch batch1 = batches.removeFirst();
+            Batch batch2 = batches.removeFirst();
+            if (batch1.getStart() > batch2.getStart()) {
+                batches.add(merge(batch2, batch1));
+            } else {
+                batches.add(merge(batch1, batch2));
+            }
+        }
+        output(batches);
+        Batch batch = batches.removeFirst();
+        if (batch.reverse) {
+            for (int i = 0; i < ts.length / 2; i++) {
+                T t = ts[i];
+                ts[i] = ts[ts.length - i - 1];
+                ts[ts.length - i - 1] = t;
+            }
+        }
+    }
+
+    private void output(LinkedList<Batch> batches) {
+        if (print) {
+            System.out.println(batches.stream().map(b -> b.toString(ts)).collect(Collectors.joining(" ")));
+        }
+    }
+
+    private void addBatch(int index, int length, int compare, LinkedList<Batch> batches) {
+        if (compare > 0) {
+            batches.add(new Batch(index + length, index));
         } else {
-            batches.add(new Batch(index, index + indexLength));
-        }
-
-        System.out.println(batches);
-        System.out.println(Arrays.toString(ts));
-        for (int i = 0; i < batches.size() - 1; i++) {
-            Batch b = merge(ts, batches.get(i), batches.get(i + 1));
-            batches.set(i + 1, b);
-            System.out.println();
-            System.out.println(batches);
-            System.out.println(Arrays.toString(ts));
+            batches.add(new Batch(index, index + length));
         }
     }
 
-    private Batch merge(T[] ts, Batch b1, Batch b2) {
-        int length = b1.length() + b2.length();
-        T[] nTS = (T[])new Object[length];
+    private Batch merge(Batch batch1, Batch batch2) {
+        T[] array = (T[]) new Object[batch1.length() + batch2.length()];
+        int index = 0;
 
-        int index = b1.getStart();
+        while (index < array.length) {
+            int i1 = batch1.getIndex();
+            int i2 = batch2.getIndex();
 
-        for (int i = 0; i < length; i++) {
-            int i1 = b1.get();
-            int i2 = b2.get();
-
-            System.out.println(i1 + " " + i2);
-            if (i1 == -1 && i2 == -1) {
-                break;
-            }
-
+            int compare;
             if (i1 == -1) {
-                nTS[i] = ts[b2.get()];
-                b2.update();
-                continue;
-            }
-            if (i2 == -1) {
-                nTS[i] = ts[b1.get()];
-                b1.update();
-                continue;
-            }
-
-            int compare = comparator.compare(ts[i1], ts[i2]);
-            if (compare > 0) {
-                nTS[i] = ts[b2.get()];
-                b2.update();
+                compare = 1;
+            } else if (i2 == -1) {
+                compare = -1;
             } else {
-                nTS[i] = ts[b1.get()];
-                b1.update();
+                compare = comparator.compare(ts[i1], ts[i2]);
             }
-        }
-        System.out.println(Arrays.toString(nTS));
 
-        for (int i = 0; i < length; i++) {
-            ts[i + index] = nTS[i];
-        }
-
-        return new Batch(0, b2.getEnd());
-    }
-
-    public static void main(String[] args) {
-        //YSort<Integer> ySort = new YSort<>(3, 5, 4, 3, 4, 6, 6, 9, 6, 8);
-        //YSort<Integer> ySort = new YSort<>(7, 0, 7, 6, 1, 8, 5, 6, 0, 2);
-        YSort<Integer> ySort = new YSort<>(0, 3, 4, 9, 4, 7, 8, 4, 3, 6);
-        //YSort<Integer> ySort = new YSort<>(createIntArray(10, 10));
-        ySort.sort(Integer::compareTo);
-        System.out.println(Arrays.toString(ySort.getSortedArray()));
-    }
-
-    private static Integer[] createIntArray(int size, int constraint) {
-        NumberRandom numberRandom = new NumberRandom();
-        Integer[] ints = new Integer[size];
-        for (int i = 0; i < ints.length; i++) {
-            ints[i] = numberRandom.getInt(constraint);
-        }
-        return ints;
-    }
-
-    private static Integer[] createIntArray(int size, boolean reversed) {
-        Integer[] ints = new Integer[size];
-        for (int i = 0; i < ints.length; i++) {
-            if (reversed) {
-                ints[i] = ints.length - 1 - i;
+            if (compare < 0) {
+                array[index] = ts[batch1.getIndex()];
+                batch1.update();
             } else {
-                ints[i] = i;
+                array[index] = ts[batch2.getIndex()];
+                batch2.update();
             }
+            index++;
         }
-        return ints;
+
+        mergeBack(batch1.getStart(), array);
+        return returnBatch(batch1, batch2);
+    }
+
+    private Batch returnBatch(Batch batch1, Batch batch2) {
+        return batch1.reset(batch1.getStart(), batch2.getEnd());
+    }
+
+    private void mergeBack(int start, T[] array) {
+        for (int i = 0; i < array.length; i++) {
+            ts[start + i] = array[i];
+        }
+    }
+
+    @Override
+    public void sortReversed(Comparator<T> comparator) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void reverse() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setArray(T... ts) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setHook(SortingHook<T> sortingHook) {
+        throw new UnsupportedOperationException();
     }
 
 }

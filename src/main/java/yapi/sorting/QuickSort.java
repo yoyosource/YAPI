@@ -4,12 +4,10 @@
 
 package yapi.sorting;
 
-import yapi.sorting.hook.SortingHook;
-
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class QuickSort<T> {
+public class QuickSort<T> implements Sort<T> {
 
     private T[] ts = null;
     private Comparator<T> comparator = null;
@@ -25,6 +23,7 @@ public class QuickSort<T> {
         this.ts = ts;
     }
 
+    @Override
     public void setHook(SortingHook<T> sortingHook) {
         this.sortingHook = sortingHook;
     }
@@ -35,6 +34,7 @@ public class QuickSort<T> {
         ts[j] = tmp;
     }
 
+    @Override
     public void sort(Comparator<T> comparator) {
         if (ts == null) {
             return;
@@ -45,6 +45,7 @@ public class QuickSort<T> {
         quickSort(ts, 0, ts.length - 1);
     }
 
+    @Override
     public void sortReversed(Comparator<T> comparator) {
         if (ts == null) {
             return;
@@ -55,6 +56,7 @@ public class QuickSort<T> {
         quickSort(ts, 0, ts.length - 1);
     }
 
+    @Override
     public void reverse() {
         if (ts.length <= 1) {
             return;
@@ -65,10 +67,13 @@ public class QuickSort<T> {
         }
     }
 
-    public T[] getSortedArray() {
+
+    @Override
+    public T[] getArray() {
         return ts;
     }
 
+    @Override
     public void setArray(T... ts) {
         if (this.ts == null) {
             this.ts = ts;

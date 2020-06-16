@@ -4,13 +4,11 @@
 
 package yapi.sorting;
 
-import yapi.sorting.hook.SortingHook;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
-public class BogoSort<T> {
+public class BogoSort<T> implements Sort<T> {
 
     private T[] ts = null;
     private Comparator<T> comparator;
@@ -25,6 +23,7 @@ public class BogoSort<T> {
 
     }
 
+    @Override
     public void setHook(SortingHook<T> sortingHook) {
         this.sortingHook = sortingHook;
     }
@@ -35,6 +34,7 @@ public class BogoSort<T> {
         ts[j] = tmp;
     }
 
+    @Override
     public void sort(Comparator<T> comparator) {
         if (ts == null) {
             return;
@@ -44,6 +44,7 @@ public class BogoSort<T> {
         bogoSort(ts);
     }
 
+    @Override
     public void sortReversed(Comparator<T> comparator) {
         if (ts == null) {
             return;
@@ -54,6 +55,7 @@ public class BogoSort<T> {
         reverse();
     }
 
+    @Override
     public void reverse() {
         if (ts.length <= 1) {
             return;
@@ -64,10 +66,12 @@ public class BogoSort<T> {
         }
     }
 
-    public T[] getSortedArray() {
+    @Override
+    public T[] getArray() {
         return ts;
     }
 
+    @Override
     public void setArray(T... ts) {
         if (this.ts == null) {
             this.ts = ts;
