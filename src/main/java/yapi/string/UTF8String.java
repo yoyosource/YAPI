@@ -4,6 +4,7 @@
 
 package yapi.string;
 
+import yapi.array.LinkedListUtils;
 import yapi.internal.annotations.yapi.WorkInProgress;
 import yapi.internal.annotations.yapi.WorkInProgressType;
 import yapi.internal.runtimeexceptions.StringException;
@@ -14,19 +15,11 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 @WorkInProgress(context = WorkInProgressType.ALPHA)
 public class UTF8String {
-
-    public static void main(String[] args) {
-        UTF8String string = new UTF8String("Hallo Welt äöü");
-        string.append("Hello World!");
-        System.out.println(string);
-        System.out.println(string.toHex(true));
-        System.out.println(string.toBinary(true));
-        System.out.println(UTF8String.fromHex(string.toHex()).toHex(true));
-    }
 
     private byte[] bytes;
 
@@ -46,8 +39,20 @@ public class UTF8String {
         bytes = new String(chars).getBytes(StandardCharsets.UTF_8);
     }
 
+    private UTF8String(byte[] bytes, boolean copy) {
+        if (copy) {
+            this.bytes = Arrays.copyOf(bytes, bytes.length);
+        } else {
+            this.bytes = bytes;
+        }
+    }
+
     private UTF8String(byte[] bytes) {
-        this.bytes = bytes;
+        this(bytes, false);
+    }
+
+    private UTF8String(UTF8String utf8String) {
+        this(utf8String.bytes, true);
     }
 
     public byte[] getRaw() {
@@ -55,7 +60,7 @@ public class UTF8String {
     }
 
     public static UTF8String fromHex(String hex) {
-        if (!(hex.matches("[0-9A-Fa-f]+") || hex.matches("[0-9A-Fa-f]{2}( [0-9A-Fa-f]{2})*"))) {
+        if (hex.matches("[0-9A-Fa-f]+")) {
             throw new StringException();
         }
         if (hex.length() % 2 != 0) {
@@ -152,25 +157,19 @@ public class UTF8String {
     }
 
     public UTF8String substring(int start, int end) {
+        if (start < 0 && end <= 0) {
+            return substringInternal(bytes.length - start * -1, bytes.length - end * -1);
+        }
+        if (start == end) {
+            return new UTF8String(new byte[0]);
+        }
         return substringInternal(start, end);
     }
 
-    private UTF8String substringInternal(int start, int end) {
-        return new UTF8String(toString().substring(start, end));
-    }
-
-    public UTF8String substringRisky(int start) {
-        if (start < 0) {
-            return substringRiskyInternal(bytes.length - start * -1, bytes.length);
+    public UTF8String substringInternal(int start, int end) {
+        if (end < start) {
+            return new UTF8String(Arrays.copyOfRange(bytes, end, start)).reverse();
         }
-        return substringRiskyInternal(start, bytes.length);
-    }
-
-    public UTF8String substringRisky(int start, int end) {
-        return substringRiskyInternal(start, end);
-    }
-
-    public UTF8String substringRiskyInternal(int start, int end) {
         return new UTF8String(Arrays.copyOfRange(bytes, start, end));
     }
 
@@ -233,6 +232,176 @@ public class UTF8String {
             }
         }
         this.bytes = nBytes;
+    }
+
+    public boolean startsWith(UTF8String string) {
+        if (string.bytes.length > bytes.length) {
+            return false;
+        }
+
+        int index = 0;
+        while (index < string.bytes.length) {
+            if (bytes[index] != string.bytes[index]) {
+                return false;
+            }
+            index++;
+        }
+        return true;
+    }
+
+    public boolean endsWith(UTF8String string) {
+        if (string.bytes.length > bytes.length) {
+            return false;
+        }
+
+        int index = 0;
+        int l1 = string.bytes.length;
+        int l2 = bytes.length;
+        while (index < l1) {
+            if (bytes[l2 - index - 1] != string.bytes[l1 - index - 1]) {
+                return false;
+            }
+            index++;
+        }
+        return true;
+    }
+
+    public boolean contains(UTF8String string) {
+        return indexOf(string, 0) != -1;
+    }
+
+    public boolean contains(UTF8String string, int index) {
+        return indexOf(string, index) != -1;
+    }
+
+    public int indexOf(UTF8String string) {
+        return indexOf(string, 0);
+    }
+
+    public int indexOf(UTF8String string, int index) {
+        if (string.bytes.length > bytes.length) {
+            return -1;
+        }
+
+        int length = 0;
+        while (index < bytes.length) {
+            if (string.bytes.length == length) {
+                return index - length;
+            }
+            if (bytes[index] == string.bytes[length]) {
+                length++;
+            } else if (length > 0) {
+                index -= length;
+                length = 0;
+            }
+            index++;
+        }
+        return -1;
+    }
+
+    public int lastIndexOf(UTF8String string) {
+        return lastIndexOf(string, bytes.length - 1);
+    }
+
+    public int lastIndexOf(UTF8String string, int index) {
+        if (string.bytes.length > bytes.length) {
+            return -1;
+        }
+
+        int length = 0;
+        int l1 = string.bytes.length;
+        while (index >= 0) {
+            if (bytes[index] == string.bytes[l1 - length - 1]) {
+                length++;
+            } else {
+                index += length;
+                length = 0;
+            }
+            if (string.bytes.length == length) {
+                return index;
+            }
+            index--;
+        }
+        return -1;
+    }
+
+    public int[] occurrences(UTF8String string) {
+        int index = 0;
+        LinkedList<Integer> linkedList = new LinkedList<>();
+        while ((index = indexOf(string, index)) != -1) linkedList.add(index++);
+        return LinkedListUtils.toIntegerArray(linkedList);
+    }
+
+    private void copy(byte[] from, byte[] into, int fromIndex, int fromLength, int intoIndex) {
+        if (fromLength < 0) return;
+        if (fromIndex < 0 || fromIndex > from.length - 1) return;
+        if (intoIndex < 0 || intoIndex > into.length - 1) return;
+
+        // I did not use this Line because of better readability
+        // if (fromLength >= 0) System.arraycopy(from, fromIndex, into, intoIndex, fromLength);
+        for (int i = 0; i < fromLength; i++) {
+            into[intoIndex + i] = from[fromIndex + i];
+        }
+    }
+
+    @WorkInProgress(context = WorkInProgressType.ALPHA)
+    public UTF8String replace(UTF8String target, UTF8String replacement) {
+        int[] occurrences = occurrences(target);
+        if (occurrences.length == 0) {
+            return this;
+        }
+
+        byte[] nBytes = new byte[bytes.length - target.bytes.length * occurrences.length + replacement.bytes.length * occurrences.length];
+        System.out.println(bytes.length + " " + nBytes.length);
+        for (int i = 0; i < occurrences.length; i++) {
+            System.out.println(occurrences[i]);
+        }
+        return this;
+    }
+
+    public UTF8String replaceFirst(UTF8String target, UTF8String replacement) {
+        int index = indexOf(target);
+        if (index == -1) {
+            return this;
+        }
+
+        byte[] nBytes = new byte[bytes.length - target.bytes.length + replacement.bytes.length];
+        copy(bytes, nBytes, 0, index, 0);
+        copy(replacement.bytes, nBytes, 0, replacement.bytes.length, index);
+        copy(bytes, nBytes, index + target.bytes.length, bytes.length - (index + target.bytes.length), index + replacement.bytes.length);
+        bytes = nBytes;
+        return this;
+    }
+
+    public UTF8String replaceLast(UTF8String target, UTF8String replacement) {
+        int index = lastIndexOf(target);
+        if (index == -1) {
+            return this;
+        }
+        byte[] nBytes = new byte[bytes.length - target.bytes.length + replacement.bytes.length];
+        copy(bytes, nBytes, 0, index, 0);
+        copy(replacement.bytes, nBytes, 0, replacement.bytes.length, index);
+        copy(bytes, nBytes, index + target.bytes.length, bytes.length - (index + target.bytes.length), index + replacement.bytes.length);
+        bytes = nBytes;
+        return this;
+    }
+
+    public static void main(String[] args) {
+        UTF8String string = new UTF8String("Hallo WeWelt äöü");
+        string.append("Hello World!");
+        System.out.println(string);
+        System.out.println(string.indexOf(new UTF8String("Welt")));
+        System.out.println(string.substring(string.indexOf(new UTF8String("Welt"))));
+        System.out.println(string.lastIndexOf(new UTF8String("Welt")));
+        System.out.println(string.substring(string.lastIndexOf(new UTF8String("Welt"))));
+        System.out.println(string.lastIndexOf(new UTF8String("Hallo")));
+        System.out.println(string.substring(string.lastIndexOf(new UTF8String("Hallo"))));
+
+        string.replaceFirst(new UTF8String("Welt"), new UTF8String("Hello World"));
+        System.out.println(string);
+        string.replaceLast(new UTF8String("Hello"), new UTF8String("Hello World"));
+        System.out.println(string);
+        string.replace(new UTF8String("H"), new UTF8String("B"));
     }
 
     @Override

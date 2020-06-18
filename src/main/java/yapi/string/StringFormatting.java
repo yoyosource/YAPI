@@ -639,4 +639,30 @@ public class StringFormatting {
         return " ".repeat(paddingLength / 2) + s + " ".repeat(paddingLength / 2 + 1);
     }
 
+    public static String pad(String s, int paddingLength, Padding paddingType, boolean clip, boolean extended) {
+        if (!extended) {
+            return pad(s, paddingLength, paddingType, clip);
+        }
+        if (clip && s.length() > paddingLength) {
+            if (paddingType == Padding.LEFT) {
+                return s.substring(0, paddingLength);
+            }
+            if (paddingType == Padding.RIGHT) {
+                return s.substring(s.length() - paddingLength);
+            }
+            int lowIndex = 0;
+            int highIndex = s.length() - 1;
+            int size = s.length() - paddingLength;
+            while (size > 1) {
+                if (size % 2 == 0) {
+                    lowIndex ++;
+                } else {
+                    highIndex--;
+                }
+                size--;
+            }
+            return s.substring(lowIndex, highIndex);
+        }
+        return pad(s, paddingLength, paddingType, clip);
+    }
 }
