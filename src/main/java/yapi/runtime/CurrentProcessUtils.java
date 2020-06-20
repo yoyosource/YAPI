@@ -21,7 +21,7 @@ public class CurrentProcessUtils {
         return new RunningProcess(ProcessHandle.current());
     }
 
-    public static List<RunningProcess> getRunningProesses() {
+    public static List<RunningProcess> getRunningProcesses() {
         return ProcessHandle.allProcesses().map(pH -> new RunningProcess(pH)).collect(Collectors.toList());
     }
 
