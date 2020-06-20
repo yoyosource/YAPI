@@ -17,11 +17,11 @@ public class CurrentProcessUtils {
         return ProcessHandle.current().pid();
     }
 
-    public RunningProcess getCurrentProcess() {
+    public static RunningProcess getCurrentProcess() {
         return new RunningProcess(ProcessHandle.current());
     }
 
-    public List<RunningProcess> getRunningProesses() {
+    public static List<RunningProcess> getRunningProesses() {
         return ProcessHandle.allProcesses().map(pH -> new RunningProcess(pH)).collect(Collectors.toList());
     }
 
