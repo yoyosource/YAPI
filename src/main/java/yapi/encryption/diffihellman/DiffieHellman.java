@@ -77,7 +77,7 @@ public class DiffieHellman {
         values.init(g, p);
     }
 
-    private class DiffieHellmanFactory {
+    public class DiffieHellmanFactory {
 
         private Values values;
         private DiffieHellman diffieHellman;
@@ -100,7 +100,7 @@ public class DiffieHellman {
 
     }
 
-    private class DiffieHellmanResult {
+    public class DiffieHellmanResult {
 
         private BigInteger sharedSecret;
 
