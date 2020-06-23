@@ -5,24 +5,53 @@
 package yapi.math;
 
 import ch.obermuhlner.math.big.BigDecimalMath;
+import yapi.array.ArrayUtils;
 import yapi.internal.runtimeexceptions.MathException;
 import yapi.internal.runtimeexceptions.math.RangeException;
 import yapi.manager.worker.TaskParallelization;
 import yapi.manager.worker.WorkerPool;
 import yapi.math.range.RangeSimple;
-import yapi.quick.Timer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NumberUtils {
 
     private NumberUtils() {
         throw new IllegalStateException("Utility class");
+    }
+
+    /**
+     * Golden Ratio
+     */
+    private static BigDecimal phi = BigDecimalMath.toBigDecimal("1.6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911375");
+
+    public static BigDecimal getPhi(int precision) {
+        return getPhi(new MathContext(precision, RoundingMode.HALF_UP));
+    }
+
+    public static BigDecimal getGoldenRatio(int precision) {
+        return getGoldenRatio(new MathContext(precision, RoundingMode.HALF_UP));
+    }
+
+    public static BigDecimal getPhi(MathContext mathContext) {
+        return getGoldenRatio(mathContext);
+    }
+
+    public static BigDecimal getGoldenRatio(MathContext mathContext) {
+        if (mathContext.getPrecision() > phi.precision()) {
+            calcGoldenRatio(mathContext);
+        }
+        return phi.round(mathContext);
+    }
+
+    private static void calcGoldenRatio(MathContext mathContext) {
+        phi = BigDecimal.ONE.add(BigDecimalMath.sqrt(BigDecimal.valueOf(5), mathContext), mathContext).divide(BigDecimal.valueOf(2), mathContext);
     }
 
     /**
@@ -175,7 +204,7 @@ public class NumberUtils {
      * @param b
      * @return
      */
-    public static boolean areCoprime(long a, long b) {
+    public static boolean areCoPrime(long a, long b) {
         return greatestCommonFactor(a, b) == 1;
     }
 
@@ -747,45 +776,6 @@ public class NumberUtils {
         return factorial(n) / (factorial(r) * factorial(n - r));
     }
 
-    public static void main(String[] args) throws Exception {
-
-        for (int i = 0; i < 2000; i++) {
-            //over(BigInteger.valueOf(49), BigInteger.valueOf(6));
-            fastFactorial(BigInteger.valueOf(449));
-        }
-        long time = 0;
-        int index = 100;
-        for (int times = 0; times < index; times++) {
-            Timer timer = new Timer();
-            timer.start();
-            //over(BigInteger.valueOf(70000), BigInteger.valueOf(1000));
-            //System.out.println(over(6, 3));
-            for (int i = 0; i < 1000; i++) {
-                //over(BigInteger.valueOf(49), BigInteger.valueOf(6));
-                fastFactorial(BigInteger.valueOf(449));
-            }
-            timer.stop();
-            time += timer.getTime() / 1000;
-            System.out.println(timer.getTime() / 1000 + "µs");
-        }
-        System.out.println(time / index + "µs");
-
-
-        System.out.println(fastFactorial(BigInteger.valueOf(449)));
-
-        // fastOver
-        // 6 over 3
-        // 1221635µs
-        // 49 over 6
-        // >2h 41m 43s
-        // over (fast)
-        // 6 over 3
-        //  573031µs
-        // 49 over 6
-        //    7842µs (cached)
-        //  695592µs
-    }
-
     public static BigInteger over(long n, BigInteger r) {
         return over(BigInteger.valueOf(n), r);
     }
@@ -1136,6 +1126,91 @@ public class NumberUtils {
         BigDecimal num1 = one.divide(BigDecimalMath.sqrt(pi, mathContext).multiply(a, mathContext));
         BigDecimal num2 = BigDecimalMath.exp(BigDecimal.ZERO.subtract(x.multiply(x, mathContext).divide(a.multiply(a, mathContext)), mathContext), mathContext);
         return num1.multiply(num2, mathContext);
+    }
+
+    public static boolean isDivisibleByTwo(long l) {
+        return l % 2 == 0;
+    }
+
+    public static boolean isDivisibleByThree(long l) {
+        return sumOfDigits(l) % 3 == 0;
+    }
+
+    public static boolean isDivisibleByFour(long l) {
+        // return (l / 2) % 2 == 0;
+        return l % 4 == 0;
+    }
+
+    public static boolean isDivisibleByFive(long l) {
+        String s = l + "";
+        char c = s.charAt(s.length() - 1);
+        return c == '5' || c == '0';
+    }
+
+    public static boolean isDivisibleBySix(long l) {
+        return isDivisibleByTwo(l) && isDivisibleByThree(l);
+    }
+
+    public static boolean isDivisibleBySeven(long l) {
+        return l % 7 == 0;
+    }
+
+    public static boolean isDivisibleByEight(long l) {
+        return isDivisibleByTwo(l) && isDivisibleByFour(l);
+    }
+
+    public static boolean isDivisibleByNine(long l) {
+        return sumOfDigits(l) % 9 == 0;
+    }
+
+    public static boolean isDivisibleByTen(long l) {
+        String s = l + "";
+        return s.charAt(s.length() - 1) == '0';
+    }
+
+    public static boolean isPowerOfTwo(long l) {
+        if(l==0) return false;
+        double powerOfTwo = Math.log(l) / Math.log(2);
+        return (int)(Math.ceil(powerOfTwo)) == (int)(Math.floor((powerOfTwo)));
+    }
+
+    public static long getPowerOfTwo(long l) {
+        if (!isPowerOfTwo(l)) return -1;
+        return (long)(Math.log(l) / Math.log(2));
+    }
+
+    public static boolean isDivisibleByPowerOfTwo(long l, long divisor) {
+        if (!isPowerOfTwo(divisor)) return false;
+        long powerOfTwo = getPowerOfTwo(divisor);
+        return (((l >> powerOfTwo) << powerOfTwo) == l);
+    }
+
+    public static boolean isDivisibleBy(long l, long divisor) {
+        if (divisor > l) return false;
+        if (divisor == l) return true;
+        if (divisor == 0) return false;
+        if (divisor == 1) return true;
+        if (divisor == 2) return isDivisibleByTwo(l);
+        if (divisor == 3) return isDivisibleByThree(l);
+        if (divisor == 4) return isDivisibleByFour(l);
+        if (divisor == 5) return isDivisibleByFive(l);
+        if (divisor == 6) return isDivisibleBySix(l);
+        if (divisor == 7) return isDivisibleBySeven(l);
+        if (divisor == 8) return isDivisibleByEight(l);
+        if (divisor == 9) return isDivisibleByNine(l);
+        if (divisor == 10) return isDivisibleByTen(l);
+        if (isDivisibleByPowerOfTwo(l, divisor)) return true;
+        return l % divisor == 0;
+    }
+
+    public static boolean isDivisibleByPrimeFactorization(long l, long divisor) {
+        long[] longs = ArrayUtils.toLongArray(primeFactorization(divisor));
+        System.out.println(Arrays.toString(longs));
+        return false;
+    }
+
+    public static void main(String[] args) {
+        isDivisibleByPrimeFactorization(1378645, 3746456);
     }
 
 }
