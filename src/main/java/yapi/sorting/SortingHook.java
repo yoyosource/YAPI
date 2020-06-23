@@ -2,7 +2,7 @@
 // YAPI
 // Copyright (C) 2019,2020 yoyosource
 
-package yapi.sorting.hook;
+package yapi.sorting;
 
 import yapi.runtime.ThreadUtils;
 
@@ -13,11 +13,11 @@ public class SortingHook<T> {
     }
 
     private final void sleep(int sleepTime) {
-        ThreadUtils.sleep((double)sleepTime);
+        ThreadUtils.sleep(sleepTime);
     }
 
     private final void sleep(long sleepTime) {
-        ThreadUtils.sleep((double)sleepTime);
+        ThreadUtils.sleep(sleepTime);
     }
 
 }
