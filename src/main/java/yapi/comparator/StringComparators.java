@@ -4,15 +4,19 @@
 
 package yapi.comparator;
 
-import yapi.comparator.base.HEXComparator;
+import yapi.comparator.base.Base64Comparator;
+import yapi.comparator.base.HexComparator;
 import yapi.string.HashType;
 import yapi.string.StringCrypting;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 
 public class StringComparators {
+
+    private StringComparators() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static final Comparator<String> compareString = (o1, o2) -> {
         for (int i = 0; i < Math.min(o1.length(), o2.length()); i++) {
@@ -38,7 +42,17 @@ public class StringComparators {
 
     public static final Comparator<String> compareHexString = (o1, o2) -> {
         for (int i = 0; i < Math.min(o1.length(), o2.length()); i++) {
-            int compare = HEXComparator.compareHex.compare(o1.charAt(i), o2.charAt(i));
+            int compare = HexComparator.compareHex.compare(o1.charAt(i), o2.charAt(i));
+            if (compare != 0) {
+                return compare;
+            }
+        }
+        return Integer.compare(o1.length(), o2.length());
+    };
+
+    public static final Comparator<String> compareBase64String = (o1, o2) -> {
+        for (int i = 0 ; i < Math.min(o1.length(), o2.length()); i++) {
+            int compare = Base64Comparator.compareBase.compare(o1.charAt(i), o2.charAt(i));
             if (compare != 0) {
                 return compare;
             }

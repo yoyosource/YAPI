@@ -45,6 +45,6 @@ public class ColorUtils {
     }
 
     public static String getString(Color color) {
-        return "#" + StringFormatting.toHex(new byte[] {(byte) color.getRGB(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha()});
+        return "#" + StringFormatting.toHex((byte) color.getRGB(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha());
     }
 }
