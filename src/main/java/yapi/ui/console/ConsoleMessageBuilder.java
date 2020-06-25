@@ -6,11 +6,12 @@ package yapi.ui.console;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ConsoleMessageBuilder {
 
-    private List<ConsoleMessageTask> tasks = new ArrayList<>();
+    private List<ConsoleMessageTask> tasks = new LinkedList<>();
 
     public ConsoleMessageBuilder() {
 

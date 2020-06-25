@@ -20,14 +20,5 @@ public class ConsoleMessageAppendable extends ConsoleMessage {
         getTasks().addAll(message.getTasks());
         return this;
     }
-
-    @Override
-    List<ConsoleMessageTask> getTasks() {
-        return super.getTasks();
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+    
 }

@@ -55,10 +55,8 @@ public class RendererDefault implements ConsoleRenderer {
 
         @Override
         public void add(ConsoleMessageTask task, CRenderLine renderLine) {
-            if (task instanceof TaskAlignment) {
-                if (!renderLine.snippets.get(renderLine.snippets.size() - 1).isEmpty()) {
-                    renderLine.snippets.add(new CRenderSnippet(controller));
-                }
+            if (task instanceof TaskAlignment && !renderLine.snippets.get(renderLine.snippets.size() - 1).isEmpty()) {
+                renderLine.snippets.add(new CRenderSnippet(controller));
             }
             renderLine.snippets.get(renderLine.snippets.size() - 1).add(task);
         }
@@ -99,9 +97,7 @@ public class RendererDefault implements ConsoleRenderer {
 
     private CRenderAll split(List<ConsoleMessageTask> tasks) {
         CRenderAll cRenderAll = new CRenderAll(controller);
-        for (ConsoleMessageTask task : tasks) {
-            cRenderAll.add(task);
-        }
+        for (ConsoleMessageTask task : tasks) cRenderAll.add(task);
         return cRenderAll;
     }
 
