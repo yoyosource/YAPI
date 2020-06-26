@@ -4,6 +4,8 @@
 
 package yapi.ui.console;
 
+import org.fusesource.jansi.Ansi;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,10 @@ public class CRenderAll {
     int currentWidth = 0;
     int width = 0;
 
+    private Ansi.Color currentColor = null;
+    private Ansi.Color currentColorBackground = null;
+    private Ansi.Attribute currentAttibute = null;
+
     public CRenderAll(RenderController controller) {
         this.controller = controller;
         this.lastAlignment = controller.getAlignment();
@@ -24,6 +30,26 @@ public class CRenderAll {
     }
 
     public void add(ConsoleMessageTask task) {
+        if (task instanceof TaskColor) {
+            if (currentColor != null && currentColor == ((TaskColor) task).getColor()) return;
+            currentColor = ((TaskColor) task).getColor();
+        }
+        if (task instanceof TaskColorBright) {
+            if (currentColor != null && currentColor == ((TaskColorBright) task).getColor()) return;
+            currentColor = ((TaskColorBright) task).getColor();
+        }
+        if (task instanceof TaskBGColor) {
+            if (currentColorBackground != null && currentColorBackground == ((TaskBGColor) task).getColor()) return;
+            currentColorBackground = ((TaskBGColor) task).getColor();
+        }
+        if (task instanceof TaskBGColorBright) {
+            if (currentColorBackground != null && currentColorBackground == ((TaskBGColorBright) task).getColor()) return;
+            currentColorBackground = ((TaskBGColorBright) task).getColor();
+        }
+        if (task instanceof TaskAttribute) {
+            if (currentAttibute != null && currentAttibute == ((TaskAttribute) task).getAttribute()) return;
+            currentAttibute = ((TaskAttribute) task).getAttribute();
+        }
         controller.add(task, this);
     }
 

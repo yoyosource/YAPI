@@ -20,5 +20,10 @@ public class ConsoleMessageAppendable extends ConsoleMessage {
         getTasks().addAll(message.getTasks());
         return this;
     }
+
+    public ConsoleMessageAppendable newLine() {
+        getTasks().add(new TaskNewLine());
+        return this;
+    }
     
 }

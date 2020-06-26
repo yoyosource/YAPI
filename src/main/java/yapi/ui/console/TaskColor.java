@@ -14,6 +14,10 @@ public class TaskColor extends ConsoleMessageTask {
         this.color = color;
     }
 
+    Ansi.Color getColor() {
+        return color;
+    }
+
     @Override
     public void runTask(Ansi ansi, Console console) {
         ansi.fg(color);

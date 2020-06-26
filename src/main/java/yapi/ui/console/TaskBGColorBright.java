@@ -14,6 +14,10 @@ public class TaskBGColorBright extends ConsoleMessageTask {
         this.color = color;
     }
 
+    Ansi.Color getColor() {
+        return color;
+    }
+
     @Override
     public void runTask(Ansi ansi, Console console) {
         ansi.bgBright(color);

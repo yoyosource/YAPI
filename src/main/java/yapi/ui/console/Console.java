@@ -76,14 +76,13 @@ public class Console {
     }
 
     public synchronized Console send(ConsoleMessage message) {
-        ConsoleMessageSendStats stats = new ConsoleMessageSendStats();
-        stats.previousTasks = message.getTasks().size();
+        int previousTasks = message.getTasks().size();
         long time = System.currentTimeMillis();
         List<ConsoleMessageTask> tasks = renderer.render(message.getTasks(), clipping, getWidth());
         time = System.currentTimeMillis() - time;
-        stats.optimizedTasks = tasks.size();
-        stats.renderTime = time;
-        this.stats = stats;
+        int optimizedTasks = tasks.size();
+        long renderTime = time;
+        this.stats = new ConsoleMessageSendStats(previousTasks, optimizedTasks, renderTime);
         Ansi ansi = Ansi.ansi();
 
         for (ConsoleMessageTask task : tasks) {

@@ -14,6 +14,10 @@ public class TaskAttribute extends ConsoleMessageTask {
         this.attribute = attribute;
     }
 
+    Ansi.Attribute getAttribute() {
+        return attribute;
+    }
+
     @Override
     public void runTask(Ansi ansi, Console console) {
         if (attribute.equals(Ansi.Attribute.RESET)) {

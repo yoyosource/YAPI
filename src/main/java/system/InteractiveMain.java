@@ -19,6 +19,7 @@ import yapi.manager.yapion.value.YAPIONObject;
 import yapi.math.NumberUtils;
 import yapi.runtime.Hook;
 import yapi.runtime.TerminalUtils;
+import yapi.runtime.taskmanager.YProcess;
 import yapi.string.StringSplitting;
 import yapi.ui.console.Console;
 import yapi.ui.console.ConsoleMessageBuilder;
@@ -63,6 +64,10 @@ public class InteractiveMain {
         if (false) {
             Console.main(args);
             //ProveOfWork.main(args);
+            return;
+        }
+        if (true) {
+            YProcess.main(args);
             return;
         }
         if (true) {

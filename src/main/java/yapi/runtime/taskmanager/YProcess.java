@@ -30,10 +30,8 @@ public class YProcess {
         console.setClipping(ConsoleClipping.CLIP_WIDTH);
 
         ConsoleMessageAppendable consoleMessageAppendable = ConsoleMessageAppendable.getInstance();
-        ProcessUtils.getYProcesses().stream().map(YProcess::toCompactColorString).forEach(message -> {
-            consoleMessageAppendable.appendMessage(message);
-            consoleMessageAppendable.appendMessage(ConsoleMessageBuilder.build("\n"));
-        });
+        ProcessUtils.getYProcesses().stream().map(YProcess::toCompactColorString).forEach(message -> consoleMessageAppendable.appendMessage(message).newLine());
+        System.out.println(YProcess.legendString());
         console.send(consoleMessageAppendable);
         System.out.println(console.getStats());
         //System.out.println(ProcessUtils.getYProcesses().stream().filter(o -> o.getUser().equals("jojo")).map(YProcess::toCompactString).collect(Collectors.joining("\n")));
@@ -129,7 +127,11 @@ public class YProcess {
         this.command = processInfo.getCommand();
         this.user = processInfo.getUser();
 
-        this.cpuUsage = Double.parseDouble(processInfo.getCpuUsage().replace(",", "."));
+        try {
+            this.cpuUsage = Double.parseDouble(processInfo.getCpuUsage().replace(",", "."));
+        } catch (NullPointerException e) {
+
+        }
         this.physicalMemory = Long.parseLong(processInfo.getPhysicalMemory());
         this.virtualMemory = Long.parseLong(processInfo.getVirtualMemory());
 
@@ -279,6 +281,19 @@ public class YProcess {
         st.append(DEFAULT).append(StringFormatting.pad(getStartTime(), 10, StringFormatting.Padding.RIGHT, false)).append(" ");
         st.append(DEFAULT).append(getCommand());
         return ConsoleMessageBuilder.build(st.toString());
+    }
+
+    public static String legendString() {
+        StringBuilder st = new StringBuilder();
+        st.append(StringFormatting.pad("PID", 5, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(StringFormatting.pad("USER", 10, StringFormatting.Padding.RIGHT, false)).append(" ");
+        st.append(StringFormatting.pad("V-mem", 7, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(StringFormatting.pad("P-mem", 7, StringFormatting.Padding.RIGHT, false)).append(" ");
+        st.append(StringFormatting.pad("CPU", 5, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(StringFormatting.pad("TIME", 10, StringFormatting.Padding.LEFT, false)).append(" ");
+        st.append(StringFormatting.pad("S-time", 10, StringFormatting.Padding.RIGHT, false)).append(" ");
+        st.append("COMMAND").append(" ");
+        return st.toString();
     }
 
     @Override

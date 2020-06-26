@@ -619,6 +619,7 @@ public class StringFormatting {
     }
 
     public static String pad(String s, int paddingLength, Padding paddingType, boolean clip) {
+        if (s == null) return " ".repeat(paddingLength);
         if (clip && s.length() > paddingLength) {
             return s.substring(0, paddingLength);
         }
