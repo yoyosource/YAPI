@@ -7,6 +7,7 @@ package yapi.runtime.taskmanager;
 import org.jutils.jprocesses.JProcesses;
 import org.jutils.jprocesses.model.JProcessesResponse;
 import org.jutils.jprocesses.model.ProcessInfo;
+import yapi.comparator.complex.*;
 import yapi.file.FileUtils;
 import yapi.math.NumberUtils;
 import yapi.runtime.RunningProcess;
@@ -29,7 +30,22 @@ public class YProcess {
         console.setRenderer(true, true);
         console.setClipping(ConsoleClipping.CLIP_WIDTH);
 
-        ConsoleMessageAppendable consoleMessageAppendable = ConsoleMessageAppendable.getInstance();
+        //ConsoleMessageAppendable consoleMessageAppendable = ConsoleMessageAppendable.getInstance();
+        ConsoleMessagePreRender consoleMessageAppendable = ConsoleMessagePreRender.getInstance(console);
+        ComparatorManager<YProcess> yProcessComparatorManager = new ComparatorManager<>(new ComparatorList<>(
+                //new Compare<>(YProcess::getCpuUsage, Double::compare),
+                new ComparatorBranch<>(
+                        new Compare<>(YProcess::getCpuUsage, Double::compare),
+                        new ComparatorListStaticNegative<>(),
+                        new ComparatorListStaticEqual<>(),
+                        new ComparatorListStaticPositive<>()
+                ),
+                //new Compare<>(YProcess::getPhysicalMemory, Long::compare),
+                //new Compare<>(YProcess::getVirtualMemory, Long::compare),
+                //new Compare<>(YProcess::getUser, StringComparators.compareString),
+                //new Compare<>(YProcess::getCommand, StringComparators.compareString),
+                new Compare<>(YProcess::getPID, Integer::compare)
+        ));
         ProcessUtils.getYProcesses().stream().map(YProcess::toCompactColorString).forEach(message -> consoleMessageAppendable.appendMessage(message).newLine());
         System.out.println(YProcess.legendString());
         console.send(consoleMessageAppendable);

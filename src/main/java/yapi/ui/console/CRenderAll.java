@@ -22,6 +22,8 @@ public class CRenderAll {
     private Ansi.Color currentColorBackground = null;
     private Ansi.Attribute currentAttibute = null;
 
+    private StringBuilder st = null;
+
     public CRenderAll(RenderController controller) {
         this.controller = controller;
         this.lastAlignment = controller.getAlignment();
@@ -49,6 +51,14 @@ public class CRenderAll {
         if (task instanceof TaskAttribute) {
             if (currentAttibute != null && currentAttibute == ((TaskAttribute) task).getAttribute()) return;
             currentAttibute = ((TaskAttribute) task).getAttribute();
+        }
+        if (task instanceof TaskText) {
+            if (st == null) st = new StringBuilder();
+            st.append(((TaskText) task).getText());
+            return;
+        } else if (st != null) {
+            controller.add(new TaskText(st.toString()), this);
+            st = null;
         }
         controller.add(task, this);
     }

@@ -50,6 +50,10 @@ public class Console {
         return this;
     }
 
+    public ConsoleClipping getClipping() {
+        return clipping;
+    }
+
     public synchronized Console setClipping(ConsoleClipping clipping) {
         this.clipping = clipping;
         return this;
@@ -78,20 +82,32 @@ public class Console {
     public synchronized Console send(ConsoleMessage message) {
         int previousTasks = message.getTasks().size();
         long time = System.currentTimeMillis();
-        List<ConsoleMessageTask> tasks = renderer.render(message.getTasks(), clipping, getWidth());
-        time = System.currentTimeMillis() - time;
+        List<ConsoleMessageTask> tasks = render(message);
         int optimizedTasks = tasks.size();
-        long renderTime = time;
-        this.stats = new ConsoleMessageSendStats(previousTasks, optimizedTasks, renderTime);
-        Ansi ansi = Ansi.ansi();
+        long renderTime = System.currentTimeMillis() - time;
 
+        time = System.currentTimeMillis();
+        Ansi ansi = Ansi.ansi();
         for (ConsoleMessageTask task : tasks) {
             task.runTask(ansi, this);
         }
-
         ansi.reset();
         System.out.println(ansi.toString());
+        long printTime = System.currentTimeMillis() - time;
+        this.stats = new ConsoleMessageSendStats(previousTasks, optimizedTasks, renderTime, printTime);
         return this;
+    }
+
+    private List<ConsoleMessageTask> render(ConsoleMessage message) {
+        if (message instanceof ConsoleMessagePreRender) {
+            if (((ConsoleMessagePreRender) message).validRender(this)) {
+                return  ((ConsoleMessagePreRender) message).getPreRenderedTasks();
+            } else {
+                return renderer.render(message.getTasks(), clipping, getWidth());
+            }
+        } else {
+            return renderer.render(message.getTasks(), clipping, getWidth());
+        }
     }
 
     public int getWidth() {

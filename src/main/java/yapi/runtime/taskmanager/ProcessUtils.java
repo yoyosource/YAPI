@@ -8,6 +8,7 @@ import org.jutils.jprocesses.JProcesses;
 import org.jutils.jprocesses.model.JProcessesResponse;
 import org.jutils.jprocesses.model.ProcessInfo;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +28,14 @@ public class ProcessUtils {
         for (ProcessInfo processInfo : processInfos) {
             yProcessList.add(YProcess.getInstance(processInfo));
         }
+        yProcessList.sort(Comparator.comparingInt(YProcess::getPID));
         return yProcessList;
+    }
+
+    public static List<YProcess> getYProcesses(Comparator<YProcess> comparator) {
+        List<YProcess> yProcesses = getYProcesses();
+        yProcesses.sort(comparator);
+        return yProcesses;
     }
 
     public static List<ProcessInfo> getProcesses(String name) {
