@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ConsoleMessageOverlay extends ConsoleMessage {
 
-    public static ConsoleMessageOverlay getInstance(ConsoleMessage messageToOverlay) {
+    private static ConsoleMessageOverlay getInstance(ConsoleMessage messageToOverlay) {
         ConsoleMessageOverlay consoleMessageOverlay = new ConsoleMessageOverlay(messageToOverlay.getTasks());
         return consoleMessageOverlay;
     }
