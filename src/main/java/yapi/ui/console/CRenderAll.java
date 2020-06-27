@@ -19,8 +19,10 @@ public class CRenderAll {
     int width = 0;
 
     private Ansi.Color currentColor = null;
+    private boolean isBright = false;
     private Ansi.Color currentColorBackground = null;
-    private Ansi.Attribute currentAttibute = null;
+    private boolean isBrightBackground = false;
+    private Ansi.Attribute currentAttribute = null;
 
     private StringBuilder st = null;
 
@@ -33,34 +35,59 @@ public class CRenderAll {
 
     public void add(ConsoleMessageTask task) {
         if (task instanceof TaskColor) {
-            if (currentColor != null && currentColor == ((TaskColor) task).getColor()) return;
+            if (currentColor != null && currentColor == ((TaskColor) task).getColor() && !isBright) return;
             currentColor = ((TaskColor) task).getColor();
+            isBright = false;
         }
         if (task instanceof TaskColorBright) {
-            if (currentColor != null && currentColor == ((TaskColorBright) task).getColor()) return;
+            if (currentColor != null && currentColor == ((TaskColorBright) task).getColor() && isBright) return;
             currentColor = ((TaskColorBright) task).getColor();
+            isBright = true;
         }
         if (task instanceof TaskBGColor) {
-            if (currentColorBackground != null && currentColorBackground == ((TaskBGColor) task).getColor()) return;
+            if (currentColorBackground != null && currentColorBackground == ((TaskBGColor) task).getColor() && !isBrightBackground) return;
             currentColorBackground = ((TaskBGColor) task).getColor();
+            isBrightBackground = false;
         }
         if (task instanceof TaskBGColorBright) {
-            if (currentColorBackground != null && currentColorBackground == ((TaskBGColorBright) task).getColor()) return;
+            if (currentColorBackground != null && currentColorBackground == ((TaskBGColorBright) task).getColor() && isBrightBackground) return;
             currentColorBackground = ((TaskBGColorBright) task).getColor();
+            isBrightBackground = true;
         }
         if (task instanceof TaskAttribute) {
-            if (currentAttibute != null && currentAttibute == ((TaskAttribute) task).getAttribute()) return;
-            currentAttibute = ((TaskAttribute) task).getAttribute();
+            if (currentAttribute != null && currentAttribute == ((TaskAttribute) task).getAttribute()) return;
+            currentAttribute = ((TaskAttribute) task).getAttribute();
         }
         if (task instanceof TaskText) {
-            if (st == null) st = new StringBuilder();
-            st.append(((TaskText) task).getText());
+            textCase((TaskText) task);
             return;
         } else if (st != null) {
             controller.add(new TaskText(st.toString()), this);
             st = null;
         }
         controller.add(task, this);
+    }
+
+    private void textCase(TaskText taskText) {
+        if (st == null) st = new StringBuilder();
+        String text = taskText.getText();
+
+        if (!text.contains("\n")) {
+            st.append(text);
+            return;
+        }
+
+        int length = text.length();
+        for (int i = 0; i < length; i++) {
+            char c = text.charAt(i);
+            if (c != '\n' && c != '\t') {
+                st.append(c);
+                continue;
+            }
+            controller.add(new TaskText(st.toString()), this);
+            st = new StringBuilder();
+        }
+        if (text.charAt(length - 1) == '\n' || text.charAt(length - 1) == '\t') st = null;
     }
 
     void wrapHard(String text) {

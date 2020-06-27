@@ -7,13 +7,15 @@ package yapi.runtime.taskmanager;
 import org.jutils.jprocesses.JProcesses;
 import org.jutils.jprocesses.model.JProcessesResponse;
 import org.jutils.jprocesses.model.ProcessInfo;
-import yapi.comparator.complex.*;
 import yapi.file.FileUtils;
 import yapi.math.NumberUtils;
 import yapi.runtime.RunningProcess;
 import yapi.runtime.ThreadUtils;
 import yapi.string.StringFormatting;
-import yapi.ui.console.*;
+import yapi.ui.console.Console;
+import yapi.ui.console.ConsoleClipping;
+import yapi.ui.console.ConsoleMessage;
+import yapi.ui.console.ConsoleMessageBuilder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +33,7 @@ public class YProcess {
         console.setClipping(ConsoleClipping.CLIP_WIDTH);
 
         //ConsoleMessageAppendable consoleMessageAppendable = ConsoleMessageAppendable.getInstance();
-        ConsoleMessagePreRender consoleMessageAppendable = ConsoleMessagePreRender.getInstance(console);
+        /*ConsoleMessageAppendable consoleMessageAppendable = ConsoleMessageAppendable.getInstance();
         ComparatorManager<YProcess> yProcessComparatorManager = new ComparatorManager<>(new ComparatorList<>(
                 //new Compare<>(YProcess::getCpuUsage, Double::compare),
                 new ComparatorBranch<>(
@@ -50,7 +52,13 @@ public class YProcess {
         System.out.println(YProcess.legendString());
         console.send(consoleMessageAppendable);
         System.out.println(console.getStats());
-        //System.out.println(ProcessUtils.getYProcesses().stream().filter(o -> o.getUser().equals("jojo")).map(YProcess::toCompactString).collect(Collectors.joining("\n")));
+        //System.out.println(ProcessUtils.getYProcesses().stream().filter(o -> o.getUser().equals("jojo")).map(YProcess::toCompactString).collect(Collectors.joining("\n")));*/
+
+        ConsoleMessageBuilder consoleMessageBuilder = new ConsoleMessageBuilder();
+        consoleMessageBuilder.addText("Hello World ");
+        consoleMessageBuilder.addLine();
+        consoleMessageBuilder.overLay(100);
+        console.send(consoleMessageBuilder.build());
     }
 
     private static Thread updater;

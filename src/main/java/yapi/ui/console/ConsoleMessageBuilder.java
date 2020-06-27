@@ -38,6 +38,11 @@ public class ConsoleMessageBuilder {
         return this;
     }
 
+    public ConsoleMessageBuilder newLine() {
+        tasks.add(new TaskNewLine());
+        return this;
+    }
+
     public ConsoleMessageBuilder eraseLine(ConsoleErase erase) {
         if (!tasks.isEmpty()) {
             throw new IllegalStateException();
@@ -96,6 +101,11 @@ public class ConsoleMessageBuilder {
 
     public ConsoleMessageBuilder setEscape(String escape) {
         tasks.add(new TaskEscape(escape));
+        return this;
+    }
+
+    public ConsoleMessageBuilder overLay(int overlaySize) {
+        tasks.add(new TaskOverlay(overlaySize));
         return this;
     }
 

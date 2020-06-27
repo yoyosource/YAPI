@@ -82,7 +82,7 @@ enum ConsoleBuildAttribute {
     ATTRIBUTE_CONCEAL("conceal", new TaskAttribute(Ansi.Attribute.CONCEAL_ON), new TaskAttribute(Ansi.Attribute.CONCEAL_OFF)),
     ATTRIBUTE_STRIKETHROUGH("strikethrough", new TaskAttribute(Ansi.Attribute.STRIKETHROUGH_ON), new TaskAttribute(Ansi.Attribute.STRIKETHROUGH_OFF));
 
-    private static final ConsoleBuildAttribute[] consoleBuildAttributes = new ConsoleBuildAttribute[]{
+    private static final ConsoleBuildAttribute[] CONSOLE_BUILD_ATTRIBUTE = new ConsoleBuildAttribute[]{
             DEFAULT, DEFAULT_COLOR, DEFAULT_ATTRIBUTE, DEFAULT_ALIGNMENT,
             ERASE_LINE_ALL, ERASE_LINE_FORWARD, ERASE_LINE_BACKWARD,
             ERASE_SCREEN_ALL, ERASE_SCREEN_FORWARD, ERASE_SCREEN_BACKWARD,
@@ -116,7 +116,7 @@ enum ConsoleBuildAttribute {
     }
 
     public static ConsoleBuildAttribute get(String name) {
-        for (ConsoleBuildAttribute buildAttribute : consoleBuildAttributes) {
+        for (ConsoleBuildAttribute buildAttribute : CONSOLE_BUILD_ATTRIBUTE) {
             if (buildAttribute.name.equalsIgnoreCase(name)) {
                 return buildAttribute;
             }
