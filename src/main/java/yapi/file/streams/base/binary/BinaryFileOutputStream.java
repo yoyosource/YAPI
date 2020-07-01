@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 
 public class BinaryFileOutputStream extends Output {
 
@@ -44,4 +45,11 @@ public class BinaryFileOutputStream extends Output {
         for (byte t : b) write(t);
     }
 
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        Objects.checkFromIndexSize(off, len, b.length);
+        for (int i = 0; i < len; i++) {
+            write(b[off + i]);
+        }
+    }
 }

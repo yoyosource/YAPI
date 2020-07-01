@@ -6,10 +6,7 @@ package yapi.file.streams.base.binary;
 
 import yapi.file.streammanagement.Input;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,4 +57,36 @@ public class BinaryFileInputStream extends Input {
         }
         return bts;
     }
+
+
+    @Override
+    public int read(byte[] b) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long skip(long n) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public byte[] readAllBytes() throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int readNBytes(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void skipNBytes(long n) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
 }

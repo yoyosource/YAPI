@@ -4,7 +4,6 @@
 
 package yapi.file.streams.base.base64;
 
-import yapi.file.management.FileCloseUtils;
 import yapi.file.streammanagement.OutputAutoClose;
 import yapi.math.base.BaseConversion;
 
@@ -15,12 +14,6 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 public class Base64FileOutputStream extends OutputAutoClose {
-
-    private boolean isClosed = false;
-
-    {
-        FileCloseUtils.addShutdownClose(this);
-    }
 
     private StringBuilder st = new StringBuilder();
     private int i = 0;

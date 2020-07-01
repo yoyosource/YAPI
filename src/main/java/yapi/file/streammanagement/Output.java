@@ -31,17 +31,17 @@ public class Output extends FileOutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        throw new UnsupportedOperationException();
+        super.write(b);
     }
 
     @Override
     public void write(byte[] b) throws IOException {
-        throw new UnsupportedOperationException();
+        super.write(b);
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        throw new UnsupportedOperationException();
+        super.write(b, off, len);
     }
 
     @Override
@@ -51,9 +51,8 @@ public class Output extends FileOutputStream {
 
     @Override
     public FileChannel getChannel() {
-        throw new UnsupportedOperationException();
+        return super.getChannel();
     }
-
 
     @Override
     public void flush() throws IOException {

@@ -91,4 +91,10 @@ public class ChunkedFileOutputStream extends OutputAutoClose {
     public void closeStream() throws IOException {
         endChunk();
     }
+
+
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
 }

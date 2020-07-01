@@ -48,4 +48,39 @@ public class Base64FileInputStream extends Input {
         super.close();
     }
 
+
+    @Override
+    public int read(byte[] b) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long skip(long n) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public byte[] readAllBytes() throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public byte[] readNBytes(int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int readNBytes(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void skipNBytes(long n) throws IOException {
+        throw new UnsupportedOperationException();
+    }
 }

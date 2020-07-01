@@ -7,10 +7,8 @@ package yapi.file.zip;
 import yapi.internal.annotations.yapi.WorkInProgress;
 import yapi.internal.annotations.yapi.WorkInProgressType;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @WorkInProgress(context = WorkInProgressType.ALPHA)
@@ -28,16 +26,40 @@ public class ZIPInflater {
         }
 
         this.file = f;
-        this.inputStream = new ZipInputStream(new FileInputStream(f));
     }
 
     public synchronized void unzip(File destination) throws IOException {
+        this.inputStream = new ZipInputStream(new FileInputStream(file));
         if (!destination.exists()) {
             destination.mkdirs();
         }
         if (!destination.isDirectory()) {
             throw new IOException("Directory needed");
         }
+
+        byte[] buffer = new byte[1024];
+        ZipEntry entry = null;
+        do {
+            entry = inputStream.getNextEntry();
+            if (entry == null) {
+                continue;
+            }
+
+            String fileName = entry.getName();
+            File f = new File(destination + "/" + fileName);
+
+            if (entry.isDirectory()) {
+                f.mkdirs();
+            } else {
+                FileOutputStream fileOutputStream = new FileOutputStream(f);
+                int len;
+                while ((len = inputStream.read(buffer)) > 0) {
+                    fileOutputStream.write(buffer, 0, len);
+                }
+                fileOutputStream.close();
+                inputStream.closeEntry();
+            }
+        } while (entry != null);
     }
 
 }
