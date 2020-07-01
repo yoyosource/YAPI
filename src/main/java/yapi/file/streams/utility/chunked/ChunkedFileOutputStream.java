@@ -53,6 +53,7 @@ public class ChunkedFileOutputStream extends OutputAutoClose {
 
     @Override
     public void write(int b) throws IOException {
+        if (b > 255 || b < 0) throw new IOException("Illegal Input");
         openChunk = true;
         bytes.add((byte)b);
         if (bytes.size() >= 255) {

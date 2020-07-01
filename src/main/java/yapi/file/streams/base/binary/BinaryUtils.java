@@ -4,13 +4,16 @@
 
 package yapi.file.streams.base.binary;
 
+import java.io.IOException;
+
 public class BinaryUtils {
 
     public static int fromBinary(String s) {
         return Integer.parseInt(s, 2);
     }
 
-    public static String toBinary(int i) {
+    public static String toBinary(int i) throws IOException {
+        if (i > 255 || i < 0) throw new IOException("Illegal Input");
         int x = 256;
         StringBuilder st = new StringBuilder();
         while (i != 1) {

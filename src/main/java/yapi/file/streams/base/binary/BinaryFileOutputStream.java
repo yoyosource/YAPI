@@ -36,6 +36,7 @@ public class BinaryFileOutputStream extends Output {
 
     @Override
     public void write(int b) throws IOException {
+        if (b > 255 || b < 0) throw new IOException("Illegal Input");
         super.write(BinaryUtils.toBinary(b).getBytes());
         super.write(' ');
     }

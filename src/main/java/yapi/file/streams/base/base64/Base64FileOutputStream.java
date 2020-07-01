@@ -40,6 +40,7 @@ public class Base64FileOutputStream extends OutputAutoClose {
 
     @Override
     public void write(int b) throws IOException {
+        if (b > 255 || b < 0) throw new IOException("Illegal Input");
         String base2 = BaseConversion.toBase2(b);
         st.append("0".repeat(8 - base2.length())).append(base2);
         writeInternal();
