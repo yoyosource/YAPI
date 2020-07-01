@@ -53,4 +53,9 @@ public class MorseFileOutputStream extends Output {
     public void write(byte[] b) throws IOException {
         for (byte t : b) write(t);
     }
+
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -34,7 +34,8 @@ public class HexFileOutputStream extends FileOutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        super.write(StringFormatting.toHex(b).getBytes());
+        if (b > 255 || b < 0) throw new IOException("Illegal Input");
+        super.write(StringFormatting.toHex((byte)b).getBytes());
         super.write(' ');
     }
 

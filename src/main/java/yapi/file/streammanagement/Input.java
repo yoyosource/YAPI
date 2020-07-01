@@ -23,22 +23,22 @@ public class Input extends FileInputStream {
 
     @Override
     public int read() throws IOException {
-        throw new UnsupportedOperationException();
+        return super.read();
     }
 
     @Override
     public int read(byte[] b) throws IOException {
-        throw new UnsupportedOperationException();
+        return super.read(b);
     }
 
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-        throw new UnsupportedOperationException();
+        return super.read(b, off, len);
     }
 
     @Override
     public long skip(long n) throws IOException {
-        throw new UnsupportedOperationException();
+        return super.skip(n);
     }
 
     @Override
@@ -56,40 +56,39 @@ public class Input extends FileInputStream {
         return super.getChannel();
     }
 
-
     @Override
     public byte[] readAllBytes() throws IOException {
-        throw new UnsupportedOperationException();
+        return super.readAllBytes();
     }
 
     @Override
     public byte[] readNBytes(int len) throws IOException {
-        throw new UnsupportedOperationException();
+        return super.readNBytes(len);
     }
 
     @Override
     public int readNBytes(byte[] b, int off, int len) throws IOException {
-        throw new UnsupportedOperationException();
+        return super.readNBytes(b, off, len);
     }
 
     @Override
     public void skipNBytes(long n) throws IOException {
-        throw new UnsupportedOperationException();
+        super.skipNBytes(n);
     }
 
     @Override
     public synchronized void mark(int readlimit) {
-        throw new UnsupportedOperationException();
+        super.mark(readlimit);
     }
 
     @Override
     public synchronized void reset() throws IOException {
-        throw new UnsupportedOperationException();
+        super.reset();
     }
 
     @Override
     public boolean markSupported() {
-        throw new UnsupportedOperationException();
+        return super.markSupported();
     }
 
     @Override

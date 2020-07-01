@@ -7,10 +7,7 @@ package yapi.file.streams.utility.chunked;
 import yapi.file.streammanagement.Input;
 import yapi.internal.exceptions.file.ChunkedIOException;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -71,4 +68,41 @@ public class ChunkedFileInputStream extends Input {
             bytes.clear();
         }
     }
+
+
+    @Override
+    public int read(byte[] b) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long skip(long n) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public byte[] readAllBytes() throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public byte[] readNBytes(int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int readNBytes(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void skipNBytes(long n) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
 }
