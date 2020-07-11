@@ -280,6 +280,15 @@ public class NumberRandom {
         return (byte)(nextNumber() / 256);
     }
 
+    public byte[] getBytes(byte[] bytes) {
+        fillByteArray(bytes);
+        return bytes;
+    }
+
+    public void fillByteArray(byte[] bytes) {
+        for (int i = 0; i < bytes.length; i++) bytes[i] = getByte();
+    }
+
     /**
      *
      * @since Version 1

@@ -1,7 +1,3 @@
-// SPDX-License-Identifier: Apache-2.0
-// YAPI
-// Copyright (C) 2019,2020 yoyosource
-
 package yapi.encryption.encryption;
 
 import yapi.file.FileUtils;
@@ -20,9 +16,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static yapi.encryption.encryption.YAPICipherSynchronizer.BLOCK_SIZE_ENCRYPTION;
+import static yapi.encryption.encryption.YAPICipherSynchronizer.BLOCK_SIZE_DECRYPTION;
 
-class YAPICipherModeEncryptionParallel implements YAPICipherImpl {
+class YAPICipherModeDecryptionParallel implements YAPICipherImpl {
 
     private final File baseFileCipher = new File(YAPICipherSynchronizer.getBaseFileYAPIPath() + "/" + StringCrypting.hash(YAPICipherSynchronizer.getID() + "", HashType.SHA512, false) + "-");
 
@@ -30,7 +26,7 @@ class YAPICipherModeEncryptionParallel implements YAPICipherImpl {
         int fileID = 0;
         byte[] bytes;
         while (fileInputStream.available() > 0) {
-            bytes = fileInputStream.readNBytes(BLOCK_SIZE_ENCRYPTION);
+            bytes = fileInputStream.readNBytes(BLOCK_SIZE_DECRYPTION);
             File f = new File(baseFileCipher.getAbsolutePath() + fileID++);
             if (f.exists()) { FileUtils.emptyFile(f); } else { FileUtils.create(f); }
             f.deleteOnExit();
@@ -108,7 +104,7 @@ class YAPICipherModeEncryptionParallel implements YAPICipherImpl {
             File f = new File(baseFileCipher.getAbsolutePath() + id);
             try (FileInputStream fileInputStream = new FileInputStream(f)) {
                 byte[] bytes = fileInputStream.readAllBytes();
-                YAPICipher yapiCipher = YAPICipher.getInstance(YAPICipher.ENCRYPTION);
+                YAPICipher yapiCipher = YAPICipher.getInstance(YAPICipher.DECRYPTION);
                 bytes = yapiCipher.crypt(getKey(keySpace, id), bytes);
 
                 FileOutputStream fileOutputStream = new FileOutputStream(f);
