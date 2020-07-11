@@ -1,6 +1,6 @@
-[![YAPI Release V2.2.0](https://img.shields.io/badge/YAPI%20Release-2.3.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
+[![YAPI Release V2.3.0](https://img.shields.io/badge/YAPI%20Release-2.3.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPI Pre-Release V?.?-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-%3F.%3F--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
-[![YAPI Version V2.2.0](https://img.shields.io/badge/YAPI%20Version-2.3.0-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
+[![YAPI Version V2.3.0](https://img.shields.io/badge/YAPI%20Version-2.3.0-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
 
 [![Files 305](https://img.shields.io/badge/Files-305-inactive)](https://github.com/yoyosource/YAPI)
@@ -130,4 +130,4 @@ Changed version Naming to `[MAYOR].[MINOR].[PATCH]`, eg. `2.0.0` (Mayor: 2, Mino
 - `23 Jun 2020` `2.2.0`
 - `01 Jul 2020` `2.2.1`
 - `01 Jul 2020` `2.2.2`
-- `01 Jul 2020` `2.3.0`
+- `11 Jul 2020` `2.3.0`
