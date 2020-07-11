@@ -12,38 +12,38 @@ public class LinkedListUtils {
         throw new IllegalStateException("Utility class");
     }
 
-    public static List<Short> asList(short... input) {
-        List<Short> output = new LinkedList<>();
+    public static LinkedList<Short> asList(short... input) {
+        LinkedList<Short> output = new LinkedList<>();
         for (short var : input) output.add(var);
         return output;
     }
 
-    public static List<Boolean> asList(boolean... input) {
-        List<Boolean> output = new LinkedList<>();
+    public static LinkedList<Boolean> asList(boolean... input) {
+        LinkedList<Boolean> output = new LinkedList<>();
         for (boolean var : input) output.add(var);
         return output;
     }
 
-    public static List<Byte> asList(byte... input) {
-        List<Byte> output = new LinkedList<>();
+    public static LinkedList<Byte> asList(byte... input) {
+        LinkedList<Byte> output = new LinkedList<>();
         for (byte var : input) output.add(var);
         return output;
     }
 
-    public static List<Integer> asList(int... input) {
-        List<Integer> output = new LinkedList<>();
+    public static LinkedList<Integer> asList(int... input) {
+        LinkedList<Integer> output = new LinkedList<>();
         for (int var : input) output.add(var);
         return output;
     }
 
-    public static List<Character> asList(char... input) {
-        List<Character> output = new LinkedList<>();
+    public static LinkedList<Character> asList(char... input) {
+        LinkedList<Character> output = new LinkedList<>();
         for (char var : input) output.add(var);
         return output;
     }
 
-    public static List<Long> asList(long... input) {
-        List<Long> output = new LinkedList<>();
+    public static LinkedList<Long> asList(long... input) {
+        LinkedList<Long> output = new LinkedList<>();
         for (long var : input) output.add(var);
         return output;
     }

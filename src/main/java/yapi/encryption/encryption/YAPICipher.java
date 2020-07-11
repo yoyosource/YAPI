@@ -15,6 +15,9 @@ public final class YAPICipher {
     public static final String ENCRYPTION = "encryption";
     public static final String DECRYPTION = "decryption";
 
+    public static final String ENCRYPTION_PARALLEL = "encryption_parallel";
+    public static final String DECRYPTION_PARALLEL = "decryption_parallel";
+
     public static final String DERIVATION = "derivation";
 
     public static YAPICipher getInstance(String mode) throws NoSuchAlgorithmException {
@@ -23,6 +26,13 @@ public final class YAPICipher {
         }
         if (mode.equals(DECRYPTION)) {
             return new YAPICipher(new YAPICipherModeDecryption());
+        }
+
+        if (mode.equals(ENCRYPTION_PARALLEL)) {
+            return new YAPICipher(new YAPICipherModeEncryptionParallel());
+        }
+        if (mode.equals(DECRYPTION_PARALLEL)) {
+            return new YAPICipher(new YAPICipherModeDecryptionParallel());
         }
 
         if (mode.equalsIgnoreCase(DERIVATION)) {
@@ -61,6 +71,17 @@ public final class YAPICipher {
         }
     }
 
+    /**
+     * Implementations that use this method:
+     * - encryption_parallel
+     * - decryption_parallel
+     *
+     * @param key
+     * @param source
+     * @param destination
+     * @param threads
+     * @throws CipherException
+     */
     public void cryptParallel(byte[] key, FileInputStream source, FileOutputStream destination, int threads) throws CipherException {
         if (used) {
             throw new IllegalStateException();

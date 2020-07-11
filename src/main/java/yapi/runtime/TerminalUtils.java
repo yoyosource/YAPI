@@ -11,10 +11,8 @@ import yapi.os.OSCheck;
 import yapi.os.OSType;
 
 import java.awt.*;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -120,7 +118,7 @@ public class TerminalUtils {
         resizeHooks.remove(hook.getId());
     }
 
-    public static void stopResizeEventHanlder() {
+    public static void stopResizeEventHandler() {
         running = false;
     }
 
@@ -218,7 +216,7 @@ public class TerminalUtils {
         } catch (IOException e) {
 
         }
-        return new Dimension(80, 24);
+        return getDefaultSizeMacOS();
     }
 
     public static Dimension getDefaultSizeLinux() {
@@ -226,11 +224,10 @@ public class TerminalUtils {
     }
 
     private static Dimension getSizeLinux() {
-        // TODO: Untested
         try {
-            String[] s = new BufferedReader(new InputStreamReader(RuntimeUtils.exec("stty size").getInputStream())).readLine().split(" ");
-            int width = getInt(s[1]);
-            int height = getInt(s[0]);
+            // bash -c "stty size 2> /dev/tty"
+            int width = getInt(RuntimeUtils.exec("bash", "-c", "tput cols 2> /dev/tty").getInputStream());
+            int height = getInt(RuntimeUtils.exec("bash", "-c", "tput lines 2> /dev/tty").getInputStream());
             if (width == -1 || height == -1) {
                 throw new IOException();
             }
@@ -238,7 +235,7 @@ public class TerminalUtils {
         } catch (IOException e) {
 
         }
-        return new Dimension(80, 32);
+        return getDefaultSizeLinux();
     }
 
     public static Dimension getDefaultSizeWindows() {
@@ -256,11 +253,16 @@ public class TerminalUtils {
         } catch (Exception e) {
 
         }
-        return new Dimension(120, 30);
+        return getDefaultSizeWindows();
     }
 
     private static int getInt(InputStream inputStream) throws IOException {
-        return getInt(new BufferedReader(new InputStreamReader(inputStream)).readLine());
+        int c;
+        StringBuilder st = new StringBuilder();
+        while ((c = inputStream.read()) != -1) {
+            st.append((char)c);
+        }
+        return getInt(st.toString().trim());
     }
 
     private static int getInt(String s) {

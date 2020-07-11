@@ -47,10 +47,6 @@ public class LogManager {
     private static String fileName = "";
     private static PrintStream printStream = null;
 
-    static {
-        setAllowLogDefault();
-    }
-
     private static Logging logging = new Logging("LogManager", 0);
 
     private LogManager() {
