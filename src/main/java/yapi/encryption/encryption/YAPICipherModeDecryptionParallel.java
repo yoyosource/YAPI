@@ -7,7 +7,6 @@ package yapi.encryption.encryption;
 import yapi.file.FileUtils;
 import yapi.internal.exceptions.CipherException;
 import yapi.manager.worker.WorkerPool;
-import yapi.math.NumberRandom;
 import yapi.runtime.ThreadUtils;
 import yapi.string.HashType;
 import yapi.string.StringCrypting;
@@ -55,16 +54,16 @@ class YAPICipherModeDecryptionParallel implements YAPICipherImpl {
             threads = 1;
         }
         try {
+            byte[] bytes = source.readNBytes(128 + 32);
             int ids = partitionSource(source);
             YAPICipher keySpaceCipher = YAPICipher.getInstance(YAPICipher.DERIVATION);
-            byte[] salt = salt();
+            byte[] salt = salt(key, bytes);
             byte[] keySpace = keySpaceCipher.derive(salt, key, ids * 8);
 
             WorkerPool workerPool = new WorkerPool(threads);
             for (int i = 0; i < ids; i++) {
                 work(keySpace, workerPool, i);
             }
-            destination.write(header(salt, key));
             workerPool.awaitClose();
 
             for (int i = 0; i < ids; i++) {
@@ -132,18 +131,15 @@ class YAPICipherModeDecryptionParallel implements YAPICipherImpl {
         return key;
     }
 
-    private byte[] salt() {
-        return new NumberRandom().getBytes(new byte[8]);
-    }
-
-    private byte[] header(byte[] salt, byte[] key) throws CipherException {
-        byte[] bytes = new NumberRandom().getBytes(new byte[salt.length * 16]);
-        for (int i = 0; i < salt.length; i++) {
-            bytes[i * 16] = salt[i];
-        }
+    private byte[] salt(byte[] key, byte[] bytes) throws CipherException {
         try {
-            YAPICipher yapiCipher = YAPICipher.getInstance(YAPICipher.ENCRYPTION);
-            return yapiCipher.crypt(key, bytes);
+            YAPICipher yapiCipher = YAPICipher.getInstance(YAPICipher.DECRYPTION);
+            bytes = yapiCipher.crypt(key, bytes);
+            byte[] salt = new byte[8];
+            for (int i = 0; i < bytes.length / 16; i++) {
+                salt[i] = bytes[i * 16];
+            }
+            return salt;
         } catch (NoSuchAlgorithmException e) {
             throw new CipherException(e.getMessage(), e.getCause());
         }

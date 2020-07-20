@@ -41,6 +41,26 @@ public final class YAPICipher {
         throw new NoSuchAlgorithmException();
     }
 
+    public static YAPICipherCrypt getEncryption() {
+        return new YAPICipherCrypt(new YAPICipher(new YAPICipherModeEncryption()));
+    }
+
+    public static YAPICipherCrypt getDecryption() {
+        return new YAPICipherCrypt(new YAPICipher(new YAPICipherModeDecryption()));
+    }
+
+    public static YAPICipherCryptParallel getEncryptionParallel() {
+        return new YAPICipherCryptParallel(new YAPICipher(new YAPICipherModeEncryptionParallel()));
+    }
+
+    public static YAPICipherCryptParallel getDecryptionParallel() {
+        return new YAPICipherCryptParallel(new YAPICipher(new YAPICipherModeDecryptionParallel()));
+    }
+
+    public static YAPICipherDerive getDerivation() {
+        return new YAPICipherDerive(new YAPICipher(new YAPICipherModeDerivation()));
+    }
+
     private YAPICipherImpl yapiCipher;
     private boolean used = false;
 
