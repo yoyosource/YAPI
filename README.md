@@ -131,3 +131,4 @@ Changed version Naming to `[MAYOR].[MINOR].[PATCH]`, eg. `2.0.0` (Mayor: 2, Mino
 - `01 Jul 2020` `2.2.1`
 - `01 Jul 2020` `2.2.2`
 - `11 Jul 2020` `2.3.0`
+- `20 Jul 2020` `2.3.1`
