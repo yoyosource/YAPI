@@ -20,7 +20,7 @@ ext {
 sourceCompatibility = 1.12
 targetCompatibility = 1.12
 
-mainClassName = 'system.InteractiveMain'
+mainClassName = 'system.YAPIMain'
 
 repositories {
     jcenter()
@@ -76,7 +76,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'yoyosource'
-            artifactId = 'YAPI'
+            artifactId = group
             version = publication
 
             from components.java
@@ -154,19 +154,19 @@ task YAPILicense {
 }
 shadowJar.dependsOn YAPILicense
 
-task YAPIInfo {
+task YAPIReadme {
     description 'Create the Interactive Main Info file'
     group "YAPI"
 
     mustRunAfter YAPILicense
 
     doLast {
-        def command = "java -classpath ${buildDir}/classes/java/main system.CreateInteractiveMain ${buildDir}"
+        def command = "java -classpath ${buildDir}/classes/java/main system.ReadmeSystem ${buildDir} ${group}"
         def retval = command.execute().text
         print(retval)
     }
 }
-shadowJar.dependsOn YAPIInfo
+shadowJar.dependsOn YAPIReadme
 
 task buildYAPI {
     description 'Build YAPI'

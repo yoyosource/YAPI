@@ -13,10 +13,7 @@
 
 package system;
 
-import yapi.file.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,8 +60,8 @@ public class LicenseSystem {
                     }
                     fileCount++;
                     try {
-                        String[] strings = addLicense(FileUtils.fileContentAsString(f), f);
-                        FileUtils.dump(f, strings);
+                        String[] strings = addLicense(fileContentAsString(f), f);
+                        dump(f, strings);
                     } catch (IOException e) {
                         System.out.println("File Exception (IOException): " + f.getName());
                     }
@@ -79,6 +76,46 @@ public class LicenseSystem {
         System.out.println("  > Changed Files: " + changedFiles);
         if (!changedFilesName.isEmpty()) {
             System.out.println("  - " + changedFilesName.stream().collect(Collectors.joining("\n  - ")));
+        }
+    }
+
+    public static String[] fileContentAsString(File file) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+            List<String> strings = new ArrayList<>();
+            String s;
+            while ((s = bufferedReader.readLine()) != null) {
+                strings.add(s);
+            }
+            return strings.toArray(new String[0]);
+        } catch (IOException e) {
+            return new String[0];
+        }
+    }
+
+    private static void dump(File file, String[] strings) throws IOException {
+        dump(file, strings, false);
+    }
+
+    private static void dump(File file, String[] strings, boolean append) throws IOException {
+        if (!file.exists()) {
+            throw new FileNotFoundException();
+        }
+        if (!file.isFile()) {
+            throw new FileNotFoundException();
+        }
+        if (strings == null) {
+            throw new NullPointerException();
+        }
+        try (OutputStream outputStream = new FileOutputStream(file, append)) {
+            for (int i = 0; i < strings.length; i++) {
+                if (i != 0) {
+                    outputStream.write(new byte[]{'\n'});
+                }
+                outputStream.write(strings[i].getBytes());
+                outputStream.flush();
+            }
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
         }
     }
 
