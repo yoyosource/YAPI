@@ -13,9 +13,16 @@
 
 package system;
 
+import yapi.encryption.encryption.YAPICipher;
+import yapi.internal.exceptions.CipherException;
+import yapi.string.HashType;
+import yapi.string.StringCrypting;
+
+import java.io.File;
+
 public class Work {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         /*
         int times = 10;
         long time = System.currentTimeMillis();
@@ -212,6 +219,16 @@ public class Work {
         System.out.println(graph.ascii());
 
         System.out.println(node1);*/
+    }
+
+    private static String generateFileName(String password, File file) throws CipherException {
+        String passwordHash = StringCrypting.hash(password, HashType.SHA512, false);
+        String identifier = StringCrypting.hash(password, HashType.SHA1, false) + file.getName();
+
+        byte[] key = YAPICipher.getDerivation().derive(passwordHash.getBytes(), password.getBytes(), 8);
+        byte[] bytes = YAPICipher.getEncryption().crypt(key, identifier.getBytes());
+
+        return StringCrypting.encodeBase64(bytes);
     }
 
 }
