@@ -4,69 +4,18 @@
 
 package yapi.manager.json;
 
-import yapi.file.FileUtils;
 import yapi.internal.runtimeexceptions.objectnotation.JSONException;
 import yapi.manager.json.value.JSONArray;
 import yapi.manager.json.value.JSONObject;
 import yapi.manager.json.value.JSONValue;
-import yapi.manager.yapion.YAPIONVariable;
-import yapi.manager.yapion.value.YAPIONArray;
-import yapi.manager.yapion.value.YAPIONObject;
-import yapi.manager.yapion.value.YAPIONValue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JSONParser {
 
-    public static void main(String[] args) {
-        String s = Arrays.stream(FileUtils.fileContentFromResourceAsString("sample.json")).collect(Collectors.joining("\n"));
-        JSONArray jsonObject = parseArray(s);
-        //System.out.println(jsonObject);
-        YAPIONArray yapionObject = toYAPION(jsonObject);
-        //System.out.println(yapionObject);
-        System.out.println(yapionObject.toHierarchyString());
-    }
-
     private JSONParser() {
         throw new IllegalStateException();
-    }
-
-    public static synchronized YAPIONObject toYAPION(JSONObject jsonObject) {
-        YAPIONObject yapionObject = new YAPIONObject();
-        List<String> keys = jsonObject.getKeys();
-        for (String s : keys) {
-            JSONType jsonType = jsonObject.getVariable(s).getJsonType();
-            if (jsonType instanceof JSONValue) {
-                yapionObject.add(new YAPIONVariable(s, toYAPION((JSONValue) jsonType)));
-            } else if (jsonType instanceof JSONArray) {
-                yapionObject.add(new YAPIONVariable(s, toYAPION((JSONArray) jsonType)));
-            } else if (jsonType instanceof JSONObject) {
-                yapionObject.add(new YAPIONVariable(s, toYAPION((JSONObject) jsonType)));
-            }
-        }
-        return yapionObject;
-    }
-
-    public synchronized static YAPIONArray toYAPION(JSONArray jsonArray) {
-        YAPIONArray yapionArray = new YAPIONArray();
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JSONType jsonType = jsonArray.get(i);
-            if (jsonType instanceof JSONValue) {
-                yapionArray.add(toYAPION((JSONValue) jsonType));
-            } else if (jsonType instanceof JSONArray) {
-                yapionArray.add(toYAPION((JSONArray) jsonType));
-            } else if (jsonType instanceof JSONObject) {
-                yapionArray.add(toYAPION((JSONObject) jsonType));
-            }
-        }
-        return yapionArray;
-    }
-
-    private static YAPIONValue toYAPION(JSONValue jsonValue) {
-        return new YAPIONValue(jsonValue.toString());
     }
 
     public static synchronized JSONObject parseObject(String json) {

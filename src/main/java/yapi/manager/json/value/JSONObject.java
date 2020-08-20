@@ -4,17 +4,15 @@
 
 package yapi.manager.json.value;
 
-import yapi.manager.json.JSONParser;
 import yapi.manager.json.JSONType;
 import yapi.manager.json.JSONVariable;
-import yapi.manager.yapion.value.YAPIONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JSONObject extends JSONType {
 
-    private List<JSONVariable> jsonVariables = new ArrayList<>();
+    private final List<JSONVariable> jsonVariables = new ArrayList<>();
 
     public List<String> getKeys() {
         List<String> keys = new ArrayList<>();
@@ -94,8 +92,8 @@ public class JSONObject extends JSONType {
         return st.toString();
     }
 
-    public YAPIONObject toYAPION() {
+    /*public YAPIONObject toYAPION() {
         return JSONParser.toYAPION(this);
-    }
+    }*/
 
 }

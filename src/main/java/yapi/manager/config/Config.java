@@ -12,7 +12,6 @@ import yapi.manager.config.type.ConfigFileType;
 import yapi.manager.config.type.ConfigLoadType;
 import yapi.manager.config.type.ConfigSaveType;
 import yapi.manager.config.type.ConfigSecurityType;
-import yapi.manager.yapion.value.YAPIONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +26,7 @@ public class Config {
     ConfigLoadType configLoadType;
     ConfigSaveType configSaveType;
 
-    private String fileSuffix = ".yconfig";
+    private final String fileSuffix = ".yconfig";
 
     public Config(String name, String password, ConfigFileType configFileType, ConfigSecurityType configSecurityType, ConfigLoadType configLoadType, ConfigSaveType configSaveType) {
         this.name = FileUtils.getName(name);
@@ -58,7 +57,7 @@ public class Config {
         return b;
     }
 
-    void save(String path, YAPIONObject yapionObject) throws IOException {
+    /*void save(String path, YAPIONObject yapionObject) throws IOException {
         if (configSaveType == ConfigSaveType.NOSAVE) {
             return;
         }
@@ -73,5 +72,5 @@ public class Config {
         } else if (configSecurityType == ConfigSecurityType.PASSWORD) {
 
         }
-    }
+    }*/
 }

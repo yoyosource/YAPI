@@ -1,7 +1,6 @@
 [![YAPI Release V2.3.0](https://img.shields.io/badge/YAPI%20Release-2.3.0-green)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPI Pre-Release V?.?-alpha](https://img.shields.io/badge/YAPI%20Pre--Release-%3F.%3F--alpha-yellow)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
 [![YAPI Version V2.3.0](https://img.shields.io/badge/YAPI%20Version-2.3.0-red)](https://github.com/yoyosource/YAPI/releases/tag/v1.2)
-[![YAPION Version V2.0](https://img.shields.io/badge/YAPION%20Version-2.0-red)](https://github.com/yoyosource/YAPI/tree/master/src/main/java/yapi/manager/yapion)
 
 [![Files 305](https://img.shields.io/badge/Files-305-inactive)](https://github.com/yoyosource/YAPI)
 [![Methods 1642](https://img.shields.io/badge/Methods-1642-inactive)](https://github.com/yoyosource/YAPI)
@@ -51,6 +50,9 @@ Alternative you can download the jar directly from [releases](https://github.com
   - [L] Apache-2.0
 - profesorfalken/jProcesses (https://github.com/profesorfalken/jProcesses)
   - [V] 1.6.4
+  - [L] Apache-2.0
+- yoyosource/YAPION (https://github.com/yoyosource/YAPION)
+  - [V] 0.4.0
   - [L] Apache-2.0
 
 * [V] Version

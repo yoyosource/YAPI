@@ -7,9 +7,6 @@ package yapi.string;
 import yapi.internal.annotations.yapi.WorkInProgress;
 import yapi.internal.annotations.yapi.WorkInProgressType;
 import yapi.internal.runtimeexceptions.string.YAPIStringException;
-import yapi.manager.yapion.YAPIONVariable;
-import yapi.manager.yapion.value.YAPIONObject;
-import yapi.manager.yapion.value.YAPIONValue;
 import yapi.quick.Timer;
 
 import java.util.Arrays;
@@ -1416,25 +1413,5 @@ public class YAPIString {
         result = 31 * result + Arrays.hashCode(chars);
         result = 31 * result + Arrays.hashCode(bytes);
         return result;
-    }
-
-    public YAPIONObject serialize() {
-        YAPIONObject yapionObject = new YAPIONObject();
-        yapionObject.add(new YAPIONVariable("object-type", new YAPIONValue("yapi-string")));
-        yapionObject.add(new YAPIONVariable("value", new YAPIONValue(toString())));
-        yapionObject.add(new YAPIONVariable("reversed", new YAPIONValue(reversed + "")));
-        return yapionObject;
-    }
-
-    public static YAPIString deserialize(YAPIONObject yapionObject) {
-        YAPIString yapiString = null;
-        if (yapionObject.getKeys().contains("object-type") && yapionObject.getValue("object-type").getString().equals("yapi-string")) {
-            if (yapionObject.getKeys().size() == 3 && yapionObject.getKeys().contains("value") && yapionObject.getKeys().contains("reversed")) {
-                String value = yapionObject.getValue("value").getString();
-                boolean reversed = yapionObject.getValue("reversed").getBoolean();
-                yapiString = new YAPIString(value, reversed);
-            }
-        }
-        return yapiString;
     }
 }
