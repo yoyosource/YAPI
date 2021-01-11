@@ -213,6 +213,10 @@ public class BigVector {
         return new BigVector(Arrays.copyOf(vec, vec.length));
     }
 
+    public int size() {
+        return vec.length;
+    }
+
 
     @Override
     public String toString() {

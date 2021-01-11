@@ -10,8 +10,8 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
 
     }
 
-    public ImmutablePair(R r, L l) {
-        super(r, l);
+    public ImmutablePair(L l, R r) {
+        super(l, r);
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.List;
 public class Knot {
 
     private static MathContext mathContext = new MathContext(200);
-    private List<Knot> knots = new ArrayList<>();
+    private final List<Knot> knots = new ArrayList<>();
 
     public final MathContext getMathContext() {
         return mathContext;
@@ -28,7 +28,7 @@ public class Knot {
         return knots;
     }
 
-    public final int knowCount() {
+    public final int knotCount() {
         return knots.size();
     }
 

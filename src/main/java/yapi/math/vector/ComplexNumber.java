@@ -45,8 +45,9 @@ public class ComplexNumber {
             throw new ArithmeticException("Complex number imaginary part needs to be non-zero");
         }
         ComplexNumber[] complexNumbers = new ComplexNumber[2];
-        double nR = Math.sqrt((r + Math.sqrt(r * r + i * i)) / 2);
-        double nI = Math.signum(i) * Math.sqrt(((-r) + Math.sqrt(r * r + i * i)) / 2);
+        double sqrt = Math.sqrt(r * r + i * i);
+        double nR = Math.sqrt((r + sqrt) / 2);
+        double nI = Math.signum(i) * Math.sqrt(((-r) + sqrt) / 2);
         complexNumbers[0] = new ComplexNumber(nR, nI);
         complexNumbers[1] = new ComplexNumber(-nR, -nI);
         return complexNumbers;

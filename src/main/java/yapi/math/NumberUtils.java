@@ -17,7 +17,6 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class NumberUtils {
@@ -1205,12 +1204,14 @@ public class NumberUtils {
 
     public static boolean isDivisibleByPrimeFactorization(long l, long divisor) {
         long[] longs = ArrayUtils.toLongArray(primeFactorization(divisor));
-        System.out.println(Arrays.toString(longs));
+        for (long div : longs) {
+            if (isDivisibleBy(l, div)) return true;
+        }
         return false;
     }
 
     public static void main(String[] args) {
-        isDivisibleByPrimeFactorization(1378645, 3746456);
+        System.out.println(isDivisibleByPrimeFactorization(1378645, 3746456));
     }
 
 }

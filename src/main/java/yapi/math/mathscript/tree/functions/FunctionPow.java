@@ -14,7 +14,7 @@ public class FunctionPow extends Knot {
 
     @Override
     public Knot addKnot(Knot knot) {
-        if (knowCount() < 2) {
+        if (knotCount() < 2) {
             super.addKnot(knot);
         }
         return this;

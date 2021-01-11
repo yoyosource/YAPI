@@ -188,10 +188,10 @@ public class RandomArt {
                 }
             }
         }
-        String s = st.toString();
-        s = s.replace("++ ", "→").replace("-- ", "←");
-        s = s.replace("+- ", "↑").replace("-+ ", "↓");
-        s = s.replace("←→", "↔").replace("↑↓", "↕").replace("←←", "«").replace("→→", "»");
+        // String s = st.toString();
+        // s = s.replace("++ ", "→").replace("-- ", "←");
+        // s = s.replace("+- ", "↑").replace("-+ ", "↓");
+        // s = s.replace("←→", "↔").replace("↑↓", "↕").replace("←←", "«").replace("→→", "»");
 
         if (board[yDim / 2][xDim / 2] == 0) {
             board[yDim / 2][xDim / 2] = start;

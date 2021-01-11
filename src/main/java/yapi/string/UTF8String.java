@@ -60,28 +60,23 @@ public class UTF8String {
     }
 
     public static UTF8String fromHex(String hex) {
-        if (hex.matches("[0-9A-Fa-f]+")) {
+        hex = hex.replace(" ", "");
+        if (!hex.matches("[0-9A-Fa-f]+")) {
             throw new StringException();
         }
         if (hex.length() % 2 != 0) {
             throw new StringException();
         }
 
-        String[] strings;
-        if (hex.matches("[0-9A-Fa-f]+")) {
-            List<String> strs = new ArrayList<>();
-            for (int i = 0; i < hex.length() / 2; i++) {
-                strs.add(hex.charAt(i * 2) + "" + hex.charAt(i * 2 + 1));
-            }
-            strings = strs.toArray(new String[0]);
-        } else {
-            strings = hex.split(" ");
+        List<String> strs = new ArrayList<>();
+        for (int i = 0; i < hex.length() / 2; i++) {
+            strs.add(hex.charAt(i * 2) + "" + hex.charAt(i * 2 + 1));
         }
+        String[] strings = strs.toArray(new String[0]);
 
         byte[] bytes = new byte[strings.length];
-        int i = 0;
-        for (String s : strings) {
-            bytes[i++] = (byte)Integer.parseInt(s, 16);
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) Integer.parseInt(strings[i], 16);
         }
         return new UTF8String(bytes);
     }

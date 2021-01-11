@@ -22,7 +22,7 @@ public class ImageCompression {
     private int width = 0;
     private int height = 0;
 
-    private BufferedImage bufferedImage;
+    private final BufferedImage bufferedImage;
     private int[] colors = new int[0];
 
     private int type = 0;
@@ -138,7 +138,7 @@ public class ImageCompression {
                 repetitionLength++;
                 if (repetitionLength == (byte)0xFF) {
                     addLength(bytes, repetitionLength);
-                    //lastInts = new int[0];
+                    // lastInts = new int[0];
                     repetitionLength = 0;
                 }
             } else {

@@ -15,7 +15,7 @@ public class Pair<L, R> {
 
     }
 
-    public Pair(R r, L l) {
+    public Pair(L l, R r) {
         this.r = r;
         this.l = l;
     }

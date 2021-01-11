@@ -27,15 +27,12 @@ public class ColorUtils {
         }
         color = color.substring(1);
         try {
+            String r = color.substring(0, 1);
+            String g = color.substring(2, 3);
+            String b = color.substring(4, 6);
             if (color.length() == 6) {
-                String r = color.substring(0, 1);
-                String g = color.substring(2, 3);
-                String b = color.substring(4, 6);
                 return new Color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16));
             } else {
-                String r = color.substring(0, 1);
-                String g = color.substring(2, 3);
-                String b = color.substring(4, 6);
                 String a = color.substring(7, 8);
                 return new Color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16), Integer.parseInt(a, 16));
             }

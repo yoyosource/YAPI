@@ -32,10 +32,10 @@ public class Trail {
 
     public void update(BigDecimal x, BigDecimal y, int radius) {
         values.add(new TrailValue(x, y, radius));
-        values.forEach((TrailValue t) -> {
-            t.radius = t.radius - (t.radius * radiusDecrease);
-        });
-        values = values.stream().filter((TrailValue t) -> t.radius > 1).collect(Collectors.toList());
+        values = values.stream()
+                .filter(t -> t.radius > 1)
+                .peek(t -> t.radius = t.radius - (t.radius * radiusDecrease))
+                .collect(Collectors.toList());
     }
 
     private class TrailValue {
@@ -46,8 +46,8 @@ public class Trail {
             this.radius = radius;
         }
 
-        private BigDecimal x;
-        private BigDecimal y;
+        private final BigDecimal x;
+        private final BigDecimal y;
         private double radius;
 
     }

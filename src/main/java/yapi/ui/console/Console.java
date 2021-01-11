@@ -7,9 +7,13 @@ package yapi.ui.console;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 import yapi.runtime.TerminalUtils;
+import yapion.annotations.deserialize.YAPIONLoad;
+import yapion.annotations.serialize.YAPIONSave;
 
 import java.util.List;
 
+@YAPIONSave
+@YAPIONLoad
 public class Console {
 
     public static void main(String[] args) {
