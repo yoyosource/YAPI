@@ -8,7 +8,7 @@ import org.fusesource.jansi.Ansi;
 
 class TaskIndention extends ConsoleMessageTask {
 
-    private int indention;
+    private final int indention;
 
     TaskIndention(int indention) {
         this.indention = indention;
@@ -22,4 +22,8 @@ class TaskIndention extends ConsoleMessageTask {
         ansi.a(" ".repeat(indention));
     }
 
+    @Override
+    public String toString() {
+        return "TaskIndention{" + indention + '}';
+    }
 }

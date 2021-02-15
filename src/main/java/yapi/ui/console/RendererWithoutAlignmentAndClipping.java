@@ -9,17 +9,17 @@ import java.util.List;
 
 public class RendererWithoutAlignmentAndClipping implements ConsoleRenderer {
 
-    private ConsoleAlignment alignment = ConsoleAlignment.LEFT;
+    private final ConsoleAlignment alignment = ConsoleAlignment.LEFT;
     private ConsoleClipping clipping = ConsoleClipping.WRAP_OFF;
     private int width = 0;
 
-    private RenderController controller = new RenderController() {
+    private final RenderController controller = new RenderController() {
         @Override
         public void add(ConsoleMessageTask task, CRenderAll renderAll) {
             if (task instanceof TaskNewLine) {
                 renderAll.currentWidth = 0;
                 renderAll.lines.add(new CRenderLine(controller));
-                renderAll.lines.get(renderAll.lines.size() - 1).add(new TaskAlignment(renderAll.lastAlignment));
+                if (renderAll.lastAlignment != ConsoleAlignment.LEFT) renderAll.lines.get(renderAll.lines.size() - 1).add(new TaskAlignment(renderAll.lastAlignment));
                 return;
             }
 
@@ -97,7 +97,8 @@ public class RendererWithoutAlignmentAndClipping implements ConsoleRenderer {
             consoleMessageTasks.add(snippets.get(0).getEraseTask());
         }
 
-        consoleMessageTasks.add(new TaskIndention(indent(snippets.get(0).getAlignment(), snippets.get(0).getLength(), width)));
+        int indentation = indent(snippets.get(0).getAlignment(), snippets.get(0).getLength(), width);
+        if (indentation > 0) consoleMessageTasks.add(new TaskIndention(indentation));
         consoleMessageTasks.addAll(snippets.get(0).getTasks());
 
         for (int i = 1; i < snippets.size(); i++) {
@@ -110,7 +111,9 @@ public class RendererWithoutAlignmentAndClipping implements ConsoleRenderer {
             if (previousIndention > currentIndention) {
                 consoleMessageTasks.add(new TaskNewLine());
             }
-            consoleMessageTasks.add(new TaskIndention(currentIndention - previousIndention));
+
+            indentation = currentIndention - previousIndention;
+            if (indentation > 0) consoleMessageTasks.add(new TaskIndention(indentation));
             consoleMessageTasks.addAll(snippet.getTasks());
         }
 

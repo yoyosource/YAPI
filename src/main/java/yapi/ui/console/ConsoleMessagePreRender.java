@@ -18,7 +18,7 @@ public class ConsoleMessagePreRender extends ConsoleMessage {
     }
 
     private int width = 0;
-    private ConsoleAlignment alignment = ConsoleAlignment.LEFT;
+    private final ConsoleAlignment alignment = ConsoleAlignment.LEFT;
     private ConsoleClipping clipping = ConsoleClipping.WRAP_OFF;
 
     private RenderController controller;
@@ -149,7 +149,10 @@ public class ConsoleMessagePreRender extends ConsoleMessage {
             consoleMessageTasks.add(snippets.get(0).getEraseTask());
         }
 
-        consoleMessageTasks.add(new TaskIndention(indent(snippets.get(0).getAlignment(), snippets.get(0).getLength(), width)));
+        int indentation = indent(snippets.get(0).getAlignment(), snippets.get(0).getLength(), width);
+        if (indentation != 0) {
+            consoleMessageTasks.add(new TaskIndention(indentation));
+        }
         consoleMessageTasks.addAll(snippets.get(0).getTasks());
 
         for (int i = 1; i < snippets.size(); i++) {

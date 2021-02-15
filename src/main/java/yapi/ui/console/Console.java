@@ -14,10 +14,18 @@ public class Console {
 
     public static void main(String[] args) {
         Console console = new Console();
-        console.send(ConsoleMessageBuilder.build("<RED>\\\\\\\\  <RED:BRIGHT,BOLD>\\\\¸/<WHITE> /¯\\\\ |¯) ˙|˙</BOLD>  <RED>//"));
+        /*console.send(ConsoleMessageBuilder.build("<RED>\\\\\\\\  <RED:BRIGHT,BOLD>\\\\¸/<WHITE> /¯\\\\ |¯) ˙|˙</BOLD>  <RED>//"));
         console.send(ConsoleMessageBuilder.build("<RED>//  <RED:BRIGHT,BOLD> |<WHITE>  |¯| |¯  ¸|¸</BOLD>  <RED>\\\\\\\\"));
         console.send(ConsoleMessageBuilder.build(""));
-        console.send(ConsoleMessageBuilder.build("<WHITE:BRIGHT>(C)<WHITE> 2019,2020 <RED:BRIGHT>y<WHITE>oyosource Apache-2.0"));
+        console.send(ConsoleMessageBuilder.build("<WHITE:BRIGHT>(C)<WHITE> 2019,2020 <RED:BRIGHT>y<WHITE>oyosource Apache-2.0"));*/
+
+        console.setRenderer(false, false);
+        console.send(ConsoleMessageAppendable.getInstance()
+                .appendMessage(ConsoleMessageBuilder.build("<RED>\\\\\\\\  <RED:BRIGHT,BOLD>\\\\¸/<WHITE> /¯\\\\ |¯) ˙|˙</BOLD>  <RED>//\n"))
+                .appendMessage(ConsoleMessageBuilder.build("<RED>//  <RED:BRIGHT,BOLD> |<WHITE>  |¯| |¯  ¸|¸</BOLD>  <RED>\\\\\\\\\n"))
+                .appendMessage(ConsoleMessageBuilder.build("\n"))
+                .appendMessage(ConsoleMessageBuilder.build("<WHITE:BRIGHT>(C)<WHITE> 2019,2020 <RED:BRIGHT>y<WHITE>oyosource Apache-2.0")));
+        System.out.println(console.getStats());
     }
 
     private ConsoleClipping clipping = ConsoleClipping.WRAP_OFF;
@@ -80,11 +88,13 @@ public class Console {
     }
 
     public synchronized Console send(ConsoleMessage message) {
+        System.out.println(message.getTasks());
         int previousTasks = message.getTasks().size();
         long time = System.currentTimeMillis();
         List<ConsoleMessageTask> tasks = render(message);
         int optimizedTasks = tasks.size();
         long renderTime = System.currentTimeMillis() - time;
+        System.out.println(tasks);
 
         time = System.currentTimeMillis();
         Ansi ansi = Ansi.ansi();
@@ -101,7 +111,7 @@ public class Console {
     private List<ConsoleMessageTask> render(ConsoleMessage message) {
         if (message instanceof ConsoleMessagePreRender) {
             if (((ConsoleMessagePreRender) message).validRender(this)) {
-                return  ((ConsoleMessagePreRender) message).getPreRenderedTasks();
+                return ((ConsoleMessagePreRender) message).getPreRenderedTasks();
             } else {
                 return renderer.render(message.getTasks(), clipping, getWidth());
             }

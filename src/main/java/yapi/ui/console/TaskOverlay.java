@@ -8,9 +8,9 @@ import org.fusesource.jansi.Ansi;
 
 public class TaskOverlay extends ConsoleMessageTask {
 
-    private static String overlayText = "<OVERLAY> ";
+    private static final String overlayText = "<OVERLAY> ";
     private static int index = 0;
-    private int overlaySize;
+    private final int overlaySize;
 
     public TaskOverlay(int overlaySize) {
         this.overlaySize = overlaySize;
@@ -25,4 +25,10 @@ public class TaskOverlay extends ConsoleMessageTask {
         }
         ansi.a(st.toString());
     }
+
+    @Override
+    public String toString() {
+        return "TaskOverlay{" + index + ":" + overlaySize + '}';
+    }
+
 }

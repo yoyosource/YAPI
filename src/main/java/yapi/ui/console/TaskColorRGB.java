@@ -13,7 +13,7 @@ public class TaskColorRGB extends ConsoleMessageTask {
     private static final char FIRST_ESC_CHAR = 27;
     private static final char SECOND_ESC_CHAR = '[';
 
-    private Color color;
+    private final Color color;
 
     TaskColorRGB(Color color) {
         this.color = color;
@@ -24,4 +24,8 @@ public class TaskColorRGB extends ConsoleMessageTask {
         ansi.a("" + FIRST_ESC_CHAR + SECOND_ESC_CHAR + (char)38 + ";2;" + color.getRed() + ";" + color.getGreen() + ";" + color.getBlue() + "m");
     }
 
+    @Override
+    public String toString() {
+        return "TaskColorRGB{" + color + '}';
+    }
 }
