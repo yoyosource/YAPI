@@ -4,18 +4,14 @@
 
 package yapi.compression.huffman;
 
-import yapi.file.FileUtils;
 import yapi.string.StringFormatting;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HuffmanCompression {
 
-    private char[] chars;
+    private final char[] chars;
 
     public static void main(String[] args) {
         //HuffmanCompression huffmanCompression = new HuffmanCompression("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".toCharArray());
@@ -122,6 +118,13 @@ public class HuffmanCompression {
         }
         return bts;
     }
+
+    /*
+    0x00 -> 00
+    0x01 -> 01 -> (
+    0x02 -> 10 -> )
+    0x03 -> 11 -> VALUE
+     */
 
     private byte createByte(String s) {
         byte b = 1;

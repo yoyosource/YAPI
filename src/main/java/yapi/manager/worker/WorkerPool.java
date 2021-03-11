@@ -14,33 +14,33 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class WorkerPool implements Runnable {
 
-    private List<Worker> available = new ArrayList<>();
-    private List<Worker> all = new ArrayList<>();
-    private List<CachedWorker> cachedWorkers = new CopyOnWriteArrayList<>();
+    private final List<Worker> available = new ArrayList<>();
+    private final List<Worker> all = new ArrayList<>();
+    private final List<CachedWorker> cachedWorkers = new CopyOnWriteArrayList<>();
     private boolean run = true;
     private boolean started = false;
-    private WorkerPool pool;
+    private final WorkerPool pool;
 
-    private List<Task> tasks = new CopyOnWriteArrayList<>();
+    private final List<Task> tasks = new CopyOnWriteArrayList<>();
 
-    private int minWorkers;
-    private int maxWorkers;
+    private final int minWorkers;
+    private final int maxWorkers;
 
     private static long wIDGlobal = 0;
-    private long wID = wIDGlobal++;
+    private final long wID = wIDGlobal++;
     private long id = 0;
     private long taskID = 0;
     private long lastTaskAssigned = 0;
     private int wait = 0;
 
-    private Logging log = new Logging("Worker Pool");
+    private final Logging log = new Logging("Worker Pool");
     private int lastLogSize = 0;
 
-    private boolean daemon = false;
+    private final boolean daemon = false;
 
-    private static ThreadGroup threadGroup = new ThreadGroup(ThreadUtils.yapiGroup, "Worker Pools");
-    private ThreadGroup workerGroup = new ThreadGroup(threadGroup, "Worker Pool: " + wID);
-    private ThreadGroup workerPoolGroup = new ThreadGroup(workerGroup, "Workers");
+    private static final ThreadGroup threadGroup = new ThreadGroup(ThreadUtils.yapiGroup, "Worker Pools");
+    private final ThreadGroup workerGroup = new ThreadGroup(threadGroup, "Worker Pool: " + wID);
+    private final ThreadGroup workerPoolGroup = new ThreadGroup(workerGroup, "Workers");
 
     private String name;
 
@@ -397,6 +397,10 @@ public class WorkerPool implements Runnable {
         return tasks.isEmpty();
     }
 
+    public int openTasks() {
+        return tasks.size();
+    }
+
     /**
      * @since Version 1.1
      */
@@ -436,8 +440,8 @@ public class WorkerPool implements Runnable {
 
     private class CachedWorker {
 
-        private long time = System.currentTimeMillis();
-        private Worker worker;
+        private final long time = System.currentTimeMillis();
+        private final Worker worker;
 
         public CachedWorker(Worker worker) {
             this.worker = worker;

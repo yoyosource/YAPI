@@ -6,32 +6,57 @@ package yapi.peripheral;
 
 import yapi.compression.image.ImageCompression;
 import yapi.datastructures.circular.CircularQueue;
+import yapi.manager.worker.WorkerPool;
 import yapi.runtime.ThreadUtils;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.LinkedList;
 
 public class VideoCapture {
 
-    private GraphicsDevice graphicsDevice;
+    private final GraphicsDevice graphicsDevice;
     private boolean running = false;
     private double compression;
 
-    private CircularQueue<byte[]> bytes = new CircularQueue<>(10);
+    private final CircularQueue<byte[]> bytes = new CircularQueue<>(10);
+    private int count = 0;
 
-    private Thread thread = new Thread(() -> {
+    private final Thread thread = new Thread(() -> {
+        WorkerPool workerPool = new WorkerPool(60);
+        LinkedList<BufferedImage> bufferedImages = new LinkedList<>();
         while (running) {
-            Image image = PeripheralUtils.takeScreenShot(graphicsDevice);
-            if (image != null) {
-                ImageCompression imageCompression = new ImageCompression(image);
-                if (compression == -1) {
-                    bytes.add(imageCompression.getRaw());
-                } else {
-                    imageCompression.lossyCompress(compression);
-                    bytes.add(imageCompression.compress());
-                }
-                System.out.println(bytes);
+            while (workerPool.openTasks() > 4) {
+                ThreadUtils.sleep(10);
             }
-            ThreadUtils.sleep(1000/60);
+            try {
+                bufferedImages.addLast(new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())));
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+            workerPool.work(() -> {
+                BufferedImage image = bufferedImages.removeFirst();
+                // Image image = PeripheralUtils.takeScreenShot(graphicsDevice);
+                if (image != null) {
+                    long time = System.currentTimeMillis();
+                    ImageCompression imageCompression = new ImageCompression(image);
+                    if (compression != -1) {
+                        imageCompression.lossyCompress(compression);
+                    }
+                    byte[] imageBytes = imageCompression.compress();
+                    try (FileOutputStream fileOutputStream = new FileOutputStream(new File("/Users/jojo/Desktop/capture", "image-" + count++))) {
+                        fileOutputStream.write(imageBytes);
+                    } catch (IOException e) {
+
+                    }
+                    System.out.println((System.currentTimeMillis() - time) + " " + imageBytes);
+                }
+            });
+            ThreadUtils.sleep(16);
+
         }
     });
 

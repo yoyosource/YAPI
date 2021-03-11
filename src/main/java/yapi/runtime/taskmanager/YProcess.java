@@ -30,7 +30,7 @@ public class YProcess {
         console.setClipping(ConsoleClipping.CLIP_WIDTH);
 
         ConsoleMessageAppendable consoleMessageAppendable = ConsoleMessageAppendable.getInstance();
-        ProcessUtils.getYProcesses().stream().map(YProcess::toCompactColorString).forEach(message -> {
+        ProcessUtils.getYProcesses().stream().map(YProcess::toColorString).forEach(message -> {
             consoleMessageAppendable.appendMessage(message);
             consoleMessageAppendable.appendMessage(ConsoleMessageBuilder.build("\n"));
         });
@@ -40,7 +40,7 @@ public class YProcess {
     }
 
     private static Thread updater;
-    private static List<YProcess> allProcesses = new LinkedList<>();
+    private static final List<YProcess> allProcesses = new LinkedList<>();
 
     private static void createUpdater() {
         if (updater != null) {
